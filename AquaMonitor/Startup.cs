@@ -6,6 +6,7 @@ using AquaMonitor.Web.Helpers;
 using AquaMonitor.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -77,6 +78,11 @@ namespace AquaMonitor.Web
 #else
             services.AddRazorPages().AddRazorRuntimeCompilation();
 #endif
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
         }
 
         /// <summary>

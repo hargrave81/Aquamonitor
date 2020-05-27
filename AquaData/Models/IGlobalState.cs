@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Configuration;
 
 namespace AquaMonitor.Data.Models
 {
@@ -90,6 +89,8 @@ namespace AquaMonitor.Data.Models
         /// Used to draw a weather Icon
         /// </summary>
         string WeatherIcon { get; set; }
+
+
     }
 
 }

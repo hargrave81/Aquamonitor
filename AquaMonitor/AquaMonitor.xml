@@ -369,6 +369,11 @@
             <param name="register"></param>
             <param name="data"></param>
         </member>
+        <member name="M:AquaMonitor.Web.Devices.Htu21D.DisposeI2C">
+            <summary>
+            Dispose the static device instance
+            </summary>
+        </member>
         <member name="T:AquaMonitor.Web.Devices.I2cAddress">
             <summary>
             SHT3x I2C Address
@@ -823,6 +828,11 @@
             API Key for weather API
             </summary>
         </member>
+        <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.More_TempOffset">
+            <summary>
+            Temperature Offset
+            </summary>
+        </member>
         <member name="T:AquaMonitor.Web.Models.SystemRequestMessageModel">
             <summary>
             System Request Message
@@ -1070,6 +1080,11 @@
             Humidity 0 - 100  (%)
             </summary>
         </member>
+        <member name="T:AquaMonitor.Web.Models.Sys">
+            <summary>
+            Sunrise Information
+            </summary>
+        </member>
         <member name="P:AquaMonitor.Web.Models.Sys.UnixSunrise">
             <summary>
             Sunrise unix time UTC
@@ -1088,6 +1103,11 @@
         <member name="P:AquaMonitor.Web.Models.Sys.Sunset">
             <summary>
             Sunrise
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.Weather">
+            <summary>
+            Weather details
             </summary>
         </member>
         <member name="P:AquaMonitor.Web.Models.Weather.Main">

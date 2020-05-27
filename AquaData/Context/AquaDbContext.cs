@@ -38,6 +38,7 @@ namespace AquaMonitor.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
             modelBuilder.Entity<AppSetting>().Property(p => p.AdminPassword).HasDefaultValue("fishy");
             base.OnModelCreating(modelBuilder);
         }

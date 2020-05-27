@@ -176,6 +176,9 @@ namespace AquaMonitor.Web.Models
         public long Humidity { get; set; }
     }    
 
+    /// <summary>
+    /// Sunrise Information
+    /// </summary>
     public partial class Sys
     {
         /// <summary>
@@ -212,6 +215,9 @@ namespace AquaMonitor.Web.Models
         }
     }
 
+    /// <summary>
+    /// Weather details
+    /// </summary>
     public partial class Weather
     {
         /// <summary>

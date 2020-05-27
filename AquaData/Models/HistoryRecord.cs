@@ -26,6 +26,10 @@ namespace AquaMonitor.Data.Models
         public virtual IEnumerable<PowerReading> PowerReadings { get; set; }
         public bool SystemRunning { get; set; }
         public DateTime Created { get; set; }
+        /// <summary>
+        /// Used for future serialized data
+        /// </summary>
+        public string Serialize { get; set; }
 
         #region cTor
 

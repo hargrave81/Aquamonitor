@@ -425,5 +425,14 @@ namespace AquaMonitor.Web.Devices
             // wait SCL free            
             System.Threading.Thread.Sleep(20);
         }
+
+        /// <summary>
+        /// Dispose the static device instance
+        /// </summary>
+        public static void DisposeI2C()
+        {
+            if (_staticDevice != null)
+                _staticDevice.Dispose();
+        }
     }
 }

@@ -32,13 +32,13 @@
                             <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#chart-temps" data-update='@Url.RouteUrl("defaultApi",new { controller="tempchart" })?startDate=@DateTime.Now.AddDays(-7).ToString("MM-dd-yyyy HH:mm:ss")&endDate=@DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")' data-prefix="$" data-suffix="k">
                                 <a href="#" class="nav-link py-2 px-3 active" data-toggle="tab">
                                     <span class="d-none d-md-block">Week</span>
-                                    <span class="d-md-none">M</span>
+                                    <span class="d-md-none">W</span>
                                 </a>
                             </li>
                             <li class="nav-item" data-toggle="chart" data-target="#chart-temps" data-update='@Url.RouteUrl("defaultApi",new { controller="tempchart" })?startDate=@DateTime.Now.AddHours(-72).ToString("MM-dd-yyyy HH:mm:ss")&endDate=@DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")' data-prefix="$" data-suffix="k">
                                 <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
                                     <span class="d-none d-md-block">72 Hours</span>
-                                    <span class="d-md-none">W</span>
+                                    <span class="d-md-none">72</span>
                                 </a>
                             </li>
                         </ul>

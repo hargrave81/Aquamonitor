@@ -1,4 +1,6 @@
-﻿<meta charset="utf-8" />
+﻿@using Microsoft.AspNetCore.Http.Extensions
+
+<meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
 <meta name="description" content="Aquaponics Monitoring System running on Raspberry Pi">
 <meta name="author" content="Hargrave">
@@ -8,7 +10,8 @@
 <link href="~/img/brand/favicon.ico" rel="icon" type="image/x-icon">
 <!-- Extra details for Live View on GitHub Pages -->
 <!-- Canonical SEO -->
-<link rel="canonical" href="https://www.creative-tim.com/live/argon-dashboard-asp-net" />
+<link rel="canonical" href="@(this.Context.Request.Scheme+"://"+this.Context.Request.Host+(this.Context.Request.Headers.ContainsKey("X-Forwarded-Port") ? ":" + this.Context.Request.Headers["X-Forwarded-Port"][0] : ""))" />
+<meta property="og:url" content="@(this.Context.Request.Scheme+"://"+this.Context.Request.Host+(this.Context.Request.Headers.ContainsKey("X-Forwarded-Port") ? ":" + this.Context.Request.Headers["X-Forwarded-Port"][0] : ""))" />
 
 <partial name="_ExternalScripts" />
 
@@ -22,7 +25,7 @@
 <meta itemprop="name" content="Aquaponics Dashboard">
 <meta itemprop="description" content="Aquaponics system monitor that operates and monitors Aquaponics system functions such at pumps, fans, vents, temperature, humidity, and more.">
 
-<meta itemprop="image" content="@Url.Content("~/img/fbimg.png")">
+<meta itemprop="image" content="@Url.Content("~/img/AquaLogoLarge.png")">
 
 <!-- Twitter Card data -->
 <meta name="twitter:card" content="Aquaponics">
@@ -31,6 +34,6 @@
 
 <meta name="twitter:description" content="Aquaponics system monitor that operates and monitors Aquaponics system functions such at pumps, fans, vents, temperature, humidity, and more.">
 <meta name="twitter:creator" content="@@hargrave81">
-<meta name="twitter:image" content="@Url.Content("~/img/twimg.png")">
+<meta name="twitter:image" content="@Url.Content("~/img/AquaCard.png")">
 
 <partial name="_OpenGraph" />

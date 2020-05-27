@@ -124,6 +124,31 @@ namespace AquaMonitor.Data.Models
         /// </summary>
         public string WeatherIcon { get; set; }
 
+        #region Extra settings
+        /// <summary>
+        /// Gets or sets extended settings
+        /// </summary>
+        [System.Text.Json.Serialization.JsonIgnore]
+        public IExtendedSettings More { get; set; }
+
+        /// <summary>
+        /// Extended settings for serialization
+        /// </summary>
+        public string SettingA { get => More != null ? System.Text.Json.JsonSerializer.Serialize(More) : "{}";
+            set => More = string.IsNullOrEmpty(value) ? new ExtendedSettings() : System.Text.Json.JsonSerializer.Deserialize<ExtendedSettings>(value);
+        }
+
+        /// <summary>
+        /// Extended settings for serialization future use
+        /// </summary>
+        public string SettingB { get; set; }
+
+        /// <summary>
+        /// Extended settings for serialization future use
+        /// </summary>
+        public string SettingC { get; set; }
+        #endregion
+
         /// <summary>
         /// CTor
         /// </summary>
@@ -188,6 +213,7 @@ namespace AquaMonitor.Data.Models
                 this.APIKey = setting.APIKey;
                 this.Zipcode = setting.Zipcode;
                 this.Country = setting.Country;
+                this.More = setting.More;
             }
         }
 

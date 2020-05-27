@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Configuration;
@@ -49,6 +50,35 @@ namespace AquaMonitor.Data.Models
         /// API Key for weather API
         /// </summary>
         public string APIKey { get; set; }
+
+
+        #region Extra settings
+        /// <summary>
+        /// Gets or sets extended settings
+        /// </summary>
+        [System.Text.Json.Serialization.JsonIgnore]
+        [NotMapped]
+        public IExtendedSettings More { get; set; }
+
+        /// <summary>
+        /// Extended settings for serialization
+        /// </summary>
+        public string SettingA
+        {
+            get => More != null ? System.Text.Json.JsonSerializer.Serialize(More) : "{}";
+            set => More = string.IsNullOrEmpty(value) ? new ExtendedSettings() : System.Text.Json.JsonSerializer.Deserialize<ExtendedSettings>(value);
+        }
+
+        /// <summary>
+        /// Extended settings for serialization future use
+        /// </summary>
+        public string SettingB { get; set; }
+
+        /// <summary>
+        /// Extended settings for serialization future use
+        /// </summary>
+        public string SettingC { get; set; }
+        #endregion
     }
 
 

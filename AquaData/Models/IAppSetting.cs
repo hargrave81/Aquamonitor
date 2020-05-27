@@ -1,4 +1,6 @@
-﻿namespace AquaMonitor.Data.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace AquaMonitor.Data.Models
 {
     /// <summary>
     /// Global objects
@@ -39,5 +41,30 @@
         /// API Key for weather API
         /// </summary>
         string APIKey { get; set; }
+
+        #region Extra settings
+        /// <summary>
+        /// Gets or sets extended settings
+        /// </summary>
+        [System.Text.Json.Serialization.JsonIgnore]
+        [NotMapped]
+        IExtendedSettings More { get; set; }
+        
+        /// <summary>
+        /// Extended settings for serialization
+        /// </summary>
+        string SettingA { get; set; }
+
+        /// <summary>
+        /// Extended settings for serialization future use
+        /// </summary>
+        string SettingB { get; set; }
+
+        /// <summary>
+        /// Extended settings for serialization future use
+        /// </summary>
+        string SettingC { get; set; }
+        #endregion
     }
+
 }

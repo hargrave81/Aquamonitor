@@ -151,7 +151,15 @@
                                     <td class="long">
                                         <span><input value="@Model.APIKey" id="APIKey" name="APIKey" Title="API Key - you must register and request a weather API key from openweathermap.org" /></span>
                                     </td>
-                                </tr>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <span>Temp Offset</span>
+                                </th>
+                                <td class="long">
+                                    <span><input value="@(Model.More.TempOffset ?? 0f)" id="More_TempOffset" name="More_TempOffset" Title="Temperature offset (in F) negative or positive number" /></span>
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </form>
@@ -362,7 +370,8 @@ $(document).ready(function() {
                     DataCollectionRate: parseInt($('#DataCollectionRate').val()),
                     APIKey: $('#APIKey').val(),
                     Country: $('#Country').val(),
-                    Zipcode: $('#Zipcode').val()
+                    Zipcode: $('#Zipcode').val(),
+                    More_TempOffset: $('#More_TempOffset').val()
                 }),
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8",

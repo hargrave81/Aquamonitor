@@ -40,5 +40,10 @@ namespace AquaMonitor.Web.Models
         /// API Key for weather API
         /// </summary>
         public string APIKey { get; set; }
+
+        /// <summary>
+        /// Temperature Offset
+        /// </summary>
+        public double? More_TempOffset { get; set; }
     }
 }

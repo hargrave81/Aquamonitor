@@ -21,9 +21,8 @@ namespace AquaMonitor.Web.Services
         private Timer timer;
         private bool busy;
         private readonly IGlobalState globalData;
-        private int cyclesSinceWorking;
         private readonly Random random;
-        private HttpClient thisClient;
+        private readonly HttpClient thisClient;
         /// <summary>
         /// Service Constructor
         /// </summary>
@@ -118,9 +117,7 @@ namespace AquaMonitor.Web.Services
             catch (Exception ex)
             {
                 logger.LogError("could not get request from weather service: " + ex.Message);
-            }
-            if (cyclesSinceWorking > 5)
-                logger.LogWarning("The weather service has not been working.");
+            }        
         }
 
 

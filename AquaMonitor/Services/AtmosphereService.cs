@@ -22,6 +22,8 @@ namespace AquaMonitor.Web.Services
         private readonly IGlobalState globalData;
         private int cyclesSinceWorking;
         private readonly Random random;
+        private bool i2c;
+
         /// <summary>
         /// Service Constructor
         /// </summary>
@@ -29,6 +31,7 @@ namespace AquaMonitor.Web.Services
         /// <param name="globalData"></param>
         public AtmosphereService(ILogger<AtmosphereService> logger, IGlobalState globalData)
         {
+            i2c = false;
             this.logger = logger;
             this.globalData = globalData;
             random = new Random();
@@ -100,8 +103,8 @@ namespace AquaMonitor.Web.Services
         {
             cyclesSinceWorking++;
             double h;
-            double tc;
-            double tf;
+            Iot.Units.Temperature tc;
+            
             if (globalData.TempType == 11)
             {
                 using var tempSensor = new Dht11(globalData.TempPin);
@@ -111,15 +114,13 @@ namespace AquaMonitor.Web.Services
                     cyclesSinceWorking = 0;
                     logger.LogInformation("Port {0} detected information and is being tracked.", globalData.TempPin);
                     globalData.Humidity = h;                    
-                    tc = tempSensor.Temperature.Celsius;
+                    tc = tempSensor.Temperature;
                     if (tempSensor.IsLastReadSuccessful)
                     {
-                        globalData.TemperatureC = tc;
-                    }
-                    tf = tempSensor.Temperature.Fahrenheit;
-                    if (tempSensor.IsLastReadSuccessful)
-                    {
-                        globalData.TemperatureF = tf;
+                        if (globalData.More?.TempOffset != null)
+                            tc = Iot.Units.Temperature.FromFahrenheit(tc.Fahrenheit - globalData.More.TempOffset.Value);
+                        globalData.TemperatureC = tc.Celsius;
+                        globalData.TemperatureF = tc.Fahrenheit;
                     }
                 }
             }
@@ -132,19 +133,18 @@ namespace AquaMonitor.Web.Services
                     cyclesSinceWorking = 0;
                     logger.LogInformation("Port {0} detected information and is being tracked.", globalData.TempPin);
                     globalData.Humidity = h;
-                    tc = tempSensor.Temperature.Celsius;
+                    tc = tempSensor.Temperature;
                     if (tempSensor.IsLastReadSuccessful)
                     {
-                        globalData.TemperatureC = tc;
-                    }
-                    tf = tempSensor.Temperature.Fahrenheit;
-                    if (tempSensor.IsLastReadSuccessful)
-                    {
-                        globalData.TemperatureF = tf;
+                        if (globalData.More?.TempOffset != null)
+                            tc = Iot.Units.Temperature.FromFahrenheit(tc.Fahrenheit - globalData.More.TempOffset.Value);
+                        globalData.TemperatureC = tc.Celsius;
+                        globalData.TemperatureF = tc.Fahrenheit;
                     }
                 }
             } else if(globalData.TempType == 21)
             {
+                this.i2c = true;
                 using var Htu = Htu21D.CreateDevice(globalData.TempPin, I2cAddress.AddrLow, Resolution.Medium);
                 h = Htu.Humidity;
                 if(Htu.IsLastReadSuccessful)
@@ -153,12 +153,14 @@ namespace AquaMonitor.Web.Services
                     logger.LogInformation("I2C detected humid information and is being tracked.");
                     globalData.Humidity = h;
                     System.Threading.Thread.Sleep(100);
-                    var temp = Htu.Temperature;
+                    tc = Htu.Temperature;                    
                     if (Htu.IsLastReadSuccessful)
                     {
+                        if(globalData.More?.TempOffset != null)
+                            tc = Iot.Units.Temperature.FromFahrenheit(tc.Fahrenheit - globalData.More.TempOffset.Value);
                         logger.LogInformation("I2C detected temp information and is being tracked.");
-                        globalData.TemperatureC = temp.Celsius;
-                        globalData.TemperatureF = temp.Fahrenheit;
+                        globalData.TemperatureC = tc.Celsius;
+                        globalData.TemperatureF = tc.Fahrenheit;
                     }                    
                 }
             }
@@ -172,6 +174,8 @@ namespace AquaMonitor.Web.Services
         /// </summary>
         public void Dispose()
         {
+            if(this.i2c)
+                Htu21D.DisposeI2C(); // clean up the I2C
             timer?.Dispose();
         }
     }
