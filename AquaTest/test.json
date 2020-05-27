@@ -1,0 +1,45 @@
+﻿{
+  "Relays": [
+    {
+      "Id": 1,
+      "Name": "Pump",
+      "Letter": "A", 
+      "Interval": 1800,
+      "IntervalRun": 900,
+      "Start": "4:00:00",
+      "Stop": "22:00:00",
+      "WaterId": 1,
+      "OnWhenFloatHigh": true
+    },
+    {
+      "Id": 2,
+      "Name": "Fan",
+      "Letter": "B",
+      "Interval": 0,
+      "IntervalRun": 0,
+      "Start": "6:00:00",
+      "Stop": "23:00:00",
+      "MinTempF": 70,
+      "MaxTempF": 150,
+      "TempVariance": 4
+    }
+  ],
+  "WaterLevels": [
+    {
+      "Id": 1,
+      "Name": "Grow Wall Tank"
+    },
+    {
+      "Id": 2,
+      "Name": "Sump Tank"
+    },
+    {
+      "Id": 3,
+      "Name": "Fish Tank"
+    },
+    {
+      "Id": 4,
+      "Name": "Solids Tank"
+    }
+  ]
+}

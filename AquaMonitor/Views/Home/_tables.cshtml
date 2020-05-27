@@ -1,0 +1,174 @@
+﻿@model AquaMonitor.Data.Models.IGlobalState
+<div class="row mt-5">
+    <div class="col-xl-8 mb-5 mb-xl-0">
+        <div class="card shadow">
+            <div class="card-header border-0">
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <h3 class="mb-0">Relays</h3>
+                        <div class="hidden alert-relay-success alert alert-success alert-dismissible fade show float-md-none" role="alert">
+                            <i class="fas fa-bell"></i>&nbsp;Relay updated!
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="hidden alert-relay-fail alert alert-danger alert-dismissible fade show float-md-none " role="alert">
+                            <i class="fas fa-exclamation-triangle"></i>&nbsp;Failed to update Relay
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                        </div>
+                    </div>
+                    <div class="col text-right">
+                        <a href="@Url.Action("Index","Settings")" class="btn btn-sm btn-primary btn-settings">Settings</a>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <!-- Projects table -->
+                <table class="table align-items-center table-flush">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Relay</th>
+                            <th scope="col">Position</th>
+                            <th scope="col">Timer</th>
+                            <th scope="col">Temp</th>
+                            <th scope="col">Water</th>
+                            <th scope="col">State</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var relay in Model.Relays)
+                        {
+                            <tr>
+                                <th scope="row">
+                                    @relay.Name
+                                </th>
+                                <td style="text-align: center;">
+                                    @relay.Letter.ToString()
+                                </td>
+                                <td style="text-align: center;">
+                                    @if (relay.Interval != 0)
+                                    {
+                                        <span>@TimeSpan.FromSeconds(relay.Interval).TotalMinutes mins</span>
+                                    }
+                                    else
+                                    {
+                                        <span>None</span>
+                                    }
+                                </td>
+                                <td style="text-align: center;">
+                                    @if (relay.MinTempF.HasValue || @relay.MaxTempF.HasValue || relay.MinOutTempF.HasValue || relay.MinTempF.HasValue)
+                                    {
+                                        // its temperature based
+                                        if (relay.MinTempF.HasValue)
+                                        {
+                                            <span>
+                                                &ge; @relay.MinTempF.Value
+                                            </span>
+                                        }
+                                        if (relay.MaxTempF.HasValue)
+                                        {
+                                            <span>
+                                                &nbsp; &le; @relay.MaxTempF.Value
+                                            </span>
+                                        }
+                                        if (relay.MinOutTempF.HasValue)
+                                        {
+                                            <span>
+                                                &nbsp; &ge;  @relay.MinOutTempF.Value OT
+                                            </span>
+                                        }
+                                        if (relay.MaxOutTempF.HasValue)
+                                        {
+                                            <span>
+                                                &nbsp; &le; @relay.MaxTempF.Value OT
+                                            </span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span>None</span>
+                                    }
+                                </td>
+                                <td style="text-align: center;">
+                                    @if (relay.WaterId.HasValue)
+                                    {
+                                        <span>@relay.WaterId.ToString() @(relay.OnWhenFloatHigh ? "WhenHigh" : "WhenLow")</span>
+                                    }
+                                    else
+                                    {
+                                        <span>None</span>
+                                    }
+                                </td>
+                                <td style="text-align: center; font-weight: bold; color: @(relay.CurrentState == AquaMonitor.Data.Models.PowerState.On ? "#090" : "#900")">
+                                    @relay.CurrentState.ToString()
+                                </td>
+                                <td style="text-align: right;">
+                                    <a href="#" data-relay="@relay.Letter" data-state="Off" class="btn btn-sm btn-relay @(relay.CurrentState == AquaMonitor.Data.Models.PowerState.Off ? "btn-primary" : "btn-secondary")">On</a>
+                                    <a href="#" data-relay="@relay.Letter" data-state="On" class="btn btn-sm btn-relay @(relay.CurrentState == AquaMonitor.Data.Models.PowerState.On ? "btn-primary" : "btn-secondary")">Off</a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4">
+        <div class="card shadow">
+            <div class="card-header border-0">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h3 class="mb-0">Water Levels</h3>
+                    </div>
+                    <div class="col text-right">
+                        <a href="#!" class="btn btn-sm btn-primary btn-settings">Settings</a>
+                    </div>
+                    <div class="alert-water-success hidden alert alert-success alert-dismissible fade show float-md-none" role="alert">
+                        <i class="fas fa-bell"></i>&nbsp;WaterLevel updated!
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="alert-water-fail hidden alert alert-danger alert-dismissible fade show float-md-none " role="alert">
+                        <i class="fas fa-exclamation-triangle"></i>&nbsp;Failed to update WaterLevel
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                </div>                
+            </div>
+            <div class="table-responsive">
+                <!-- Projects table -->
+                <table class="table align-items-center table-flush">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Reader</th>
+                            <th scope="col">Pin</th>
+                            <th scope="col">State</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var waterLevel in Model.WaterLevels)
+                        {
+                            <tr>
+                                <th scope="row">
+                                    <span>@waterLevel.Name</span>
+                                </th>
+                                <td style="text-align:center;">
+                                    <span>@waterLevel.Pin.ToString()</span>
+                                </td>
+                                <td class="@(waterLevel.FloatHigh == true ? "highwater-big": "lowwater-big")" style="text-align: center;">
+                                    <span>@(waterLevel.FloatHigh == true ? "High" : "Low")</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>  

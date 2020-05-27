@@ -1,0 +1,587 @@
+﻿@using AquaMonitor.Data.Models
+@using AquaMonitor.Web.Global
+@model AquaMonitor.Data.Models.IGlobalState
+@{
+    ViewData["Title"] = "Settings";
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+
+<div class="settings">
+    <div class="row">
+        <div class="col-md-5 mb-4 mb-md-0">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Systems</h3>
+                            <div class="hidden alert-relay-success alert alert-success alert-dismissible fade show float-md-none" role="alert">
+                                <i class="fas fa-bell"></i>&nbsp;Relay updated!
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="hidden alert-relay-fail alert alert-danger alert-dismissible fade show float-md-none " role="alert">
+                                <i class="fas fa-exclamation-triangle"></i>&nbsp;Failed to update Relay
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!-- Projects table -->
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">System</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <span>Automation</span>
+                                </td>
+                                <td>
+                                    <span id="SystemOnline">@(Model.SystemOnline == true ? "Online" : "Offline")</span>
+                                </td>
+                                <td>
+                                    <button id="SystemStateOn" class="btn btn-sm" name="SystemStateOn" @(Model.SystemOnline == true ? "disabled" : "")>On</button>
+                                    <button id="SystemStateOff" class="btn btn-sm" name="SystemStateOff" @(Model.SystemOnline == false ? "disabled" : "")>Off</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="text-align: center;">
+                                    <img src="@Url.Content("~/css/FishGraphic.png")" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5 mb-4 mb-md-0">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Settings</h3>
+                            <div id="settingsSuccess" class="hidden alert-relay-success alert alert-success alert-dismissible fade show float-md-none" role="alert">
+                                <i class="fas fa-bell"></i>&nbsp;Settings updated!
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div id="settingsAlert" class="hidden alert-relay-fail alert alert-danger alert-dismissible fade show float-md-none " role="alert">
+                                <i class="fas fa-exclamation-triangle"></i>&nbsp;Settings failed to update
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col text-right">
+                            <a id="SaveSettings" href="#!" class="btn btn-sm btn-primary">Save</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!-- Projects table -->
+                    <form id="settingsForm">
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Setting</th>
+                                    <th scope="col">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Temp Pin</span>
+                                    </th>
+                                    <td class="long">
+                                        <span><input value="@Model.TempPin" id="TempPin" name="TempPin" Title="Default is 4" /></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Temp Type</span>
+                                    </th>
+                                    <td class="long">
+                                        <span><input value="@Model.TempType" id="TempType" name="TempType" Title="11 or 22" /></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Log Interval</span>
+                                    </th>
+                                    <td class="long">
+                                        <span><input value="@Model.DataCollectionRate" id="DataCollectionRate" name="DataCollectionRate" Title="Default is 60 seconds" /></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Country Code</span>
+                                    </th>
+                                    <td class="long">
+                                        <span><input value="@Model.Country" id="Country" name="Country" Title="US,CA" /></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Zip Code</span>
+                                    </th>
+                                    <td class="long">
+                                        <span><input value="@Model.Zipcode" id="Zipcode" name="Zipcode" Title="5 digit zip code" /></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Weather API Key</span>
+                                    </th>
+                                    <td class="long">
+                                        <span><input value="@Model.APIKey" id="APIKey" name="APIKey" Title="API Key - you must register and request a weather API key from openweathermap.org" /></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-8 mb-4 mb-md-0">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Relays</h3>
+                            <div id="relaySuccess" class="hidden alert-relay-success alert alert-success alert-dismissible fade show float-md-none" role="alert">
+                                <i class="fas fa-bell"></i>&nbsp;Relay updated!
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div id="relayAlert" class="hidden alert-relay-fail alert alert-danger alert-dismissible fade show float-md-none " role="alert">
+                                <i class="fas fa-exclamation-triangle"></i>&nbsp;Failed to update Relay
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col text-right">
+                            <a id="AddRelay" href="#!" class="btn btn-sm btn-success">Add Relay</a>
+                            <a id="SaveRelays" href="#!" class="btn btn-sm btn-primary">Save</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!-- Projects table -->
+                    <form id="relayForm">
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Setting</th>
+                                    <th scope="col">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var relay in Model.Relays)
+                                {
+                                    <tr class="el-table__row">
+                                        <th scope="row" class="el-table_1_col_1">
+                                            <span>Relay #@relay.Id.ToString() @relay.Letter</span>
+                                            <br />
+                                            <button class="deleteRelay btn btn-sm btn-warning" data-id="@relay.Id.ToString()" data-letter="@relay.Letter">Remove</button>
+                                        </th>
+                                        <td class="el-table_1_col_2">
+                                            <span><label>Name: </label><input id="Name[@relay.Id]" value="@relay.Name" /></span>
+                                            <span><label>Pin: </label><input id="Pin[@relay.Id]" value="@relay.Pin" /></span>
+                                            <br />
+                                            <span><label>Interval: </label><input id="Interval[@relay.Id]" value="@relay.Interval" /></span>
+                                            <span><label>RunTime: </label><input id="IntervalRun[@relay.Id]" value="@relay.IntervalRun" /></span>
+                                            <br />
+                                            <span><label>Start: </label><input id="Start[@relay.Id]" value="@(relay.Start.HasValue ? relay.Start.Value.ToString("g") : "")" /></span>
+                                            <span><label>Stop: </label><input id="Stop[@relay.Id]" value="@(relay.Stop.HasValue ? relay.Stop.Value.ToString("g") : "")" /></span>
+                                            <br />
+                                            <span><label>Min Temp: </label><input id="MinTempF[@relay.Id]" value="@(relay.MinTempF.HasValue ? relay.MinTempF.Value.ToString("###0.00") : "")" /></span>
+                                            <span><label>Max Temp: </label><input id="MaxTempF[@relay.Id]" value="@(relay.MaxTempF.HasValue ? relay.MaxTempF.Value.ToString("###0.00") : "")" /></span>
+                                            <span><label>Variance: </label><input id="TempVariance[@relay.Id]" value="@(relay.TempVariance.HasValue ? relay.TempVariance.Value.ToString("###0.00") : "")" /></span>
+                                            <br />
+                                            <span><label>Min OutTemp: </label><input id="MinOutTempF[@relay.Id]" value="@(relay.MinOutTempF.HasValue ? relay.MinOutTempF.Value.ToString("###0.00") : "")" /></span>
+                                            <span><label>Max OutTemp: </label><input id="MaxOutTempF[@relay.Id]" value="@(relay.MaxOutTempF.HasValue ? relay.MaxOutTempF.Value.ToString("###0.00") : "")" /></span>
+                                            <br />
+                                            <span><label>WaterID: </label><input id="WaterId[@relay.Id]" value="@(relay.WaterId.HasValue ? relay.WaterId.Value.ToString() : "")" /></span>
+                                            <span><label>Water Must Be High: </label><input id="OnWhenFloatHigh[@relay.Id]" value="@(relay.OnWhenFloatHigh ? "Yes" : "No")" /></span>
+                                            <br />
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-4 mb-4 mb-md-0">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-4">
+                            <h3 class="mb-0">Water Levels</h3>
+                            <div id="waterSuccess" class="hidden alert-relay-success alert alert-success alert-dismissible fade show float-md-none" role="alert">
+                                <i class="fas fa-bell"></i>&nbsp;Water Levels updated!
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div id="waterAlert" class="hidden alert-relay-fail alert alert-danger alert-dismissible fade show float-md-none " role="alert">
+                                <i class="fas fa-exclamation-triangle"></i>&nbsp;Failed to update Water Levels
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col text-right">
+                            <a id="AddWater" href="#!" class="btn btn-sm btn-success">Add Relay</a>
+                            <a id="SaveWater" href="#!" class="btn btn-sm btn-primary">Save</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!-- Projects table -->
+                    <form id="waterForm">
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Setting</th>
+                                    <th scope="col">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var water in Model.WaterLevels)
+                                {
+                                    <tr>
+                                        <th scope="row">
+                                            <span>WaterLevel #@water.Id.ToString()</span>
+                                            <br />
+                                            <button class="deleteWater btn btn-sm btn-warning" data-id="@water.Id.ToString()">Remove</button>
+                                        </th>
+                                        <td>
+                                            <label>Name: </label><span><input id="Name[@water.Id]" value="@water.Name" /></span><br />
+                                            <label>Pin: </label><span><input id="Pin[@water.Id]" value="@water.Pin" /></span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+$(document).ready(function() {
+    console.log("ready!");
+
+    // B Relay
+    $('#SystemStateOn').click(function (e) {
+        e.preventDefault();
+        $.ajax({
+                type: 'POST',
+                url: "@Url.RouteUrl("defaultApi", new {controller = "system"})",
+                data: JSON.stringify({ state: "on" }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    'RequestVerificationToken': '@GetAntiXsrfRequestToken()'
+                }
+            })
+            .done(function(msg) {
+                if (msg.success) {
+                    $('#SystemOnline').html('Online');
+                    $('#SystemStateOn').prop('disabled', true);
+                    $('#SystemStateOff').prop('disabled', false);
+                } else {
+                    alert("Service Error: " + msg.message);
+                }
+            });
+    });
+
+    $('#SystemStateOff').click(function (e) {
+        e.preventDefault();
+        $.ajax({
+                type: 'POST',
+                url: "@Url.RouteUrl("defaultApi", new {controller = "system"})",
+                data: JSON.stringify({ state: "off" }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    'RequestVerificationToken': '@GetAntiXsrfRequestToken()'
+                }
+            })
+            .done(function(msg) {
+                if (msg.success) {
+                    $('#SystemOnline').html('Offline');
+                    $('#SystemStateOn').prop('disabled', false);
+                    $('#SystemStateOff').prop('disabled', true);
+                } else {
+                    alert("Service Error: " + msg.message);
+                }
+            });
+    });
+
+    $('#SaveSettings').click(function (e) {
+        e.preventDefault();
+        $('#SaveSettings').prop('disabled', true);
+        $.ajax({
+                type: 'POST',
+                url: "@Url.RouteUrl("defaultApi", new {controller = "settings"})",
+                data: JSON.stringify({
+                    TempPin: $('#TempPin').val(),
+                    TempType: $('#TempType').val(),
+                    DataCollectionRate: parseInt($('#DataCollectionRate').val()),
+                    APIKey: $('#APIKey').val(),
+                    Country: $('#Country').val(),
+                    Zipcode: $('#Zipcode').val()
+                }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    'RequestVerificationToken': '@GetAntiXsrfRequestToken()'
+                }
+            })
+            .done(function(msg) {
+                $('#SaveSettings').prop('disabled', false);
+                if (msg.success) {
+                    $('#settingsSuccess').removeClass('hidden');
+                    setTimeout("$('#settingsSuccess').addClass('hidden', {duration:1000});",
+                        5000); // hide the notice in 8 seconds
+                } else {
+                    $('#settingsAlert').removeClass('hidden');
+                    setTimeout("$('#settingsAlert').addClass('hidden', {duration:1000});",
+                        8000); // hide the notice in 8 seconds
+                }
+            });
+    });
+
+    $('#SaveRelays').click(function (e) {
+        e.preventDefault();
+        $('#SaveRelays').prop('disabled', true);
+        setTimeout("$('#SaveRelays').prop('disabled', false);", 1000);
+        // build json based on the data
+        var data = { relays: []};
+        $('#relayForm').find('.deleteRelay').each(function (index) {
+            var dataTree = $(this).parent().next();
+            var Id = $(this).attr('data-id');
+            var letter = $(this).attr('data-letter');
+            data.relays[index] = {
+                Id: parseInt($(this).attr('data-id')),
+                Letter: (letter == 'A' ? 0 : letter == 'B' ? 1 : letter == 'C' ? 2 : 3),
+                Name: dataTree.find('#Name\\[' + Id + '\\]').val(),
+                Interval: parseInt(dataTree.find('#Interval\\[' + Id + '\\]').val()),
+                IntervalRun: parseInt(dataTree.find('#IntervalRun\\[' + Id + '\\]').val()),
+                Start: dataTree.find('#Start\\[' + Id + '\\]').val(),
+                Stop: dataTree.find('#Stop\\[' + Id + '\\]').val(),
+                MinTempF: (dataTree.find('#MinTempF\\[' + Id + '\\]').val() == "" ? null : parseFloat(dataTree.find('#MinTempF\\[' + Id + '\\]').val())),
+                MaxTempF: (dataTree.find('#MaxTempF\\[' + Id + '\\]').val() == "" ? null : parseFloat(dataTree.find('#MaxTempF\\[' + Id + '\\]').val())),
+                MinOutTempF: (dataTree.find('#MinOutTempF\\[' + Id + '\\]').val() == "" ? null : parseFloat(dataTree.find('#MinOutTempF\\[' + Id + '\\]').val())),
+                MaxOutTempF: (dataTree.find('#MaxOutTempF\\[' + Id + '\\]').val() == "" ? null : parseFloat(dataTree.find('#MaxOutTempF\\[' + Id + '\\]').val())),
+                TempVariance: (dataTree.find('#TempVariance\\[' + Id + '\\]').val() == "" ? null : parseFloat(dataTree.find('#TempVariance\\[' + Id + '\\]').val())),
+                WaterId: (dataTree.find('#WaterId\\[' + Id + '\\]').val() == "" ? null : parseInt(dataTree.find('#WaterId\\[' + Id + '\\]').val())),
+                OnWhenFloatHigh: dataTree.find('#OnWhenFloatHigh\\[' + Id + '\\]').val() == "Yes" ? true : false,
+                Pin: parseInt(dataTree.find('#Pin\\[' + Id + '\\]').val()),
+            };
+        });
+        $.ajax({
+                type: 'POST',
+                url: "@Url.RouteUrl("defaultApi", new {controller = "relayconfig"})",
+                data: JSON.stringify(data, (key, value) => { if (value !== null) return value }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    'RequestVerificationToken': '@GetAntiXsrfRequestToken()'
+                }
+            })
+            .done(function(msg) {
+                if (msg.success) {
+                    $('#relaySuccess').removeClass('hidden');
+                    setTimeout("$('#relaySuccess').addClass('hidden', {duration:1000});",
+                        5000); // hide the notice in 8 seconds
+                } else {
+                    $('#relayAlert').removeClass('hidden');
+                    setTimeout("$('#relayAlert').addClass('hidden', {duration:1000});",
+                        8000); // hide the notice in 8 seconds
+                }
+            });
+    });
+
+$('#SaveWater').click(function (e) {
+    e.preventDefault();
+    $('#SaveWater').prop('disabled', true);
+    setTimeout("$('#SaveWater').prop('disabled', false);", 1000);
+    var data = { WaterLevels: []};
+    $('#waterForm').find('.deleteWater').each(function (index) {
+            var dataTree = $(this).parent().next();
+            var Id = $(this).attr('data-id');
+            data.WaterLevels[index] = {
+                Id: parseInt($(this).attr('data-id')),
+                Name: dataTree.find('#Name\\[' + Id + '\\]').val(),
+                Pin: parseInt(dataTree.find('#Pin\\[' + Id + '\\]').val()),
+            };
+        });
+        $.ajax({
+                type: 'POST',
+                url: "@Url.RouteUrl("defaultApi", new {controller = "waterconfig"})",
+                data: JSON.stringify(data, (key, value) => { if (value !== null) return value }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    'RequestVerificationToken': '@GetAntiXsrfRequestToken()'
+                }
+            })
+            .done(function(msg) {
+                if (msg.success) {
+                    $('#waterSuccess').removeClass('hidden');
+                    setTimeout("$('#waterSuccess').addClass('hidden', {duration:1000});",
+                        5000); // hide the notice in 8 seconds
+                } else {
+                    $('#waterAlert').removeClass('hidden');
+                    setTimeout("$('#waterAlert').addClass('hidden', {duration:1000});",
+                        8000); // hide the notice in 8 seconds
+                }
+            });
+
+    });
+
+    $('#AddWater').click(function (e) {
+        e.preventDefault();
+        var Number = 1;
+        $.each($('#waterForm').find('.deleteWater'), function (index, value) {
+            console.log("Number:" + Number + " - index " + index + " detectedId " + $(value).attr('data-id'));
+            if (parseInt($(value).attr('data-id')) >= Number) {
+                Number = parseInt($(value).attr('data-id')) + 1;
+            }
+        });
+        if (Number > 6) {
+            alert('You cannot add anymore water sensors.');
+            return true;
+        }
+        $('.water-footer').before($('#waterTemplate').html().replace(/{{Number}}/g, Number.toString()));
+        return true;
+    });
+
+    $('.settings').on('click',
+        '.deleteWater',
+        function(e) {
+            e.preventDefault();
+            $(this).parent().parent().hide(500, function () {
+                $(this).remove();
+            });
+        });
+
+
+    $('#AddRelay').click(function(e) {
+        var Number = 1;
+        var Letter = 'A';
+        var Used = '';
+        e.preventDefault();
+        $('#relayForm').find('.deleteRelay').each(function(index) {
+            if (parseInt($(this).attr('data-id')) >= Number)
+                Number = parseInt($(this).attr('data-id')) + 1;
+            Used += $(this).attr('data-letter');
+        });
+        if (Used.includes(Letter)) {
+            // we need to find a free letter
+            Letter = 'B';
+            if (Used.includes(Letter)) {
+                Letter = 'C';
+                if (Used.includes(Letter)) {
+                    Letter = 'D'
+                    if (Used.includes(Letter)) {
+                        alert('You cannot add anymore Relays');
+                        return false;
+                    }
+                }
+            }
+        }
+        $('.relay-footer').before($('#relayTemplate').html().replace(/{{Number}}/g, Number.toString())
+            .replace(/{{Letter}}/g, Letter));
+        return false;
+    });
+
+    $('.settings').on('click',
+        '.deleteRelay',
+        function(e) {
+            e.preventDefault();
+            $(this).parent().parent().hide(500, function () {
+                $(this).remove();
+            });
+        });
+});
+    </script>
+}
+
+
+<template id="waterTemplate">
+    <tr>
+        <th scope="row">
+            <span>WaterLevel #{{Number}}</span>
+            <br />
+            <button class="deleteWater btn btn-sm btn-warning" data-id="{{Number}}">Remove</button>
+        </th>
+        <td>
+            <label>Name: </label><span><input id="Name[{{Number}}]" value="New" /></span><br />
+            <label>Pin: </label><span><input id="Pin[{{Number}}]" value="0" /></span>
+        </td>
+    </tr>
+</template>
+<template id="relayTemplate">
+    <tr>
+        <td scope="row">
+            <span>Relay #{{Number}} {{Letter}}</span>
+            <br />
+            <button class="deleteRelay btn btn-sm btn-warning" data-id="{{Number}}" data-letter="{{Letter}}">Remove</button>
+        </td>
+        <td>
+            <span><label>Name: </label><input id="Name[{{Number}}]" value="New" /></span>
+            <span><label>Pin: </label><input id="Pin[{{Number}}]" value="0" /></span>
+            <br />
+            <span><label>Interval: </label><input id="Interval[{{Number}}]" value="0" /></span>
+            <span><label>RunTime: </label><input id="IntervalRun[{{Number}}]" value="0" /></span>
+            <br />
+            <span><label>Start: </label><input id="Start[{{Number}}]" /></span>
+            <span><label>Stop: </label><input id="Stop[{{Number}}]" /></span>
+            <br />
+            <span><label>Min Temp: </label><input id="MinTempF[{{Number}}]" /></span>
+            <span><label>Max Temp: </label><input id="MaxTempF[{{Number}}]" /></span>
+            <span><label>Variance: </label><input id="TempVariance[{{Number}}]" value="4" /></span>
+            <br />
+            <span><label>Min OutTemp: </label><input id="MinOutTempF[{{Number}}]" /></span>
+            <span><label>Max OutTemp: </label><input id="MaxOutTempF[{{Number}}]" /></span>
+            <br />
+            <span><label>WaterID: </label><input id="WaterId[{{Number}}]" /></span>
+            <span><label>Water Must Be High: </label><input id="OnWhenFloatHigh[{{Number}}]" value="Yes" /></span>
+            <br />
+        </td>
+    </tr>
+</template>

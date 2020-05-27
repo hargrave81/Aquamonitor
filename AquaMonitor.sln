@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AquaMonitor", "AquaMonitor\AquaMonitor.csproj", "{E43A92A3-D0B4-4921-9BFC-F5FEDFB6654F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebDeploy", "WebDeploy\WebDeploy.csproj", "{D3AFEAD3-9ECD-451C-9200-A2906E821070}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AquaTest", "AquaTest\AquaTest.csproj", "{B9BBC9E3-65CD-428A-8F5E-91DA5029C72D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{58F63EA2-494E-4240-9FE9-E56E68573C2B}"
+	ProjectSection(SolutionItems) = preProject
+		Aquadeployservice = Aquadeployservice
+		Aquamonitorservice = Aquamonitorservice
+		default.conf = default.conf
+		README.md = README.md
+		wifi.sh = wifi.sh
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AquaData", "AquaData\AquaData.csproj", "{785C52B1-CAB4-4406-B4E1-C9E889FD78EA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E43A92A3-D0B4-4921-9BFC-F5FEDFB6654F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E43A92A3-D0B4-4921-9BFC-F5FEDFB6654F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E43A92A3-D0B4-4921-9BFC-F5FEDFB6654F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E43A92A3-D0B4-4921-9BFC-F5FEDFB6654F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3AFEAD3-9ECD-451C-9200-A2906E821070}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3AFEAD3-9ECD-451C-9200-A2906E821070}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3AFEAD3-9ECD-451C-9200-A2906E821070}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3AFEAD3-9ECD-451C-9200-A2906E821070}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9BBC9E3-65CD-428A-8F5E-91DA5029C72D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9BBC9E3-65CD-428A-8F5E-91DA5029C72D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9BBC9E3-65CD-428A-8F5E-91DA5029C72D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9BBC9E3-65CD-428A-8F5E-91DA5029C72D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{785C52B1-CAB4-4406-B4E1-C9E889FD78EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{785C52B1-CAB4-4406-B4E1-C9E889FD78EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{785C52B1-CAB4-4406-B4E1-C9E889FD78EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{785C52B1-CAB4-4406-B4E1-C9E889FD78EA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {80C54067-8613-42F6-9398-302F55FD42A6}
+	EndGlobalSection
+EndGlobal

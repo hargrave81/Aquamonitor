@@ -1,0 +1,1364 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AquaMonitor</name>
+    </assembly>
+    <members>
+        <member name="T:AquaMonitor.Web.Controllers.AccountController">
+            <summary>
+            Account level controller
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.AccountController.#ctor(AquaMonitor.Data.Models.IGlobalState,AquaMonitor.Data.Context.AquaDbContext,Microsoft.AspNetCore.Identity.UserManager{AquaMonitor.Data.Models.AppUser},Microsoft.AspNetCore.Identity.SignInManager{AquaMonitor.Data.Models.AppUser})">
+            <summary>
+            CTor
+            </summary>
+            <param name="globalData"></param>
+            <param name="dbContext"></param>
+            <param name="userManager"></param>
+            <param name="signInManager"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.AccountController.Login(AquaMonitor.Data.Models.AppUser)">
+            <summary>
+            Action used to login into system
+            </summary>
+            <param name="appUser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.AccountController.LogOut">
+            <summary>
+            Used to logout
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.AccountController.Profile">
+            <summary>
+            Gets the user profile
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.AccountController.UpdateProfile(AquaMonitor.Data.Models.PasswordModel)">
+            <summary>
+            Updates the user profile
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Controllers.HomeController">
+            <summary>
+            Home controller
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.HomeController.#ctor(AquaMonitor.Data.Models.IGlobalState,AquaMonitor.Web.Global.IPowerRelayService)">
+            <summary>
+            CTor
+            </summary>
+            <param name="globalData"></param>
+            <param name="relayService"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.HomeController.Index">
+            <summary>
+            Main Page
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.HomeController.Tables">
+            <summary>
+            Partial table refresh
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.HomeController.Headers">
+            <summary>
+            Partial header refresh
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.HomeController.Settings">
+            <summary>
+            Settings Page
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.HomeController.Error">
+            <summary>
+            Error view
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Controllers.RelayChartController">
+            <summary>
+            Relay Chart Controller
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.RelayChartController.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Controllers.RelayChartController},AquaMonitor.Data.Context.AquaDbContext)">
+            <summary>
+            Ctor
+            </summary>
+            <param name="logger"></param>
+            <param name="dbContext"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.RelayChartController.Get(System.DateTime,System.DateTime)">
+            <summary>
+            Gets the ChartJS for the given date range
+            </summary>
+            <param name="startDate"></param>
+            <param name="endDate"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Controllers.RelayConfigController">
+            <summary>
+            Relay Controller
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.RelayConfigController.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Controllers.RelayConfigController},AquaMonitor.Data.Context.AquaDbContext)">
+            <summary>
+            CTor
+            </summary>
+            <param name="logger"></param>
+            <param name="dbContext"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.RelayConfigController.Post(AquaMonitor.Web.Models.PowerRelayRequestMessageModel)">
+            <summary>
+            Updates the relays in the system
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Controllers.RelayController">
+            <summary>
+            Relay Controller
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.RelayController.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Controllers.RelayController},AquaMonitor.Web.Global.IPowerRelayService)">
+            <summary>
+            CTor
+            </summary>
+            <param name="logger"></param>
+            <param name="relayService"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.RelayController.Post(AquaMonitor.Web.Models.RelayRequestMessageModel)">
+            <summary>
+            Changes the state of the requested relay
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Controllers.SettingsController">
+            <summary>
+            Relay Controller
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.SettingsController.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Controllers.SettingsController},AquaMonitor.Data.Models.IGlobalState,AquaMonitor.Data.Context.AquaDbContext)">
+            <summary>
+            CTor
+            </summary>
+            <param name="logger"></param>
+            <param name="globalData"></param>
+            <param name="dbContext"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.SettingsController.Post(AquaMonitor.Web.Models.SettingsRequestMessageModel)">
+            <summary>
+            Changes the state of the requested relay
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Controllers.SystemController">
+            <summary>
+            Relay Controller
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.SystemController.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Controllers.SystemController},AquaMonitor.Data.Models.IGlobalState)">
+            <summary>
+            CTor
+            </summary>
+            <param name="logger"></param>
+            <param name="globalData"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.SystemController.Post(AquaMonitor.Web.Models.SystemRequestMessageModel)">
+            <summary>
+            Changes the state of the requested relay
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Controllers.TempChartController">
+            <summary>
+            Temperature Chart Controller
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.TempChartController.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Controllers.TempChartController},AquaMonitor.Data.Context.AquaDbContext)">
+            <summary>
+            Ctor
+            </summary>
+            <param name="logger"></param>
+            <param name="dbContext"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.TempChartController.Get(System.DateTime,System.DateTime)">
+            <summary>
+            Gets the ChartJS for the given date range
+            </summary>
+            <param name="startDate"></param>
+            <param name="endDate"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Controllers.WaterChartController">
+            <summary>
+            Water Chart Controller
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.WaterChartController.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Controllers.WaterChartController},AquaMonitor.Data.Context.AquaDbContext)">
+            <summary>
+            Ctor
+            </summary>
+            <param name="logger"></param>
+            <param name="dbContext"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.WaterChartController.Get(System.DateTime,System.DateTime)">
+            <summary>
+            Gets the ChartJS for the given date range
+            </summary>
+            <param name="startDate"></param>
+            <param name="endDate"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Controllers.WaterConfigController">
+            <summary>
+            WaterLevel Controller
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.WaterConfigController.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Controllers.WaterConfigController},AquaMonitor.Data.Context.AquaDbContext)">
+            <summary>
+            CTor
+            </summary>
+            <param name="logger"></param>
+            <param name="dbContext"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.WaterConfigController.Post(AquaMonitor.Web.Models.WaterLevelRequestMessageModel)">
+            <summary>
+            Updates the waterlevels in the system
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Devices.Htu21D">
+            <summary>
+            Humidity and Temperature Sensor Htu21D
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Devices.Htu21D.Resolution">
+            <summary>
+            Htu21D Resolution
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Devices.Htu21D.Temperature">
+            <summary>
+            Htu21D Temperature
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Devices.Htu21D.Humidity">
+            <summary>
+            Htu21D Relative Humidity (%)
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Devices.Htu21D.CompensatedHumidity">
+            <summary>
+            Humidity compensated for the temperature
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Devices.Htu21D.IsLastReadSuccessful">
+            <summary>
+            Returns true or false if the last read was successful
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Devices.Htu21D.DewPoint">
+            <summary>
+            Gets the computed dew point
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Devices.Htu21D.Heater">
+            <summary>
+            Htu21D Heater
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Htu21D.CreateDevice(System.Int32,AquaMonitor.Web.Devices.I2cAddress,AquaMonitor.Web.Devices.Resolution)">
+            <summary>
+            Creates a Htu21D temperature device
+            </summary>
+            <param name="busId"></param>
+            <param name="address"></param>
+            <param name="resolution"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Htu21D.#ctor(System.Device.I2c.I2cDevice,AquaMonitor.Web.Devices.Resolution)">
+            <summary>
+            Creates a new instance of the Htu21D
+            </summary>
+            <param name="i2cDevice">The I2C device used for communication.</param>
+            <param name="resolution">Htu21D Read Resolution</param>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Htu21D.Dispose">
+            <summary>
+            Cleanup
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Htu21D.Reset">
+            <summary>
+            Htu21D Soft Reset
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Htu21D.SetResolution(AquaMonitor.Web.Devices.Resolution)">
+            <summary>
+            Set Htu21D Resolution
+            </summary>
+            <param name="resolution">Resolution is the quality of the temp and humidity data gathering</param>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Htu21D.SetHeater(System.Boolean)">
+            <summary>
+            Set Htu21D Heater
+            </summary>
+            <param name="isOn">Heater on when value is true</param>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Htu21D.ReadHumidity">
+            <summary>
+            Read Humidity
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Htu21D.ReadTemp">
+            <summary>
+            Read Humidity
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Htu21D.CheckCrc8(System.Byte[],System.Byte)">
+            <summary>
+            8-bit CRC Checksum Calculation
+            </summary>
+            <param name="data">Raw Data</param>
+            <param name="crc8">Raw CRC8</param>
+            <returns>Checksum is true or false</returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Htu21D.ReadBits(AquaMonitor.Web.Devices.Register,System.Int32)">
+            <summary>
+            Reads the register and returns the byte read
+            </summary>
+            <param name="register"></param>
+            <param name="byteLength"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Htu21D.WriteBits(AquaMonitor.Web.Devices.Register,System.Nullable{AquaMonitor.Web.Devices.ResolutionBits},System.Nullable{AquaMonitor.Web.Devices.HeaterBits})">
+            <summary>
+            Writes bits to the user register
+            </summary>
+            <param name="register"></param>
+            <param name="resolution"></param>
+            <param name="heater"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Htu21D.WriteRead(AquaMonitor.Web.Devices.Register,System.Int32)">
+            <summary>
+            Writes then reads the result
+            </summary>
+            <param name="register"></param>
+            <param name="readLength"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Htu21D.Write(AquaMonitor.Web.Devices.Register,System.Nullable{System.Byte})">
+            <summary>
+            Writes out
+            </summary>
+            <param name="register"></param>
+            <param name="data"></param>
+        </member>
+        <member name="T:AquaMonitor.Web.Devices.I2cAddress">
+            <summary>
+            SHT3x I2C Address
+            </summary>
+        </member>
+        <member name="F:AquaMonitor.Web.Devices.I2cAddress.AddrLow">
+            <summary>
+            ADDR (pin2) connected to logic low (Default)
+            </summary>
+        </member>
+        <member name="F:AquaMonitor.Web.Devices.I2cAddress.AddrHigh">
+            <summary>
+            ADDR (pin2) connected to logic high
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Devices.Register">
+            <summary>
+            SHT3x Register
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Devices.Resolution">
+            <summary>
+            Htu21D Resolution
+            </summary>
+        </member>
+        <member name="F:AquaMonitor.Web.Devices.Resolution.High">
+            <summary>High resolution</summary>
+        </member>
+        <member name="F:AquaMonitor.Web.Devices.Resolution.Medium">
+            <summary>Medium resolution</summary>
+        </member>
+        <member name="F:AquaMonitor.Web.Devices.Resolution.Low">
+            <summary>Low resolution</summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Devices.ResolutionBits">
+            <summary>
+            User Bits Flags
+            </summary>
+        </member>
+        <member name="F:AquaMonitor.Web.Devices.ResolutionBits.Humidity12BitTemp14Bit">
+            <summary>
+            High
+            </summary>
+        </member>
+        <member name="F:AquaMonitor.Web.Devices.ResolutionBits.Humidity8BitTemp12Bit">
+            <summary>
+            Low
+            </summary>
+        </member>
+        <member name="F:AquaMonitor.Web.Devices.ResolutionBits.Humidity10BitTemp13Bit">
+            <summary>
+            Medium
+            </summary>
+        </member>
+        <member name="F:AquaMonitor.Web.Devices.ResolutionBits.Humidity11BitTemp11Bit">
+            <summary>
+            Unused
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Devices.HeaterBits">
+            <summary>
+            Bits for heater
+            </summary>
+        </member>
+        <member name="F:AquaMonitor.Web.Devices.HeaterBits.OnChipHeaterOn">
+            <summary>
+            On flag
+            </summary>
+        </member>
+        <member name="F:AquaMonitor.Web.Devices.HeaterBits.OnChipHeaterOff">
+            <summary>
+            Off flag
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Devices.ByteShop">
+            <summary>
+            Allows bit manipulation
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.ByteShop.BitState(System.Byte,System.Int32)">
+            <summary>
+            Returns the Bit State
+            </summary>
+            <param name="src"></param>
+            <param name="position"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.ByteShop.BitOn(System.Byte,System.Int32)">
+            <summary>
+            Turns a bit on a given position
+            </summary>
+            <param name="src"></param>
+            <param name="position"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.ByteShop.BitOff(System.Byte,System.Int32)">
+            <summary>
+            Turns a bit off at a given position
+            </summary>
+            <param name="src"></param>
+            <param name="position"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Global.IPowerRelayService">
+            <summary>
+            Relay Power Interface
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Global.IPowerRelayService.GetState(AquaMonitor.Data.Models.RelayLocation)">
+            <summary>
+            Gets the state of the relay
+            </summary>
+            <param name="relay"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Global.IPowerRelayService.SetState(AquaMonitor.Data.Models.RelayLocation,AquaMonitor.Data.Models.PowerState)">
+            <summary>
+            Sets the state of the relay
+            </summary>
+            <param name="relay"></param>
+            <param name="active"></param>
+        </member>
+        <member name="T:AquaMonitor.Web.Global.PowerRelayService">
+            <summary>
+            Access to power relays
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Global.PowerRelayService.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Global.PowerRelayService},AquaMonitor.Data.Models.IGlobalState)">
+            <summary>
+            CTor
+            </summary>
+            <param name="globalData"></param>
+            <param name="logger"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Global.PowerRelayService.GetPin(AquaMonitor.Data.Models.RelayLocation)">
+            <summary>
+            gets the underlying pin #
+            </summary>
+            <param name="relay"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Global.PowerRelayService.GetState(AquaMonitor.Data.Models.RelayLocation)">
+            <summary>
+            Gets the state of the relay
+            </summary>
+            <param name="relay"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Global.PowerRelayService.SetState(AquaMonitor.Data.Models.RelayLocation,AquaMonitor.Data.Models.PowerState)">
+            <summary>
+            Sets the state of the relay
+            </summary>
+            <param name="relay"></param>
+            <param name="active"></param>
+        </member>
+        <member name="T:AquaMonitor.Web.Helpers.ChartHelper">
+            <summary>
+            Chart helper
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Helpers.ChartHelper.GetChartAsync``1(AquaMonitor.Data.Context.AquaDbContext,System.DateTime,System.DateTime)">
+            <summary>
+            Generate a chart of type T
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="context"></param>
+            <param name="startDate"></param>
+            <param name="endDate"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Helpers.NormalAverageHelper">
+            <summary>
+            Average helper function to normalize data
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Helpers.NormalAverageHelper.NormalAverage(System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>
+            Returns the normalized average of values
+            </summary>
+            <param name="entries"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Helpers.NormalAverageHelper.NormalAverage``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Double})">
+            <summary>
+            Returns the normalized average of values
+            </summary>
+            <param name="source"></param>
+            <param name="selector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Helpers.NormalAverageHelper.AveragePowerState(System.Collections.Generic.IEnumerable{AquaMonitor.Data.Models.PowerState})">
+            <summary>
+            Returns the average power state over time
+            </summary>
+            <param name="entries"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Helpers.NormalAverageHelper.AveragePowerState``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,AquaMonitor.Data.Models.PowerState})">
+            <summary>
+            Returns the average power state over time
+            </summary>
+            <param name="source"></param>
+            <param name="selector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Helpers.NormalAverageHelper.AverageWaterState(System.Collections.Generic.IEnumerable{System.Boolean})">
+            <summary>
+            Returns the average power state over time
+            </summary>
+            <param name="entries"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Helpers.NormalAverageHelper.AverageWaterState``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+            Returns the average power state over time
+            </summary>
+            <param name="source"></param>
+            <param name="selector"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.ChartJSData`1">
+            <summary>
+            Chart values
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ChartJSData`1.Label">
+            <summary>
+            Label for dataset
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ChartJSData`1.BackgroundColor">
+            <summary>
+            Fill color for data area
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ChartJSData`1.BorderColor">
+            <summary>
+            Stroke color for line
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ChartJSData`1.PointBackgroundColor">
+            <summary>
+            Point color for when data is marked on chart
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ChartJSData`1.PointBorderColor">
+            <summary>
+            Point stroke color for where data is marked on chart
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ChartJSData`1.Fill">
+            <summary>
+            true or false to fill the line region
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ChartJSData`1.Data">
+            <summary>
+            Data values to plot on the chart
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.ErrorViewModel">
+            <summary>
+            Error view model
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ErrorViewModel.RequestId">
+            <summary>
+            Request ID
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ErrorViewModel.ShowRequestId">
+            <summary>
+            True or false to show requestID
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.PowerRelayRequestMessageModel">
+            <summary>
+            Relay request model for editing relays
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.PowerRelayRequestMessageModel.Relays">
+            <summary>
+            Array of relays
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.PowerRelayModel">
+            <summary>
+            Relay Model
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.PowerRelayModel.Id">
+            <summary>
+            Power Relay Id
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.PowerRelayModel.Name">
+            <summary>
+            Logical Name for Power Relay
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.PowerRelayModel.Letter">
+            <summary>
+            Logical Relay Letter
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.PowerRelayModel.Interval">
+            <summary>
+            Interval for Power Relay in seconds
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.PowerRelayModel.IntervalRun">
+            <summary>
+            Run time for Power Relay in seconds
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.PowerRelayModel.Start">
+            <summary>
+            Start time for Power to begin working
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.PowerRelayModel.Stop">
+            <summary>
+            Stop time for Power to stop working
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.PowerRelayModel.MinTempF">
+            <summary>
+            Min Temp to start operating - ideal for cool mode
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.PowerRelayModel.MaxTempF">
+            <summary>
+            Max Temp before stop operating - ideal for heat mode
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.PowerRelayModel.MinOutTempF">
+            <summary>
+            Min Outside Temp to start operating - ideal for cool mode
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.PowerRelayModel.MaxOutTempF">
+            <summary>
+            Max Outside Temp before stop operating - ideal for heat mode
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.PowerRelayModel.TempVariance">
+            <summary>
+            Variance before triggering an on/off operation from desired set temp
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.PowerRelayModel.WaterId">
+            <summary>
+            Power functions based on a water level ID
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.PowerRelayModel.OnWhenFloatHigh">
+            <summary>
+            Power is on when float is High (true float high power is on, false float is low power is on)
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.PowerRelayModel.Pin">
+            <summary>
+            The pin within the system board
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.PowerRelayModel.ToPowerRelay">
+            <summary>
+            Creates a power relay from the model
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.PowerRelayModel.UpdateRelay(AquaMonitor.Data.Models.PowerRelay)">
+            <summary>
+            Updates a relay
+            </summary>
+            <param name="fromDb"></param>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.RelayChartModel">
+            <summary>
+            Relay chart model
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.RelayChartModel.Labels">
+            <summary>
+            labels for chart
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.RelayChartModel.DataSets">
+            <summary>
+            Datasets to display
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.RelayChartModel.#ctor">
+            <summary>
+            Create instance of the temp chart model
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.RelayChartModel.#ctor(System.Collections.Generic.IEnumerable{AquaMonitor.Data.Models.HistoryRecord},System.TimeSpan)">
+            <summary>
+            Create instance of the temp chart model with data
+            </summary>
+            <param name="records"></param>
+            <param name="Range"></param>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.RelayRequestMessageModel">
+            <summary>
+            Relay Request Message
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.RelayRequestMessageModel.Relay">
+            <summary>
+            a or b
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.RelayRequestMessageModel.State">
+            <summary>
+            on or off
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.SettingsRequestMessageModel">
+            <summary>
+            Settings Request Message
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.TempPin">
+            <summary>
+            Temperature Pin #
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.TempType">
+            <summary>
+            Temperature Type (DHT11 or DHT22)
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.DataCollectionRate">
+            <summary>
+            Data collection rate in seconds (60 = 1 minute)
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.Zipcode">
+            <summary>
+            Zipcode for weather API
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.Country">
+            <summary>
+            Country for weather API
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.APIKey">
+            <summary>
+            API Key for weather API
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.SystemRequestMessageModel">
+            <summary>
+            System Request Message
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.SystemRequestMessageModel.State">
+            <summary>
+            on or off
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.TempChartModel">
+            <summary>
+            Temperature chart model
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.TempChartModel.Labels">
+            <summary>
+            labels for chart
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.TempChartModel.DataSets">
+            <summary>
+            Datasets to display
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.TempChartModel.#ctor">
+            <summary>
+            Create instance of the temp chart model
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.TempChartModel.#ctor(System.Collections.Generic.IEnumerable{AquaMonitor.Data.Models.HistoryRecord},System.TimeSpan)">
+            <summary>
+            Create instance of the temp chart model with data
+            </summary>
+            <param name="records"></param>
+            <param name="Range"></param>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.WaterChartModel">
+            <summary>
+            Relay chart model
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WaterChartModel.Labels">
+            <summary>
+            labels for chart
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WaterChartModel.DataSets">
+            <summary>
+            Datasets to display
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.WaterChartModel.#ctor">
+            <summary>
+            Create instance of the temp chart model
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.WaterChartModel.#ctor(System.Collections.Generic.IEnumerable{AquaMonitor.Data.Models.HistoryRecord},System.TimeSpan)">
+            <summary>
+            Create instance of the temp chart model with data
+            </summary>
+            <param name="records"></param>
+            <param name="Range"></param>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.WaterLevelRequestMessageModel">
+            <summary>
+            Water level request model
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WaterLevelRequestMessageModel.WaterLevels">
+            <summary>
+            List of water levels
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.WaterLevelModel">
+            <summary>
+            Model to change water level settings
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WaterLevelModel.Id">
+            <summary>
+            ID of water level
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WaterLevelModel.Name">
+            <summary>
+            Logical name of water level
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WaterLevelModel.Pin">
+            <summary>
+            GPIO Pin
+            </summary>
+            <value></value>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.WaterLevelModel.ToWaterLevel">
+            <summary>
+            Converts model to DbModel
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.WaterLevelModel.UpdateWaterLevel(AquaMonitor.Data.Models.WaterLevel)">
+            <summary>
+            Updates Db Model from view Model
+            </summary>
+            <param name="fromDb"></param>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.WeatherResult">
+            <summary>
+            Results from weather API
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WeatherResult.Coord">
+            <summary>
+            Longitude and Latitude
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WeatherResult.Weather">
+            <summary>
+            Primary weather state
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WeatherResult.Main">
+            <summary>
+            Primary temperature
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WeatherResult.Visibility">
+            <summary>
+            Visibility distance
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WeatherResult.Wind">
+            <summary>
+            Wind speeds
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WeatherResult.Clouds">
+            <summary>
+            Cloud coverage percentage
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WeatherResult.Dt">
+            <summary>
+            Time of day calculations were made
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WeatherResult.Sys">
+            <summary>
+            Sunrise and fall details
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WeatherResult.Timezone">
+            <summary>
+            Timezone
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WeatherResult.Id">
+            <summary>
+            City ID
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WeatherResult.Name">
+            <summary>
+            City Name
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WeatherResult.Temp">
+            <summary>
+            Returns current Temperature
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WeatherResult.TempMin">
+            <summary>
+            Returns today's low Temperature
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WeatherResult.TempMax">
+            <summary>
+            Returns a today's high Temperature
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.WeatherResult.TempFeelsLike">
+            <summary>
+            Returns current Feels Like Temperature
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.Clouds">
+            <summary>
+            Cloud results
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.Clouds.All">
+            <summary>
+            Cloud coverage 0 - 100
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.Coord">
+            <summary>
+            Coordinates
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.Coord.Lon">
+            <summary>
+            Longitude
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.Coord.Lat">
+            <summary>
+            Latitude
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.Main">
+            <summary>
+            Main temperature weather
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.Main.Temp">
+            <summary>
+            Temp in celcius
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.Main.FeelsLike">
+            <summary>
+            What it feels like factoring things like humdiity
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.Main.TempMin">
+            <summary>
+            Low temp
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.Main.TempMax">
+            <summary>
+            High temp
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.Main.Pressure">
+            <summary>
+            Pressure in hPa
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.Main.Humidity">
+            <summary>
+            Humidity 0 - 100  (%)
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.Sys.UnixSunrise">
+            <summary>
+            Sunrise unix time UTC
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.Sys.UnixSunset">
+            <summary>
+            Sunset unixtime UTC
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.Sys.Sunrise">
+            <summary>
+            Sunrise
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.Sys.Sunset">
+            <summary>
+            Sunrise
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.Weather.Main">
+            <summary>
+            Main weather e.g. Rain, snow, clouds
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.Weather.Description">
+            <summary>
+            Description of weather
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.Weather.Icon">
+            <summary>
+            Icon of weather
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.Wind">
+            <summary>
+            Wind data
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.Wind.Speed">
+            <summary>
+            Wind speed in meter/sec
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.Wind.SpeedMph">
+            <summary>
+            Returns wind speed in MPH
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Program">
+            <summary>
+            Entry program
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Program.Main(System.String[])">
+            <summary>
+            Main entry point
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            Host builder
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Services.AtmosphereService">
+            <summary>
+            Atmospheric information
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.AtmosphereService.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Services.AtmosphereService},AquaMonitor.Data.Models.IGlobalState)">
+            <summary>
+            Service Constructor
+            </summary>
+            <param name="logger"></param>
+            <param name="globalData"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.AtmosphereService.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            Starts service
+            </summary>
+            <param name="stoppingToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.AtmosphereService.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Stops service
+            </summary>
+            <param name="stoppingToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.AtmosphereService.ProcessWork(System.Object)">
+            <summary>
+            Process work
+            </summary>
+            <param name="state"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.AtmosphereService.Dispose">
+            <summary>
+            Dispose Service
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Services.NetworkHealthService">
+            <summary>
+            Service to maintain network health
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.NetworkHealthService.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Services.NetworkHealthService})">
+            <summary>
+            Service Constructor
+            </summary>
+            <param name="logger"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.NetworkHealthService.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            Starts service
+            </summary>
+            <param name="stoppingToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.NetworkHealthService.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Stops service
+            </summary>
+            <param name="stoppingToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.NetworkHealthService.ProcessWork(System.Object)">
+            <summary>
+            Process work
+            </summary>
+            <param name="state"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.NetworkHealthService.Dispose">
+            <summary>
+            Dispose Service
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Services.SystemOperationsService">
+            <summary>
+            Service to track water levels
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.SystemOperationsService.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Services.SystemOperationsService},AquaMonitor.Data.Models.IGlobalState,AquaMonitor.Web.Global.IPowerRelayService,AquaMonitor.Data.Context.AquaServiceDbContext)">
+            <summary>
+            Service Constructor
+            </summary>
+            <param name="logger"></param>
+            <param name="globalData"></param>
+            <param name="relayService"></param>
+            <param name="dbContext"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.SystemOperationsService.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            Starts service
+            </summary>
+            <param name="stoppingToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.SystemOperationsService.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Stops service
+            </summary>
+            <param name="stoppingToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.SystemOperationsService.ProcessWork(System.Object)">
+            <summary>
+            Process work
+            </summary>
+            <param name="state"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.SystemOperationsService.ProcessRelay(AquaMonitor.Data.Models.RelayLocation,System.DateTime)">
+            <summary>
+            Process RelayA cycle
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.SystemOperationsService.Dispose">
+            <summary>
+            Dispose Service
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Services.WaterLevelService">
+            <summary>
+            Service to track water levels
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.WaterLevelService.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Services.WaterLevelService},AquaMonitor.Data.Models.IGlobalState)">
+            <summary>
+            Service Constructor
+            </summary>
+            <param name="logger"></param>
+            <param name="globalData"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.WaterLevelService.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            Starts service
+            </summary>
+            <param name="stoppingToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.WaterLevelService.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Stops service
+            </summary>
+            <param name="stoppingToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.WaterLevelService.ProcessWork(System.Object)">
+            <summary>
+            Process work
+            </summary>
+            <param name="state"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.WaterLevelService.Dispose">
+            <summary>
+            Dispose Service
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Services.WeatherServices">
+            <summary>
+            Weather Service
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.WeatherServices.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Services.WeatherServices},AquaMonitor.Data.Models.IGlobalState)">
+            <summary>
+            Service Constructor
+            </summary>
+            <param name="logger"></param>
+            <param name="globalData"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.WeatherServices.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            Starts service
+            </summary>
+            <param name="stoppingToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.WeatherServices.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Stops service
+            </summary>
+            <param name="stoppingToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.WeatherServices.ProcessWork(System.Object)">
+            <summary>
+            Process work
+            </summary>
+            <param name="state"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.WeatherServices.Dispose">
+            <summary>
+            Dispose Service
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Startup">
+            <summary>
+            Startup
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Main entry
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="P:AquaMonitor.Web.Startup.Configuration">
+            <summary>
+            Configuration
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Service Build up
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.AspNetCore.Identity.UserManager{AquaMonitor.Data.Models.AppUser})">
+            <summary>
+            HTTP Pipeline
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+            <param name="userManager"></param>
+        </member>
+    </members>
+</doc>

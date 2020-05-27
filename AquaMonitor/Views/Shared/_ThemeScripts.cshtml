@@ -1,0 +1,250 @@
+﻿
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+
+<!-- Argon Scripts -->
+<!-- Core -->
+<script src="~/vendor/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+<script src="~/vendor/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+<!-- Docs JS -->
+<script src="~/vendor/anchor-js/anchor.min.js" asp-append-version="true"></script>
+<script src="~/vendor/clipboard/dist/clipboard.min.js" asp-append-version="true"></script>
+<script src="~/vendor/holderjs/holder.min.js" asp-append-version="true"></script>
+<script src="~/vendor/prismjs/prism.js" asp-append-version="true"></script>
+<!-- Optional JS -->
+<script src="~/vendor/chart.js/dist/Chart.min.js" asp-append-version="true"></script>
+<script src="~/vendor/chart.js/dist/Chart.extension.js" asp-append-version="true"></script>
+<script src="~/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js" asp-append-version="true"></script>
+<!-- Argon JS -->
+<script src="~/js/argon.js" asp-append-version="true"></script>
+<!-- Site JS -->
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+<script>
+    $('body').on('submit', '#loginForm', function () {
+        $.ajax({
+            url: '@Url.Action("Login","Account")',
+            type: 'POST',
+            cache: false,
+            async: true,
+            headers: {
+                'RequestVerificationToken': '@GetAntiXsrfRequestToken()'
+            },
+            data: JSON.stringify({ "UserName": $('#Username').val(), "Password": $('#Password').val() }),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function(result){
+                if (result.success) {
+                    window.location = '@Url.Action("Index","Home")';
+                } else {
+                    $('#loginAlert').removeClass('hidden');
+                    setTimeout("$('#loginAlert').addClass('hidden', {duration:1000});", 8000); // hide the notice in 8 seconds
+                }
+            },
+            failure: function() {
+                $('#loginAlert').removeClass('hidden');
+                setTimeout("$('#loginAlert').addClass('hidden', {duration:1000});", 8000); // hide the notice in 8 seconds
+            },
+            error: function() {
+                $('#loginAlert').removeClass('hidden');
+                setTimeout("$('#loginAlert').addClass('hidden', {duration:1000});", 8000); // hide the notice in 8 seconds
+            }
+        });
+        return false;
+    });
+
+    refreshCards();
+
+    var tempChartUrl = '@Url.RouteUrl("defaultApi",new { controller="TempChart"})';
+    var waterChartUrl = '@Url.RouteUrl("defaultApi",new { controller="WaterChart"})';
+    var relayChartUrl = '@Url.RouteUrl("defaultApi",new { controller="RelayChart"})';
+
+    function drawTempChart() {
+        var ctx = document.getElementById('tempChart').getContext('2d');
+        var dateObj = new Date();
+        var startDate = new Date(dateObj.getTime() - (72 * 60 * 60 * 1000));
+        var jsonData = $.ajax({
+            url: tempChartUrl + '?startDate=' + startDate.toISOString() + '&endDate=' + dateObj.toISOString(),
+            dataType: 'json',
+        }).done(function (results) {
+            setTimeout('drawTempChart();', 60000);
+            // Instantiate a new chart
+            var myLineChart = new Chart(ctx,
+                {
+                    type: 'line',
+                    bezierCurve: true,
+                    data: results
+                }
+            );
+        });
+    }
+
+    function drawRelayChart() {
+        var ctx = document.getElementById('relayChart').getContext('2d');
+        var dateObj = new Date();
+        var startDate = new Date(dateObj.getTime() - (72 * 60 * 60 * 1000));
+        var jsonData = $.ajax({
+            url: relayChartUrl + '?startDate=' + startDate.toISOString() + '&endDate=' + dateObj.toISOString(),
+            dataType: 'json',
+        }).done(function (results) {
+            setTimeout('drawRelayChart();', 60000);
+            // Instantiate a new chart
+            var myLineChart = new Chart(ctx,
+                {
+                    type: 'line',
+                    bezierCurve: true,
+                    data: results,
+                    options: {
+                        scales: {
+                            yAxes:[{
+                                ticks:{
+                                    callback:function(value,index,values){
+                                        if (value == 1) return "On";
+                                        if (value == 0) return "Off";
+                                    }
+                                }
+                            }]
+                        }
+                    }
+                }
+            );
+        });
+    }
+
+    function drawWaterChart() {
+        var ctx = document.getElementById('waterChart').getContext('2d');
+        var dateObj = new Date();
+        var startDate = new Date(dateObj.getTime() - (72 * 60 * 60 * 1000));
+        var jsonData = $.ajax({
+            url: waterChartUrl + '?startDate=' + startDate.toISOString() + '&endDate=' + dateObj.toISOString(),
+            dataType: 'json',
+        }).done(function (results) {
+            setTimeout('drawWaterChart();', 60000);
+            // Instantiate a new chart
+            var myLineChart = new Chart(ctx,
+                {
+                    type: 'line',
+                    bezierCurve: true,
+                    data: results,
+                    options: {
+                        scales: {
+                            yAxes:[{
+                                ticks:{
+                                    callback:function(value,index,values){
+                                        if (value == 1) return "High";
+                                        if (value == 0) return "Low";
+                                    }
+                                }
+                            }]
+                        }
+                    }
+                }
+            );
+        });
+    }
+
+    function refreshCards() {
+         setTimeout(function () {
+            $.ajax({
+                url: '@Url.Action("headers","home")',
+                type: 'get',
+                cache: false,
+                async: true,
+                success: function(result){
+                    $('.header-block').html(result);
+                    $('#currentDateTime').html($('#systemDateTime').html());
+                    if ($('#systemStatusField').html() == 'True') {
+                        $('navbar-brand-img').attr("src","@Url.Content("/img/brand/blue.png")");
+                    } else {
+                        $('navbar-brand-img').attr("src","@Url.Content("/img/brand/black.png")");
+                    }
+                },
+                failure: function() { // if we cannot get a heartbeat, lets make things look broken a bit
+                    $('navbar-brand-img').attr("src","@Url.Content("/img/brand/red.png")");
+                }
+            });
+        }, 10000);
+    }
+
+    function RefreshTables() {
+        //this will wait 3 seconds and then fire the load partial function
+        setTimeout(function(){
+            loadTablePartial();
+            //recall this function so that it will continue to loop
+            RefreshTables();
+        }, 8000);
+    }
+    //initialize the loop
+    RefreshTables();
+
+
+    // Relays
+    $('.table-section').on('click', '.btn-relay', function (e) {
+        e.preventDefault();
+        var turnOff = $(this).data('state') == 'Off';
+        var onBtn = (turnOff ? $(this) : $(this).prev());
+        var offBtn = (turnOff ? $(this).next() : $(this));
+        $.ajax({
+                type: 'POST',
+                url: "@Url.RouteUrl("defaultApi",new { controller="relay" })",
+                data: JSON.stringify({ relay: $(this).data('relay'), state: $(this).data('state')  }),
+                dataType: 'json',
+                headers: {
+                    'RequestVerificationToken': '@GetAntiXsrfRequestToken()'
+                },
+                contentType: "application/json; charset=utf-8"
+            })
+            .done(function (msg) {
+                if (msg.success) {
+                    $('.alert-relay-success').removeClass('hidden');
+                    setTimeout("$('alert-relay-success').addClass('hidden', {duration:1000});", 8000);
+                    // update neccessary buttons and text
+                    if (turnOff) {
+                        onBtn.addClass('btn-primary');
+                        onBtn.removeClass('btn-secondary');
+                        offBtn.addClass('btn-secondary');
+                        offBtn.removeClass('btn-primary');
+                        onBtn.parent().prev().css('color', '#900');
+                        onBtn.parent().prev().html('Off');
+                    }
+                    else {
+                        offBtn.addClass('btn-primary');
+                        offBtn.removeClass('btn-secondary');
+                        onBtn.addClass('btn-secondary');
+                        onBtn.removeClass('btn-primary');
+                        onBtn.parent().prev().css('color', '#090');
+                        onBtn.parent().prev().html('On');
+                    }
+                } else {
+                    $('.alert-relay-fail').removeClass('hidden');
+                    setTimeout("$('alert-relay-fail').addClass('hidden', {duration:1000});", 8000);
+                }
+            });
+    });
+
+    $('.table-section').on('click', '.btn-settings', function (e) {
+        e.preventDefault();
+        window.location = '@Url.Action("Settings","Home")';
+    });
+
+    function loadTablePartial() {
+        $.ajax({
+            url: '@Url.Action("tables","home")',
+            type: 'get',
+            cache: false,
+            async: true,
+            success: function(result){
+                $('.table-section').html(result);
+            },
+            failure: function() {
+
+            }
+        });
+    }
+
+</script>

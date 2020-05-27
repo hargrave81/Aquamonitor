@@ -1,0 +1,186 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+    public string VersionNumber()
+    {
+        var fi = new System.IO.FileInfo(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "AquaMonitor.dll"));
+        return "1." + fi.LastWriteTime.ToString("yy.M.dd0") + "b";
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AquaMonitor</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar fishgraphics navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">AquaMonitor</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <partial name="_LoginPartial" />
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">System</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Settings">Settings</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2020 - AquaMonitor v @VersionNumber() <span id="currentDateTime">@DateTime.Now.ToShortDateString() @DateTime.Now.ToString("hh:mm:ss t")M</span>
+            <div id="SystemOnlineAnimation" class="hidden waterFlowing"></div>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+    <script>
+        $('.container').on('submit', '#loginForm', function () {
+            $.ajax({
+                url: '@Url.Action("Login","Account")',
+                type: 'POST',
+                cache: false,
+                async: true,
+                headers: {
+                    'RequestVerificationToken': '@GetAntiXsrfRequestToken()'
+                },
+                data: JSON.stringify({ "UserName": $('#Username').val(), "Password": $('#Password').val() }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function(result){
+                    if (result.success) {
+                        window.location = '@Url.Action("Index","Home")';
+                    } else {
+                        $('#loginAlert').removeClass('hidden');
+                        setTimeout("$('#loginAlert').addClass('hidden', {duration:1000});", 8000); // hide the notice in 8 seconds
+                    }
+                },
+                failure: function() {
+                    $('#loginAlert').removeClass('hidden');
+                    setTimeout("$('#loginAlert').addClass('hidden', {duration:1000});", 8000); // hide the notice in 8 seconds
+                },
+                error: function() {
+                    $('#loginAlert').removeClass('hidden');
+                    setTimeout("$('#loginAlert').addClass('hidden', {duration:1000});", 8000); // hide the notice in 8 seconds
+                }
+            });
+            return false;
+        });
+
+
+        var tempChartUrl = '@Url.RouteUrl("defaultApi",new { controller="TempChart"})';
+        var waterChartUrl = '@Url.RouteUrl("defaultApi",new { controller="WaterChart"})';
+        var relayChartUrl = '@Url.RouteUrl("defaultApi",new { controller="RelayChart"})';
+
+        function drawTempChart() {
+            var ctx = document.getElementById('tempChart').getContext('2d');
+            var dateObj = new Date();
+            var startDate = new Date(dateObj.getTime() - (72 * 60 * 60 * 1000));
+            var jsonData = $.ajax({
+                url: tempChartUrl + '?startDate=' + startDate.toISOString() + '&endDate=' + dateObj.toISOString(),
+                dataType: 'json',
+            }).done(function (results) {
+                setTimeout('drawTempChart();', 60000);
+                // Instantiate a new chart
+                var myLineChart = new Chart(ctx,
+                    {
+                        type: 'line',
+                        bezierCurve: true,
+                        data: results
+                    }
+                );
+            });
+        }
+
+        function drawRelayChart() {
+            var ctx = document.getElementById('relayChart').getContext('2d');
+            var dateObj = new Date();
+            var startDate = new Date(dateObj.getTime() - (72 * 60 * 60 * 1000));
+            var jsonData = $.ajax({
+                url: relayChartUrl + '?startDate=' + startDate.toISOString() + '&endDate=' + dateObj.toISOString(),
+                dataType: 'json',
+            }).done(function (results) {
+                setTimeout('drawRelayChart();', 60000);
+                // Instantiate a new chart
+                var myLineChart = new Chart(ctx,
+                    {
+                        type: 'line',
+                        bezierCurve: true,
+                        data: results,
+                        options: {
+                            scales: {
+                                yAxes:[{
+                                    ticks:{
+                                        callback:function(value,index,values){
+                                            if (value == 1) return "On";
+                                            if (value == 0) return "Off";
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                );
+            });
+        }
+
+        function drawWaterChart() {
+            var ctx = document.getElementById('waterChart').getContext('2d');
+            var dateObj = new Date();
+            var startDate = new Date(dateObj.getTime() - (72 * 60 * 60 * 1000));
+            var jsonData = $.ajax({
+                url: waterChartUrl + '?startDate=' + startDate.toISOString() + '&endDate=' + dateObj.toISOString(),
+                dataType: 'json',
+            }).done(function (results) {
+                setTimeout('drawWaterChart();', 60000);
+                // Instantiate a new chart
+                var myLineChart = new Chart(ctx,
+                    {
+                        type: 'line',
+                        bezierCurve: true,
+                        data: results,
+                        options: {
+                            scales: {
+                                yAxes:[{
+                                    ticks:{
+                                        callback:function(value,index,values){
+                                            if (value == 1) return "High";
+                                            if (value == 0) return "Low";
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                );
+            });
+        }
+    </script>
+</body>
+</html>

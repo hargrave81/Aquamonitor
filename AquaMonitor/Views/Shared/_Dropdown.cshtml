@@ -1,0 +1,35 @@
+﻿@using AquaMonitor.Data.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> SignInManager
+
+<div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
+    <div class=" dropdown-header noti-title">
+        <h6 class="text-overflow m-0">Welcome!</h6>
+    </div>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <a href="@Url.Action("Profile","Account")" class="dropdown-item">
+            <i class="ni ni-single-02"></i>
+            <span>My profile</span>
+        </a>
+        <a href="@Url.Action("Settings","Home")" class="dropdown-item">
+            <i class="ni ni-settings-gear-65"></i>
+            <span>Settings</span>
+        </a>        
+        <div class="dropdown-divider"></div>
+        <form class="form-inline" asp-action="LogOut" asp-controller="Account">
+            <button type="submit" class="dropdown-item logout">
+                <i class="ni ni-user-run"></i>
+                <span class="logout">Logout</span>
+            </button>
+        </form>
+    }
+    else
+    {
+        <a class="dropdown-item" data-toggle="modal" data-target="#loginDialog" href="#">
+            <i class="ni ni-single-02"></i>
+            <span>Login</span>
+        </a>
+
+    }
+</div>

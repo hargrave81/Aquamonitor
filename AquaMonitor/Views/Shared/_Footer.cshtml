@@ -1,0 +1,29 @@
+﻿@functions{
+    public string VersionNumber()
+    {
+        var fi = new System.IO.FileInfo(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "AquaMonitor.dll"));
+        return "1." + fi.LastWriteTime.ToString("yy.M.dd0") + "b";
+    }
+
+}
+
+
+<footer class="footer">
+    <div class="row align-items-center justify-content-xl-between">
+        <div class="col-xl-6">
+            <div class="copyright text-center text-xl-left text-muted">
+                &copy; 2020 - AquaMonitor v @VersionNumber() <span id="currentDateTime">@DateTime.Now.ToShortDateString() @DateTime.Now.ToString("hh:mm:ss t")M</span>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <ul class="nav nav-footer justify-content-center justify-content-xl-end">
+                <li class="nav-item">
+                    <a href="https://github.com/hargrave81/aquaponics" class="nav-link" target="_blank">Aquaponics Source</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://www.youtube.com/channel/UCQ-vYoXxTk2G0k-PmUELJoQ" class="nav-link" target="_blank">Aquaponics Youtube</a>
+                </li>               
+            </ul>
+        </div>
+    </div>
+</footer>

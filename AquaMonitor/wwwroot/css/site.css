@@ -1,0 +1,325 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem #000000;
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+
+footer {
+    width: 96%;
+}
+
+.fishgraphics {
+    background-image: url('FishGraphic.png');
+    -ms-background-repeat: no-repeat;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.login-nav {
+    padding-right: 250px;
+}
+
+
+@media only screen and (max-width: 768px) {
+    .login-nav {
+        padding-right: 265px;
+    }
+}
+
+
+@media only screen and (max-width: 575px) {
+    .login-nav { padding-right: 0px; }
+}
+
+
+@media only screen and (max-width: 575px) {
+    .fishgraphics {
+        background-position: calc(100% - 50px) 0;
+    }
+}
+
+
+@media only screen and (max-width: 470px) {
+    .fishgraphics {
+        background-position: right 45px;
+    }
+    nav.fishgraphics {
+        padding-bottom: 55px;
+    }
+}
+
+@media only screen and (max-width: 194px) {
+    .fishgraphics {
+        background-position: 0px 40px;
+    }
+
+    nav.fishgraphics {
+        padding-bottom: 50px;
+    }
+}
+
+.settings table tr td {
+    text-align: left;
+    font-size: 12px;
+}
+
+.settings table tr td span {
+    max-width: 160px;
+    padding-right: 10px;
+    display: inline-block;
+}
+
+.settings table tr td label {
+    width: 75px;
+    display: inline-block;
+}
+
+.settings table tr td span input {
+    max-width: 70px;
+    padding-right: 5px;
+    margin-left: 5px;
+    float: right;
+    position: relative;
+    height: 20px;
+}
+.settings table tr td.long span input {
+    max-width: 140px;
+    position: unset;
+    float: none;
+}
+
+.settings table tr td.long {
+    text-align: center;
+}
+
+
+div.fishgraphics {
+    min-height: 120px;
+    float: right;
+    position: fixed;
+    top: 0px;
+    width: 320px;
+    display: inline-block;
+}
+
+table {
+    border-spacing: 0px;
+}
+
+tr {
+    -ms-transition: 0.3s all ease-out;
+    -o-transition: 0.3s all ease-out;
+    -webkit-transition: 0.3s all ease-out;
+    transition: 0.3s all ease-out
+}
+
+thead {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    background: #004060;
+    background: rgba(0, 64, 96, 0.9);
+}
+
+    thead td {
+        padding-left: 4px;
+        padding-right: 4px;
+        border-bottom: 1px solid black;
+    }
+
+    thead tr:nth-child(even) td {
+        background: #e0e0e0;
+        background: rgba(224, 224, 224, .9);
+    }
+
+tr:nth-child(even) {
+    background: #000000;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+tbody tr:hover {
+    background: #000000;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+td {
+    max-width: 500px;
+    max-height: 40px;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-right: 1px solid #222;
+    border-left: 1px solid #222;
+}
+
+tr:last-child td {
+    border-bottom: 1px solid #222;
+}
+
+h4 {
+    padding-left: 100px;
+    text-align: left;
+}
+
+.highwater {
+    background-image: url(wave.png);
+    background-repeat: repeat-x;
+    background-position: top;
+}
+
+.lowwater {
+    background-image: url(wave.png);
+    background-repeat: repeat-x;
+    background-position: top;
+    background-position-y: 18px;
+}
+
+
+.highwater-big {
+    background-image: url(wavebig.png);    
+}
+
+.lowwater-big {
+    background-image: url(wavebig.png);    
+}
+
+.relayOff {
+    background-color: rgba(255, 128, 128, .7);
+}
+
+.relayOn {
+    background-color: rgba(128, 255, 128, .7);
+}
+
+.systemOffline {
+    color: #600 !important;
+}
+
+.systemOnline {
+    color: #0a0 !important;
+}
+
+label {
+    font-weight: bold;
+    padding-left: 4px;
+}
+.waterFlowing {
+    background-image: url(waterGoingTx.gif);
+    background-repeat: no-repeat;
+    background-size: 130px;
+}
+
+#SystemOnlineAnimation {
+    float: right;
+    height: 60px;
+    width: 140px;
+    z-index: -1;
+}
+
+.hidden {
+    display: none;
+}
+
+.mid-table-header {
+    background-color: #3e3a9a;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.weather-icon {
+    width: 72px;
+    height: 72px;
+    position: absolute;
+    left: -12px;
+    top: -10px;
+}
+
+.p-2 {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.p-2 table {
+    width: 100%;
+}
+
+.card .alert {
+    margin:-10px;
+    padding: 6px 12px;
+    padding-right: 55px;
+    display: inline;
+    float: right !important;
+}
+
+.card h3 {
+    display: inline-block;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.settings .card th {
+    padding: .5rem .5rem .5rem .5rem;   
+}
