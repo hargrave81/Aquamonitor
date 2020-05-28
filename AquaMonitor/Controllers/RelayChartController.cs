@@ -44,7 +44,7 @@ namespace AquaMonitor.Web.Controllers
                 DateTime.Parse("1/1/2600") > startDate && DateTime.Parse("1/1/2600") > endDate)
             {
                 // we have a valid request
-                var chartResult = await dbContext.GetChartAsync<WaterChartModel>(startDate, endDate);
+                var chartResult = await dbContext.GetChartAsync<RelayChartModel>(startDate, endDate);
                
                     return new JsonResult(chartResult);
                 

@@ -61,8 +61,16 @@ namespace AquaMonitor.Web.Controllers
         public IActionResult Settings()
         {
             return View(globalData);
-        }        
+        }
 
+        /// <summary>
+        /// Settings Page
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Charts()
+        {
+            return View(globalData);
+        }
 
         /// <summary>
         /// Error view

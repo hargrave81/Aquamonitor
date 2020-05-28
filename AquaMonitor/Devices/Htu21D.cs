@@ -37,7 +37,7 @@ namespace AquaMonitor.Web.Devices
         private I2cDevice _i2cDevice;
         private DateTime lastTemp = DateTime.MinValue;
         private DateTime lastHumid = DateTime.MinValue;
-
+        public bool EnableErrorCorrection { get; set; }
         #region prop
 
         private Resolution _resolution;
@@ -162,11 +162,13 @@ namespace AquaMonitor.Web.Devices
         /// <summary>
         /// Creates a new instance of the Htu21D
         /// </summary>
-        /// <param name="i2cDevice">The I2C device used for communication.</param>
+        /// <param name="i2CDevice">The I2C device used for communication.</param>
         /// <param name="resolution">Htu21D Read Resolution</param>
-        public Htu21D(I2cDevice i2cDevice, Resolution resolution = Resolution.High)
+        public Htu21D(I2cDevice i2CDevice, Resolution resolution = Resolution.High)
         {
-            _i2cDevice = i2cDevice;
+            EnableErrorCorrection = true;
+
+            _i2cDevice = i2CDevice;
             
             Resolution = resolution;            
 
@@ -242,6 +244,29 @@ namespace AquaMonitor.Web.Devices
                     return;
                 }
                 _lastReadSuccess = true;
+                if (EnableErrorCorrection) // fix HTU21Ds calibration inaccuracy estimates http://www.kandrsmith.org/RJS/Misc/Hygrometers/many_surface.png
+                {
+                    if (humidity >= 88 && _temperature >= 10)
+                        humidity += 6;
+                    else if (humidity >= 88 && _temperature >= 5)
+                        humidity += 3;
+                    else if (humidity >= 78 && _temperature >= 10)
+                        humidity += 4;
+                    else if (humidity >= 78 && _temperature >= 5)
+                        humidity += 2;
+                    else if(humidity >= 58 && _temperature >= 10)
+                        humidity += 2;
+                    else if (humidity >= 58 && _temperature >= 5)
+                        humidity += 1;
+                    else if (humidity <= 25 && _temperature >= 15)
+                        humidity += 2;
+                    else if (humidity <= 25 && _temperature >= 10)
+                        humidity += 1;
+                    else if (humidity <= 16 && _temperature >= 10)
+                        humidity += 4;
+                    else if (humidity <= 16 && _temperature >= 5)
+                        humidity += 2;
+                }
                 _humidity = humidity;
             }
             catch (Exception ex)

@@ -67,6 +67,14 @@ namespace AquaMonitor.Data.Models
             this.WaterReadings = state.WaterLevels.Select(t => new WaterReading(t)).ToList();
             this.PowerReadings = state.Relays.Select(t => new PowerReading(t)).ToList();
             this.SystemRunning = state.SystemOnline;
+            this.CloudCoverage = state.CloudCoverage;
+            this.WindSpeed = state.WindSpeed;
+            this.OutsideHumidity = state.OutsideHumidity ?? 0;
+            this.OutsideTempF = state.OutsideTempF ?? 0;
+            this.OutsideTempC = state.OutsideTempC ?? 0;
+            this.Rain = state.Rain;
+            this.Sunrise = state.Sunrise;
+            this.Sunset = state.Sunset;
             this.Created = DateTime.UtcNow;
         }
 

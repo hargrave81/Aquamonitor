@@ -80,10 +80,36 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:AquaMonitor.Web.Controllers.HomeController.Charts">
+            <summary>
+            Settings Page
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:AquaMonitor.Web.Controllers.HomeController.Error">
             <summary>
             Error view
             </summary>
+            <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Controllers.OutsideTempChartController">
+            <summary>
+            Temperature Chart Controller
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.OutsideTempChartController.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Controllers.OutsideTempChartController},AquaMonitor.Data.Context.AquaDbContext)">
+            <summary>
+            Ctor
+            </summary>
+            <param name="logger"></param>
+            <param name="dbContext"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.OutsideTempChartController.Get(System.DateTime,System.DateTime)">
+            <summary>
+            Gets the ChartJS for the given date range
+            </summary>
+            <param name="startDate"></param>
+            <param name="endDate"></param>
             <returns></returns>
         </member>
         <member name="T:AquaMonitor.Web.Controllers.RelayChartController">
@@ -111,12 +137,13 @@
             Relay Controller
             </summary>
         </member>
-        <member name="M:AquaMonitor.Web.Controllers.RelayConfigController.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Controllers.RelayConfigController},AquaMonitor.Data.Context.AquaDbContext)">
+        <member name="M:AquaMonitor.Web.Controllers.RelayConfigController.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Controllers.RelayConfigController},AquaMonitor.Data.Context.AquaDbContext,AquaMonitor.Data.Models.IGlobalState)">
             <summary>
             CTor
             </summary>
             <param name="logger"></param>
             <param name="dbContext"></param>
+            <param name="globalData"></param>
         </member>
         <member name="M:AquaMonitor.Web.Controllers.RelayConfigController.Post(AquaMonitor.Web.Models.PowerRelayRequestMessageModel)">
             <summary>
@@ -228,12 +255,13 @@
             WaterLevel Controller
             </summary>
         </member>
-        <member name="M:AquaMonitor.Web.Controllers.WaterConfigController.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Controllers.WaterConfigController},AquaMonitor.Data.Context.AquaDbContext)">
+        <member name="M:AquaMonitor.Web.Controllers.WaterConfigController.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Controllers.WaterConfigController},AquaMonitor.Data.Context.AquaDbContext,AquaMonitor.Data.Models.IGlobalState)">
             <summary>
             CTor
             </summary>
             <param name="logger"></param>
             <param name="dbContext"></param>
+            <param name="globalData"></param>
         </member>
         <member name="M:AquaMonitor.Web.Controllers.WaterConfigController.Post(AquaMonitor.Web.Models.WaterLevelRequestMessageModel)">
             <summary>
@@ -295,7 +323,7 @@
             <summary>
             Creates a new instance of the Htu21D
             </summary>
-            <param name="i2cDevice">The I2C device used for communication.</param>
+            <param name="i2CDevice">The I2C device used for communication.</param>
             <param name="resolution">Htu21D Read Resolution</param>
         </member>
         <member name="M:AquaMonitor.Web.Devices.Htu21D.Dispose">
@@ -648,6 +676,33 @@
             <summary>
             True or false to show requestID
             </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.OutsideTempChartModel">
+            <summary>
+            Outside Temperature chart model
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.OutsideTempChartModel.Labels">
+            <summary>
+            labels for chart
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.OutsideTempChartModel.DataSets">
+            <summary>
+            Datasets to display
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.OutsideTempChartModel.#ctor">
+            <summary>
+            Create instance of the temp chart model
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.OutsideTempChartModel.#ctor(System.Collections.Generic.IEnumerable{AquaMonitor.Data.Models.HistoryRecord},System.TimeSpan)">
+            <summary>
+            Create instance of the temp chart model with data
+            </summary>
+            <param name="records"></param>
+            <param name="Range"></param>
         </member>
         <member name="T:AquaMonitor.Web.Models.PowerRelayRequestMessageModel">
             <summary>

@@ -1,0 +1,185 @@
+﻿@using AquaMonitor.Data.Models
+@using AquaMonitor.Web.Global
+@model AquaMonitor.Data.Models.IGlobalState
+@{
+    ViewData["Title"] = "Charts";
+}
+
+<div class="row">
+    <div class="col-xl-6 mb-5 mb-xl-0">
+        <div class="card shadow">
+            <div class="card-header bg-gradient-orange bg-transparent">
+                <div class="row align-items-center">
+                    <div class="col-5">
+                        <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
+                        <h2 class="text-black mb-0">Temps (&#176;F)</h2>
+                    </div>
+                    <div class="col-7">
+                        <ul class="nav nav-pills justify-content-end">
+                            <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#chart-temps" data-update='@Url.RouteUrl("defaultApi",new { controller="tempchart" })?startDate=@DateTime.Now.AddDays(-7).ToString("MM-dd-yyyy HH:mm:ss")&endDate=@DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")' data-prefix="$" data-suffix="k">
+                                <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
+                                    <span class="d-none d-md-block">Week</span>
+                                    <span class="d-md-none">W</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="chart" data-target="#chart-temps" data-default data-update='@Url.RouteUrl("defaultApi",new { controller="tempchart" })?startDate=@DateTime.Now.AddHours(-72).ToString("MM-dd-yyyy HH:mm:ss")&endDate=@DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")' data-prefix="$" data-suffix="k">
+                                <a href="#" class="nav-link py-2 px-3 active" data-toggle="tab">
+                                    <span class="d-none d-md-block">72 Hours</span>
+                                    <span class="d-md-none">72</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="chart" data-target="#chart-temps" data-update='@Url.RouteUrl("defaultApi",new { controller="tempchart" })?startDate=@DateTime.Now.AddHours(-24).ToString("MM-dd-yyyy HH:mm:ss")&endDate=@DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")' data-prefix="$" data-suffix="k">
+                                <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
+                                    <span class="d-none d-md-block">24 Hours</span>
+                                    <span class="d-md-none">24</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Chart -->
+                <div class="chart">
+                    <!-- Chart wrapper -->
+                    <canvas id="chart-temps" class="chart-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-6 mb-5 mb-xl-0">
+        <!--<div class="card bg-gradient-default shadow">
+        <div class="card-header bg-transparent"> -->
+        <div class="card shadow">
+            <div class="card-header bg-gradient-indigo bg-transparent">
+                <div class="row align-items-center">
+                    <div class="col-5">
+                        <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
+                        <h2 class="text-black mb-0">Relays</h2>
+                    </div>
+                    <div class="col-7">
+                        <ul class="nav nav-pills justify-content-end">
+                            <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#chart-relays" data-update='@Url.RouteUrl("defaultApi",new { controller="relaychart" })?startDate=@DateTime.Now.AddDays(-7).ToString("MM-dd-yyyy HH:mm:ss")&endDate=@DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")' data-prefix="$" data-suffix="k">
+                                <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
+                                    <span class="d-none d-md-block">Week</span>
+                                    <span class="d-md-none">W</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="chart" data-target="#chart-relays" data-default data-update='@Url.RouteUrl("defaultApi",new { controller="relaychart" })?startDate=@DateTime.Now.AddHours(-72).ToString("MM-dd-yyyy HH:mm:ss")&endDate=@DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")' data-prefix="$" data-suffix="k">
+                                <a href="#" class="nav-link py-2 px-3 active" data-toggle="tab">
+                                    <span class="d-none d-md-block">72 Hours</span>
+                                    <span class="d-md-none">72</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="chart" data-target="#chart-relays" data-update='@Url.RouteUrl("defaultApi",new { controller="relaychart" })?startDate=@DateTime.Now.AddHours(-24).ToString("MM-dd-yyyy HH:mm:ss")&endDate=@DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")' data-prefix="$" data-suffix="k">
+                                <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
+                                    <span class="d-none d-md-block">24 Hours</span>
+                                    <span class="d-md-none">24</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Chart -->
+                <div class="chart">
+                    <!-- Chart wrapper -->
+                    <canvas id="chart-relays" class="chart-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<br />
+<div class="row">
+
+    <div class="col-xl-6 mb-5 mb-xl-0">
+        <!--<div class="card bg-gradient-default shadow">
+            <div class="card-header bg-transparent"> -->
+        <div class="card shadow">
+            <div class="card-header bg-gradient-orange bg-transparent">
+                <div class="row align-items-center">
+                    <div class="col-5">
+                        <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
+                        <h2 class="text-black mb-0">Outside Temps (&#176;F)</h2>
+                    </div>
+                    <div class="col-7">
+                        <ul class="nav nav-pills justify-content-end">
+                            <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#chart-outside" data-update='@Url.RouteUrl("defaultApi",new { controller="outsidetempchart" })?startDate=@DateTime.Now.AddDays(-7).ToString("MM-dd-yyyy HH:mm:ss")&endDate=@DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")' data-prefix="$" data-suffix="k">
+                                <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
+                                    <span class="d-none d-md-block">Week</span>
+                                    <span class="d-md-none">W</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="chart" data-target="#chart-outside" data-default data-update='@Url.RouteUrl("defaultApi",new { controller="outsidetempchart" })?startDate=@DateTime.Now.AddHours(-72).ToString("MM-dd-yyyy HH:mm:ss")&endDate=@DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")' data-prefix="$" data-suffix="k">
+                                <a href="#" class="nav-link py-2 px-3 active" data-toggle="tab">
+                                    <span class="d-none d-md-block">72 Hours</span>
+                                    <span class="d-md-none">72</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="chart" data-target="#chart-outside" data-update='@Url.RouteUrl("defaultApi",new { controller="outsidetempchart" })?startDate=@DateTime.Now.AddHours(-24).ToString("MM-dd-yyyy HH:mm:ss")&endDate=@DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")' data-prefix="$" data-suffix="k">
+                                <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
+                                    <span class="d-none d-md-block">24 Hours</span>
+                                    <span class="d-md-none">24</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Chart -->
+                <div class="chart">
+                    <!-- Chart wrapper -->
+                    <canvas id="chart-outside" class="chart-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6 mb-5 mb-xl-0">
+        <div class="card shadow">
+            <div class="card-header bg-gradient-teal bg-transparent">
+                <div class="row align-items-center">
+                    <div class="col-5">
+                        <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
+                        <h2 class="text-black mb-0">Water Levels</h2>
+                    </div>
+                    <div class="col-7">
+                        <ul class="nav nav-pills justify-content-end">
+                            <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#chart-water" data-update='@Url.RouteUrl("defaultApi", new {controller = "waterchart"})?startDate=@DateTime.Now.AddDays(-7).ToString("MM-dd-yyyy HH:mm:ss")&endDate=@DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")' data-prefix="$" data-suffix="k">
+                                <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
+                                    <span class="d-none d-md-block">Week</span>
+                                    <span class="d-md-none">W</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="chart" data-target="#chart-water" data-default data-update='@Url.RouteUrl("defaultApi", new {controller = "waterchart"})?startDate=@DateTime.Now.AddHours(-72).ToString("MM-dd-yyyy HH:mm:ss")&endDate=@DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")' data-prefix="$" data-suffix="k">
+                                <a href="#" class="nav-link py-2 px-3 active" data-toggle="tab">
+                                    <span class="d-none d-md-block">72 Hours</span>
+                                    <span class="d-md-none">72</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="chart" data-target="#chart-water" data-update='@Url.RouteUrl("defaultApi", new {controller = "waterchart"})?startDate=@DateTime.Now.AddHours(-24).ToString("MM-dd-yyyy HH:mm:ss")&endDate=@DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss")' data-prefix="$" data-suffix="k">
+                                <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
+                                    <span class="d-none d-md-block">24 Hours</span>
+                                    <span class="d-md-none">24</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Chart -->
+                <div class="chart">
+                    <!-- Chart wrapper -->
+                    <canvas id="chart-water" class="chart-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
