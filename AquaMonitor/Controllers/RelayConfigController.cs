@@ -22,16 +22,20 @@ namespace AquaMonitor.Web.Controllers
 
         private readonly ILogger<RelayConfigController> logger;        
         private readonly AquaDbContext dbContext;
+        private readonly IGlobalState globalData;
 
         /// <summary>
         /// CTor
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="dbContext"></param>
-        public RelayConfigController(ILogger<RelayConfigController> logger, AquaDbContext dbContext)
+        /// <param name="globalData"></param>
+        public RelayConfigController(ILogger<RelayConfigController> logger, AquaDbContext dbContext,
+                                     IGlobalState globalData)
         {
             this.logger = logger;            
             this.dbContext = dbContext;
+            this.globalData = globalData;
         }
 
         /// <summary>
@@ -81,7 +85,8 @@ namespace AquaMonitor.Web.Controllers
                 // perform DB operations
                 await dbContext.DeleteRelaysAsync(deletables);
                 await dbContext.AddRelaysAsync(adds);
-                await dbContext.UpdateRelaysAsync(allRelays.Where(t => !deletables.Contains(t)));                
+                await dbContext.UpdateRelaysAsync(allRelays.Where(t => !deletables.Contains(t)));   
+                globalData.Relays = allRelays.Where(t => !deletables.Contains(t)).ToList();                            
             }
             catch (Exception ex)
             {

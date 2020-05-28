@@ -22,16 +22,20 @@ namespace AquaMonitor.Web.Controllers
 
         private readonly ILogger<WaterConfigController> logger;        
         private readonly AquaDbContext dbContext;
+        private readonly IGlobalState globalData;
 
         /// <summary>
         /// CTor
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="dbContext"></param>
-        public WaterConfigController(ILogger<WaterConfigController> logger, AquaDbContext dbContext)
+        /// <param name="globalData"></param>
+        public WaterConfigController(ILogger<WaterConfigController> logger, AquaDbContext dbContext,
+                                     IGlobalState globalData)
         {
             this.logger = logger;            
             this.dbContext = dbContext;
+            this.globalData = globalData;
         }
 
         /// <summary>
@@ -81,7 +85,8 @@ namespace AquaMonitor.Web.Controllers
                 // perform DB operations
                 await dbContext.DeleteWaterLevelsAsync(deletables);
                 await dbContext.AddWaterLevelsAsync(adds);
-                await dbContext.UpdateWaterLevelsAsync(allWaters.Where(t => !deletables.Contains(t)));                
+                await dbContext.UpdateWaterLevelsAsync(allWaters.Where(t => !deletables.Contains(t)));       
+                globalData.WaterLevels = allWaters.Where(t => !deletables.Contains(t)).ToList();         
             }
             catch (Exception ex)
             {

@@ -154,6 +154,7 @@ namespace AquaMonitor.Data.Models
         /// </summary>
         public GlobalData(IConfiguration configuration, AquaServiceDbContext dbContext)
         {
+            this.More = new ExtendedSettings();
             if(DateTime.Now.Hour <=6 || DateTime.Now.Hour > 21)
                 WeatherIcon = "01n";
             else
