@@ -236,11 +236,18 @@ h4 {
 
 
 .highwater-big {
-    background-image: url(wavebig.png);    
+    background-image: url(wavebig.png);
+    background-repeat: repeat-x;
+    background-position: top;
+    color: white;
 }
 
 .lowwater-big {
-    background-image: url(wavebig.png);    
+    background-image: url(wavebig.png);
+    background-repeat: repeat-x;
+    background-position: top;
+    background-position-y: 32px;
+    color: black;
 }
 
 .relayOff {

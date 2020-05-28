@@ -371,7 +371,7 @@ $(document).ready(function() {
                     APIKey: $('#APIKey').val(),
                     Country: $('#Country').val(),
                     Zipcode: $('#Zipcode').val(),
-                    More_TempOffset: $('#More_TempOffset').val()
+                    More_TempOffset: parseInt($('#More_TempOffset').val())
                 }),
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8",
