@@ -79,6 +79,10 @@ namespace AquaMonitor.Data.Models
         /// </summary>
         public string SettingC { get; set; }
         #endregion
+
+        public AppSetting() {
+            this.More = new ExtendedSettings();
+        }
     }
 
 
