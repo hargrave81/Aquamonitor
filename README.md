@@ -112,21 +112,20 @@ Compress-Archive -Path DeployLinux/* -DestinationPath AquaDeploy.zip -Compressio
   - sudo systemctl start kestrel-aquadeploy.service    
 
 
-Sample Wiring Diagram (SampleLayout.png)
+![Sample Wiring Diagram](SampleLayout.png)
 
 Parts:
-Water Float Switch (WaterFloatSwitch.jpg)
+![Water Float Switch](WaterFloatSwitch.jpg)
 
 One of the two temp sensors
 
-HTU21D Temp Sensor (HTU21D.jpg)
+![HTU21D Temp Sensor](HTU21D.jpg)
 
-AM2302 Temp Sensor (AM2302.jpg)
+![AM2302 Temp Sensor](AM2302.jpg)
 
+![4 Channel Relay Module](RelayBoard.jpg)
 
-4 Channel Relay Module (RelayBoard.jpg)
-
-Raspberry Pi 4 (raspberrypi4.jpg)
+![Raspberry Pi 4](raspberrypi4.jpg)
 I Suggest a kit that includes power supply, heat sinks, and an HDMI cable
 
 
