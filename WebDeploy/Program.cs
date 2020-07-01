@@ -19,7 +19,9 @@ namespace WebDeploy
         private static DateTime lastGrab = DateTime.MinValue;
         private static DateTime lastGrab2 = DateTime.MinValue;
         private static bool appAlive = true;
+
         static void Main(string[] args)
+
         {
             if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory(),"appsettings.json")))
             {
@@ -110,6 +112,7 @@ namespace WebDeploy
 
         private static void WebTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            webTimer.Enabled = false;
             Console.WriteLine("Testing github web files ...");
             FileInfo sourceFi = new FileInfo(Path.Combine(settings.src + "/AquaMonitor.zip"));
             FileInfo sourceFi2 = new FileInfo(Path.Combine(settings.src + "/AquaMonitor32.zip"));
@@ -119,7 +122,7 @@ namespace WebDeploy
                 {
                     // 32-bit
                     var am32 = await GitHubCommit.Fetch("AquaMonitor32.zip");
-                    if (am32 != null && am32.commit.author.date > sourceFi2.CreationTimeUtc)
+                    if (am32 != null && am32.Commit.Author.Date > sourceFi2.CreationTimeUtc)
                     {
                         Console.WriteLine("Updating 32 bit software ...");
                         timer.Enabled = false;
@@ -141,7 +144,7 @@ namespace WebDeploy
                 {
                     // 64-bit
                     var am64 = await GitHubCommit.Fetch("AquaMonitor.zip");
-                    if (am64 != null && am64.commit.author.date > sourceFi.CreationTimeUtc)
+                    if (am64 != null && am64.Commit.Author.Date > sourceFi.CreationTimeUtc)
                     {
                         Console.WriteLine("Updating 64 bit software ...");
                         // we need to update the software
@@ -159,6 +162,7 @@ namespace WebDeploy
                         timer.Enabled = true;
                     }
                 }
+                webTimer.Enabled = true;
             });
         }
 
@@ -178,7 +182,7 @@ namespace WebDeploy
                 }
             };
             process.Start();
-            string result = process.StandardOutput.ReadToEnd();
+            process.StandardOutput.ReadToEnd();
             process.WaitForExit();
         }
 

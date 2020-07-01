@@ -33,9 +33,9 @@ namespace AquaMonitor.Web.Controllers
         /// </summary>
         /// <returns>JPG</returns>
         [HttpGet]
-        public async Task<IActionResult> Get(DateTime? start, DateTime? end)
+        public IActionResult Get(DateTime? start, DateTime? end)
         {
-            var img = new byte[]{};
+            byte[] img;
             try
             {
                 img = skyService.BuildSkyBytes(start, end);

@@ -28,6 +28,10 @@ namespace AquaMonitor.Web.Services
         /// </summary>
         private readonly byte[] DarkSky;
 
+        /// <summary>
+        /// CTOR
+        /// </summary>
+        /// <param name="env"></param>
         public SkyService(IHostEnvironment env)
         {
             LightSky = File.ReadAllBytes(Path.Combine(env.ContentRootPath,"wwwroot/img/lightsky.png"));
@@ -80,14 +84,10 @@ namespace AquaMonitor.Web.Services
         /// <returns></returns>
         public Byte[] BuildSkyBytes(DateTime? start, DateTime? end)
         {
-            using(var block = BuildSky(start, end))
-            {
-                using (var ms = new System.IO.MemoryStream())
-                {
-                    block.Save(ms, ImageFormat.Png);
-                    return ms.ToArray();
-                }
-            }
+            using var block = BuildSky(start, end);
+            using var ms = new System.IO.MemoryStream();
+            block.Save(ms, ImageFormat.Png);
+            return ms.ToArray();
         }
 
     }

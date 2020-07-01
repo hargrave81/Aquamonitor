@@ -311,6 +311,11 @@
             Humidity and Temperature Sensor Htu21D
             </summary>
         </member>
+        <member name="P:AquaMonitor.Web.Devices.Htu21D.EnableErrorCorrection">
+            <summary>
+            Enables Humidity Correction
+            </summary>
+        </member>
         <member name="P:AquaMonitor.Web.Devices.Htu21D.Resolution">
             <summary>
             Htu21D Resolution
@@ -1434,6 +1439,12 @@
             Dark sky image
             </summary>
         </member>
+        <member name="M:AquaMonitor.Web.Services.SkyService.#ctor(Microsoft.Extensions.Hosting.IHostEnvironment)">
+            <summary>
+            CTOR
+            </summary>
+            <param name="env"></param>
+        </member>
         <member name="M:AquaMonitor.Web.Services.SkyService.BuildSky(System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
             <summary>
             Builds a sky
@@ -1573,7 +1584,7 @@
             Startup
             </summary>
         </member>
-        <member name="M:AquaMonitor.Web.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Hosting.IHostEnvironment)">
+        <member name="M:AquaMonitor.Web.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             Main entry
             </summary>

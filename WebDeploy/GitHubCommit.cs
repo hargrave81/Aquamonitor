@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,11 +15,13 @@ namespace WebDeploy
         /// <summary>
         /// Sha
         /// </summary>
-        public string sha {get;set;}
+        [System.Text.Json.Serialization.JsonPropertyName("sha")]
+        public string Sha {get;set;}
         /// <summary>
         /// Commit time stamps
         /// </summary>
-        public CommitEntry commit {get;set;}
+        [System.Text.Json.Serialization.JsonPropertyName("commit")]
+        public CommitEntry Commit {get;set;}
 
         /// <summary>
         /// Fetch info from github
@@ -27,10 +30,12 @@ namespace WebDeploy
         /// <returns></returns>
         public static async Task<GitHubCommit> Fetch(string fileName)
         {
-            var basePath = "https://api.github.com/repos/hargrave81/aquamonitor/commits?path={1}&page=1&per_page=1";
+            var basePath = "https://api.github.com/repos/hargrave81/aquamonitor/commits?path={0}&page=1&per_page=1";
             using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Accept.Add( new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("request");
             var result = await httpClient.GetStringAsync(new Uri(string.Format(basePath, fileName)));
-            return System.Text.Json.JsonSerializer.Deserialize<GitHubCommit>(result);
+            return System.Text.Json.JsonSerializer.Deserialize<GitHubCommit[]>(result).First();
         }
 
         /// <summary>
@@ -41,8 +46,9 @@ namespace WebDeploy
         /// <returns></returns>
         public static async Task Download(string fileName, string storedFile)
         {
-            var basePath = "https://github.com/hargrave81/Aquamonitor/raw/master/{1}";
+            var basePath = "https://github.com/hargrave81/Aquamonitor/raw/master/{0}";
             using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("request");
             var result = await httpClient.GetByteArrayAsync(new Uri(string.Format(basePath, fileName)));
             await System.IO.File.WriteAllBytesAsync(storedFile, result);
         }
@@ -56,12 +62,14 @@ namespace WebDeploy
         /// <summary>
         /// author
         /// </summary>
-        public Person author {get;set;}
+        [System.Text.Json.Serialization.JsonPropertyName("author")]
+        public Person Author {get;set;}
 
         /// <summary>
         /// committer
         /// </summary>
-        public Person committer {get;set;}
+        [System.Text.Json.Serialization.JsonPropertyName("committer")]
+        public Person Committer {get;set;}
     }
 
     /// <summary>
@@ -72,14 +80,18 @@ namespace WebDeploy
         /// <summary>
         /// name
         /// </summary>
-        public string name {get;set;}
+        
+        [System.Text.Json.Serialization.JsonPropertyName("name")]
+        public string Name {get;set;}
         /// <summary>
         /// email
         /// </summary>
-        public string email {get;set;}
+        [System.Text.Json.Serialization.JsonPropertyName("email")]
+        public string Email {get;set;}
         /// <summary>
         /// date of change
         /// </summary>
-        public DateTime date {get;set;}
+        [System.Text.Json.Serialization.JsonPropertyName("date")]
+        public DateTime Date {get;set;}
     }
 }

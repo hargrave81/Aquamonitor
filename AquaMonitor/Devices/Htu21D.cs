@@ -37,6 +37,9 @@ namespace AquaMonitor.Web.Devices
         private I2cDevice _i2cDevice;
         private DateTime lastTemp = DateTime.MinValue;
         private DateTime lastHumid = DateTime.MinValue;
+        /// <summary>
+        /// Enables Humidity Correction
+        /// </summary>
         public bool EnableErrorCorrection { get; set; }
         #region prop
 

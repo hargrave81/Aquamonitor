@@ -23,17 +23,15 @@ namespace AquaMonitor.Web
         /// Main entry
         /// </summary>
         /// <param name="configuration"></param>
-        public Startup(IConfiguration configuration, IHostEnvironment env)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            this.env = env;
         }
         
         /// <summary>
         /// Configuration
         /// </summary>
         public IConfiguration Configuration { get; }
-        private IHostEnvironment env { get; }
 
         /// <summary>
         /// Service Build up
