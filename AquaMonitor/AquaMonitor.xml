@@ -44,6 +44,24 @@
             <param name="input"></param>
             <returns></returns>
         </member>
+        <member name="T:AquaMonitor.Web.Controllers.CameraController">
+            <summary>
+            Camera Image Controller
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.CameraController.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Controllers.CameraController},AquaMonitor.Data.Models.IGlobalState)">
+            <summary>
+            CTor
+            </summary>
+            <param name="logger"></param>
+            <param name="globalConfig"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.CameraController.Get">
+            <summary>
+            Gets the most recent camera image
+            </summary>
+            <returns>JPG</returns>
+        </member>
         <member name="T:AquaMonitor.Web.Controllers.HomeController">
             <summary>
             Home controller
@@ -190,6 +208,24 @@
             </summary>
             <param name="request"></param>
             <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Controllers.SkyController">
+            <summary>
+            Sky Image Controller
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.SkyController.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Controllers.SkyController},AquaMonitor.Web.Services.SkyService)">
+            <summary>
+            CTor
+            </summary>
+            <param name="logger"></param>
+            <param name="skyService"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.SkyController.Get(System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+            <summary>
+            Gets the most recent camera image
+            </summary>
+            <returns>JPG</returns>
         </member>
         <member name="T:AquaMonitor.Web.Controllers.SystemController">
             <summary>
@@ -592,6 +628,14 @@
             <param name="selector"></param>
             <returns></returns>
         </member>
+        <member name="M:AquaMonitor.Web.Helpers.NormalAverageHelper.AveragePowerState(System.Collections.Generic.IEnumerable{System.Linq.IGrouping{System.String,AquaMonitor.Data.Models.HistoryRecord}},System.Int32)">
+            <summary>
+            Returns the Average Power State using both average and noteworthy average
+            </summary>
+            <param name="records">Group of records over time</param>
+            <param name="readerId">Id of reader you want to report on</param>
+            <returns></returns>
+        </member>
         <member name="M:AquaMonitor.Web.Helpers.NormalAverageHelper.AveragePowerState(System.Collections.Generic.IEnumerable{AquaMonitor.Data.Models.PowerState})">
             <summary>
             Returns the average power state over time
@@ -605,6 +649,33 @@
             </summary>
             <param name="source"></param>
             <param name="selector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Helpers.NormalAverageHelper.NoteWorthyAveragePowerState(System.Collections.Generic.IEnumerable{AquaMonitor.Data.Models.PowerState},System.Int32)">
+            <summary>
+            Returns the average power state over time that is of note
+            </summary>
+            <param name="entries"></param>
+            <param name="previous">Previous detected value</param>
+            <returns></returns>
+            /// <remarks>This will trigger an unlikely value if the previous value was the same</remarks>
+        </member>
+        <member name="M:AquaMonitor.Web.Helpers.NormalAverageHelper.NoteWorthyAveragePowerState``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,AquaMonitor.Data.Models.PowerState},System.Int32)">
+            <summary>
+            Returns the average power state over time that is of note
+            </summary>
+            <param name="source">source values</param>
+            <param name="selector">selector to trim results</param>
+            <param name="previous">Previous detected value</param>
+            <returns></returns>
+            <remarks>This will trigger an unlikely value if the previous value was the same</remarks>
+        </member>
+        <member name="M:AquaMonitor.Web.Helpers.NormalAverageHelper.AverageWaterState(System.Collections.Generic.IEnumerable{System.Linq.IGrouping{System.String,AquaMonitor.Data.Models.HistoryRecord}},System.Int32)">
+            <summary>
+            Returns the Average Water State using both average and noteworthy average
+            </summary>
+            <param name="records">Group of records over time</param>
+            <param name="readerId">Id of reader you want to report on</param>
             <returns></returns>
         </member>
         <member name="M:AquaMonitor.Web.Helpers.NormalAverageHelper.AverageWaterState(System.Collections.Generic.IEnumerable{System.Boolean})">
@@ -621,6 +692,25 @@
             <param name="source"></param>
             <param name="selector"></param>
             <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Helpers.NormalAverageHelper.NoteWorthyAverageWaterState(System.Collections.Generic.IEnumerable{System.Boolean},System.Int32)">
+            <summary>
+            Returns the average power state over time
+            </summary>
+            <param name="entries"></param>
+            <param name="previous">Previous detected value</param>
+            <returns></returns>
+            <remarks>This will trigger an unlikely value if the previous value was the same</remarks>
+        </member>
+        <member name="M:AquaMonitor.Web.Helpers.NormalAverageHelper.NoteWorthyAverageWaterState``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean},System.Int32)">
+            <summary>
+            Returns the average power state over time
+            </summary>
+            <param name="source">source values</param>
+            <param name="selector">selector to trim results</param>
+            <param name="previous">Previous detected value</param>
+            <returns></returns>
+            <remarks>This will trigger an unlikely value if the previous value was the same</remarks>
         </member>
         <member name="T:AquaMonitor.Web.Models.ChartJSData`1">
             <summary>
@@ -886,6 +976,11 @@
         <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.More_TempOffset">
             <summary>
             Temperature Offset
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.More_CameraJPGUrl">
+            <summary>
+            Camera JPG url
             </summary>
         </member>
         <member name="T:AquaMonitor.Web.Models.SystemRequestMessageModel">
@@ -1251,6 +1346,43 @@
             Dispose Service
             </summary>
         </member>
+        <member name="T:AquaMonitor.Web.Services.CameraService">
+            <summary>
+            Services to take frames from a camera stream
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.CameraService.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Services.CameraService},AquaMonitor.Data.Models.IGlobalState)">
+            <summary>
+            CTor
+            </summary>
+            <param name="logger"></param>
+            <param name="globalData"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.CameraService.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            Starts service
+            </summary>
+            <param name="stoppingToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.CameraService.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Stops service
+            </summary>
+            <param name="stoppingToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.CameraService.ProcessWork(System.Object)">
+            <summary>
+            Process work
+            </summary>
+            <param name="state"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.CameraService.Dispose">
+            <summary>
+            Dispose Service
+            </summary>
+        </member>
         <member name="T:AquaMonitor.Web.Services.NetworkHealthService">
             <summary>
             Service to maintain network health
@@ -1286,6 +1418,37 @@
             <summary>
             Dispose Service
             </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Services.SkyService">
+            <summary>
+            Generates a sky image of time range
+            </summary>
+        </member>
+        <member name="F:AquaMonitor.Web.Services.SkyService.LightSky">
+            <summary>
+            Light sky image
+            </summary>
+        </member>
+        <member name="F:AquaMonitor.Web.Services.SkyService.DarkSky">
+            <summary>
+            Dark sky image
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.SkyService.BuildSky(System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+            <summary>
+            Builds a sky
+            </summary>
+            <param name="start"></param>
+            <param name="end"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.SkyService.BuildSkyBytes(System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+            <summary>
+            Builds a sky into PNG
+            </summary>
+            <param name="start"></param>
+            <param name="end"></param>
+            <returns></returns>
         </member>
         <member name="T:AquaMonitor.Web.Services.SystemOperationsService">
             <summary>
@@ -1410,7 +1573,7 @@
             Startup
             </summary>
         </member>
-        <member name="M:AquaMonitor.Web.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+        <member name="M:AquaMonitor.Web.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Hosting.IHostEnvironment)">
             <summary>
             Main entry
             </summary>

@@ -2,7 +2,6 @@ using System;
 using AquaMonitor.Data.Context;
 using AquaMonitor.Data.Models;
 using AquaMonitor.Web.Global;
-using AquaMonitor.Web.Helpers;
 using AquaMonitor.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,15 +23,17 @@ namespace AquaMonitor.Web
         /// Main entry
         /// </summary>
         /// <param name="configuration"></param>
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostEnvironment env)
         {
             Configuration = configuration;
+            this.env = env;
         }
         
         /// <summary>
         /// Configuration
         /// </summary>
         public IConfiguration Configuration { get; }
+        private IHostEnvironment env { get; }
 
         /// <summary>
         /// Service Build up
@@ -50,7 +51,9 @@ namespace AquaMonitor.Web
             services.AddHostedService<SystemOperationsService>();            
             services.AddHostedService<NetworkHealthService>();
             services.AddHostedService<WeatherServices>();
-
+            services.AddHostedService<CameraService>();
+            //services.AddSingleton<SkyService>(new SkyService(env));
+            services.AddSingleton<SkyService>();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseInMemoryDatabase("InMemoryDb"));
 

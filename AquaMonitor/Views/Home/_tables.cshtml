@@ -30,11 +30,11 @@
                     <thead class="thead-light">
                         <tr>
                             <th scope="col">Relay</th>
+                            <th scope="col">State</th>
                             <th scope="col">Position</th>
                             <th scope="col">Timer</th>
                             <th scope="col">Temp</th>
                             <th scope="col">Water</th>
-                            <th scope="col">State</th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
@@ -45,6 +45,9 @@
                                 <th scope="row">
                                     @relay.Name
                                 </th>
+                                <td style="text-align: center; font-weight: bold; color: @(relay.CurrentState == AquaMonitor.Data.Models.PowerState.On ? "#090" : "#900")">
+                                    @relay.CurrentState.ToString()
+                                </td>
                                 <td style="text-align: center;">
                                     @relay.Letter.ToString()
                                 </td>
@@ -101,9 +104,6 @@
                                     {
                                         <span>None</span>
                                     }
-                                </td>
-                                <td style="text-align: center; font-weight: bold; color: @(relay.CurrentState == AquaMonitor.Data.Models.PowerState.On ? "#090" : "#900")">
-                                    @relay.CurrentState.ToString()
                                 </td>
                                 <td style="text-align: right;">
                                     <a href="#" data-relay="@relay.Letter" data-state="Off" class="btn btn-sm btn-relay @(relay.CurrentState == AquaMonitor.Data.Models.PowerState.Off ? "btn-primary" : "btn-secondary")">On</a>

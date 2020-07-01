@@ -78,6 +78,35 @@ namespace AquaMonitor.Data.Models
             this.Created = DateTime.UtcNow;
         }
 
+        /// <summary>
+        /// Gets a historical reading by reader ID or returns a blank low level reading if none found
+        /// </summary>
+        /// <param name="readerId"></param>
+        /// <returns>WaterReading</returns>
+        public WaterReading HistoricalWater(int readerId)
+        {
+            if (this.WaterReadings.Any(t => t.ReaderId == readerId))
+            {
+                return WaterReadings.First(t => t.ReaderId == readerId);
+            }
+            return new WaterReading() {Id = 0, Name = "", ReaderId = readerId, WaterLevelHigh = false};
+        }
+
+
+        /// <summary>
+        /// Gets a historical reading by relay ID or returns a blank no power reading if none found
+        /// </summary>
+        /// <param name="relayId"></param>
+        /// <returns>PowerReading</returns>
+        public PowerReading HistoricalPower(int relayId)
+        {
+            if (this.PowerReadings.Any(t => t.ReaderId == relayId))
+            {
+                return PowerReadings.First(t => t.ReaderId == relayId);
+            }
+            return new PowerReading() {Id = 0, Name = "", PowerState = PowerState.Off, ReaderId = relayId};
+        }
+
         public void UpdateCreatedToLocal(DateTimeOffset timeZone)
         {            
             this.Created = this.Created.Add(timeZone.Offset);

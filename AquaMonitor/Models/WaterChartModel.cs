@@ -103,23 +103,29 @@ namespace AquaMonitor.Web.Models
         /// <param name="Range"></param>
         public WaterChartModel(IEnumerable<HistoryRecord> records, TimeSpan Range) : this()
         {
+            var readers = new List<int>() {records.Last().WaterReadings.First().ReaderId};
             DataSets.First().Label = records.Last().WaterReadings.First().Name;
 
             if (records.Last().WaterReadings.Count() > 1)
             {
                 DataSets.Skip(1).First().Label = records.Last().WaterReadings.Skip(1).First().Name;
+                readers.Add(records.Last().WaterReadings.Skip(1).First().ReaderId);
                 if (records.Last().WaterReadings.Count() > 2)
                 {
                     DataSets.Skip(2).First().Label = records.Last().WaterReadings.Skip(2).First().Name;
+                    readers.Add(records.Last().WaterReadings.Skip(2).First().ReaderId);
                     if (records.Last().WaterReadings.Count() > 3)
                     {
                         DataSets.Skip(3).First().Label = records.Last().WaterReadings.Skip(3).First().Name;
+                        readers.Add(records.Last().WaterReadings.Skip(3).First().ReaderId);
                         if (records.Last().WaterReadings.Count() > 4)
                         {
                             DataSets.Skip(4).First().Label = records.Last().WaterReadings.Skip(4).First().Name;
+                            readers.Add(records.Last().WaterReadings.Skip(4).First().ReaderId);
                             if (records.Last().WaterReadings.Count() > 5)
                             {
                                 DataSets.Skip(5).First().Label = records.Last().WaterReadings.Skip(5).First().Name;
+                                readers.Add(records.Last().WaterReadings.Skip(5).First().ReaderId);
                             }
                             else
                                 DataSets = new ChartJSData<int>[]
@@ -178,23 +184,17 @@ namespace AquaMonitor.Web.Models
                 this.Labels = months.ToArray();
             }
 
-            this.DataSets.First().Data = records.GroupBy(t => t.Created.ToString(filter))
-                .Select(t => t.AverageWaterState(z => z.WaterReadings.First().WaterLevelHigh)).ToArray();
+            this.DataSets.First().Data = records.GroupBy(t => t.Created.ToString(filter)).AverageWaterState(readers[0]);
             if (this.DataSets.Length > 1)
-                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString(filter))
-                    .Select(t => t.AverageWaterState(z => z.WaterReadings.Skip(1).First().WaterLevelHigh)).ToArray();
+                this.DataSets.Skip(1).First().Data = records.GroupBy(t => t.Created.ToString(filter)).AverageWaterState(readers[1]);
             if (this.DataSets.Length > 2)
-                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString(filter))
-                    .Select(t => t.AverageWaterState(z => z.WaterReadings.Skip(2).First().WaterLevelHigh)).ToArray();
+                this.DataSets.Skip(2).First().Data = records.GroupBy(t => t.Created.ToString(filter)).AverageWaterState(readers[2]);
             if (this.DataSets.Length > 3)
-                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString(filter))
-                    .Select(t => t.AverageWaterState(z => z.WaterReadings.Skip(3).First().WaterLevelHigh)).ToArray();
+                this.DataSets.Skip(3).First().Data = records.GroupBy(t => t.Created.ToString(filter)).AverageWaterState(readers[3]);
             if (this.DataSets.Length > 4)
-                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString(filter))
-                    .Select(t => t.AverageWaterState(z => z.WaterReadings.Skip(4).First().WaterLevelHigh)).ToArray();
+                this.DataSets.Skip(4).First().Data = records.GroupBy(t => t.Created.ToString(filter)).AverageWaterState(readers[4]);
             if (this.DataSets.Length > 5)
-                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString(filter))
-                    .Select(t => t.AverageWaterState(z => z.WaterReadings.Skip(5).First().WaterLevelHigh)).ToArray();
+                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString(filter)).AverageWaterState(readers[5]);
         }
 
 

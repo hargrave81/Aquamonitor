@@ -160,6 +160,14 @@
                                     <span><input value="@(Model.More.TempOffset ?? 0f)" id="More_TempOffset" name="More_TempOffset" Title="Temperature offset (in F) negative or positive number" /></span>
                                 </td>
                             </tr>
+                            <tr>
+                                <th scope="row">
+                                    <span>Camera URL</span>
+                                </th>
+                                <td class="long">
+                                    <span><input value="@(Model.More.CameraJPGUrl)" id="More_CameraJPGUrl" name="More_CameraJPGUrl" Title="Camera URL to fetch JPG" /></span>
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </form>
@@ -220,8 +228,8 @@
                                             <span><label>Interval: </label><input id="Interval[@relay.Id]" value="@relay.Interval" /></span>
                                             <span><label>RunTime: </label><input id="IntervalRun[@relay.Id]" value="@relay.IntervalRun" /></span>
                                             <br />
-                                            <span><label>Start: </label><input id="Start[@relay.Id]" value="@(relay.Start.HasValue ? relay.Start.Value.ToString("g") : "")" /></span>
-                                            <span><label>Stop: </label><input id="Stop[@relay.Id]" value="@(relay.Stop.HasValue ? relay.Stop.Value.ToString("g") : "")" /></span>
+                                            <span><label>Start: </label><input class="starttime" id="Start[@relay.Id]" value="@(relay.Start.HasValue ? relay.Start.Value.ToString("g") : "")" /></span>
+                                            <span><label>Stop: </label><input class="stoptime" id="Stop[@relay.Id]" value="@(relay.Stop.HasValue ? relay.Stop.Value.ToString("g") : "")" /></span>
                                             <br />
                                             <span><label>Min Temp: </label><input id="MinTempF[@relay.Id]" value="@(relay.MinTempF.HasValue ? relay.MinTempF.Value.ToString("###0.00") : "")" /></span>
                                             <span><label>Max Temp: </label><input id="MaxTempF[@relay.Id]" value="@(relay.MaxTempF.HasValue ? relay.MaxTempF.Value.ToString("###0.00") : "")" /></span>
@@ -233,6 +241,7 @@
                                             <span><label>WaterID: </label><input id="WaterId[@relay.Id]" value="@(relay.WaterId.HasValue ? relay.WaterId.Value.ToString() : "")" /></span>
                                             <span><label>Water Must Be High: </label><input id="OnWhenFloatHigh[@relay.Id]" value="@(relay.OnWhenFloatHigh ? "Yes" : "No")" /></span>
                                             <br />
+                                            <img data-url="@Url.RouteUrl("defaultApi", new {controller = "Sky"})" src="@Url.RouteUrl("defaultApi", new {controller = "Sky"})?start=@(relay.Start.HasValue ? relay.Start.Value.ToString("g") : "")&end=@(relay.Stop.HasValue ? relay.Stop.Value.ToString("g") : "")" />
                                         </td>
                                     </tr>
 
@@ -371,7 +380,8 @@ $(document).ready(function() {
                     APIKey: $('#APIKey').val(),
                     Country: $('#Country').val(),
                     Zipcode: $('#Zipcode').val(),
-                    More_TempOffset: parseInt($('#More_TempOffset').val())
+                    More_TempOffset: parseInt($('#More_TempOffset').val()),
+                    More_CameraJPGUrl: $('#More_CameraJPGUrl').val()
                 }),
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8",
@@ -433,6 +443,11 @@ $(document).ready(function() {
             })
             .done(function(msg) {
                 if (msg.success) {
+                    $('#relayForm img').each(function(e) {
+                        var startt = $(this).parent().find('.starttime').val();
+                        var endt = $(this).parent().find('.stoptime').val();
+                        $(this).attr('src', $(this).data('url') + '?start=' + startt + '&end=' + endt);
+                    });
                     $('#relaySuccess').removeClass('hidden');
                     setTimeout("$('#relaySuccess').addClass('hidden', {duration:1000});",
                         5000); // hide the notice in 8 seconds

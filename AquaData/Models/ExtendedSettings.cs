@@ -14,6 +14,11 @@ namespace AquaMonitor.Data.Models
         /// Temperature offset
         /// </summary>
         double? TempOffset { get; set; }
+
+        /// <summary>
+        /// URL to fetch JPG of plant area
+        /// </summary>
+        string CameraJPGUrl { get; set; }
     }
 
     /// <summary>
@@ -25,5 +30,10 @@ namespace AquaMonitor.Data.Models
         /// Temperature offset
         /// </summary>
         public double? TempOffset { get; set; }
+
+        /// <summary>
+        /// URL to fetch JPG of plant area
+        /// </summary>
+        public string CameraJPGUrl { get; set; }
     }
 }

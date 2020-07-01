@@ -13,5 +13,11 @@
         /// dest location
         /// </summary>
         public string dest { get; set; }
+
+        /// <summary>
+        /// Automatically get updates from the web
+        /// </summary>
+        public bool autoUpdateFromWeb { get; set; }
+
     }
 }

@@ -109,13 +109,24 @@ namespace AquaMonitor.Web.Helpers
             return Math.Round(avg,2);
         }
 
-
-
-
-
-
-
-
+        /// <summary>
+        /// Returns the Average Power State using both average and noteworthy average
+        /// </summary>
+        /// <param name="records">Group of records over time</param>
+        /// <param name="readerId">Id of reader you want to report on</param>
+        /// <returns></returns>
+        public static int[] AveragePowerState(this IEnumerable<IGrouping<string, HistoryRecord>> records, int readerId)
+        {
+            var InitialResults = records.Select(t => t.AveragePowerState(z => z.HistoricalPower(readerId).PowerState)).ToArray();
+            System.Diagnostics.Debug.WriteLine($"Average Power: {readerId}  " + string.Join(',',InitialResults.Select(p => p.ToString("##0.000")).ToArray()));
+            var result = new List<int>(){ (int)InitialResults[0]};
+            for (int x = 1; x < records.Count(); x++)
+            {
+                result.Add( records.Skip(x).First()
+                    .NoteWorthyAveragePowerState(e => e.HistoricalPower(readerId).PowerState, (int)InitialResults[x - 1]));
+            }
+            return result.ToArray();
+        }
 
 
         /// <summary>
@@ -123,13 +134,9 @@ namespace AquaMonitor.Web.Helpers
         /// </summary>
         /// <param name="entries"></param>
         /// <returns></returns>
-        public static int AveragePowerState(this IEnumerable<PowerState> entries)
+        public static float AveragePowerState(this IEnumerable<PowerState> entries)
         {
-            var OnCount = entries.Count(z => z == PowerState.On);
-            var OffCount = entries.Count(z => z == PowerState.Off);
-            if (OnCount > OffCount)
-                return 1;
-            return 0;
+            return AveragePowerState<PowerState>(entries, e => e);
         }
 
         /// <summary>
@@ -138,13 +145,72 @@ namespace AquaMonitor.Web.Helpers
         /// <param name="source"></param>
         /// <param name="selector"></param>
         /// <returns></returns>
-        public static int AveragePowerState<TSource>(this IEnumerable<TSource> source, Func<TSource, PowerState> selector)
+        public static float AveragePowerState<TSource>(this IEnumerable<TSource> source, Func<TSource, PowerState> selector)
         {
             var OnCount = Enumerable.Select(source, selector).Count(z => z == PowerState.On);
             var OffCount = Enumerable.Select(source, selector).Count(z => z == PowerState.Off);
             if (OnCount > OffCount)
-                return 1;
-            return 0;
+                return 1 + (OnCount / (OffCount + OnCount)/10);
+            return Math.Min(0.999f,0 + (OffCount / (OnCount+ OffCount))/10);
+        }
+
+        /// <summary>
+        /// Returns the average power state over time that is of note
+        /// </summary>
+        /// <param name="entries"></param>
+        /// <param name="previous">Previous detected value</param>
+        /// <returns></returns>
+        /// /// <remarks>This will trigger an unlikely value if the previous value was the same</remarks>
+        public static int NoteWorthyAveragePowerState(this IEnumerable<PowerState> entries, int previous)
+        {
+            return NoteWorthyAveragePowerState<PowerState>(entries, e => e, previous);
+        }
+
+        /// <summary>
+        /// Returns the average power state over time that is of note
+        /// </summary>
+        /// <param name="source">source values</param>
+        /// <param name="selector">selector to trim results</param>
+        /// <param name="previous">Previous detected value</param>
+        /// <returns></returns>
+        /// <remarks>This will trigger an unlikely value if the previous value was the same</remarks>
+        public static int NoteWorthyAveragePowerState<TSource>(this IEnumerable<TSource> source, Func<TSource, PowerState> selector, int previous)
+        {
+            var OnCount = (float)Enumerable.Select(source, selector).Count(z => z == PowerState.On);
+            var OffCount = (float)Enumerable.Select(source, selector).Count(z => z == PowerState.Off);
+            if (OnCount > OffCount)
+            {
+                // typically one
+                if (OnCount > OffCount * 1.5)
+                    return 1; // not worth showing
+                return previous == 1 ? 0 : 1;
+            }
+            else
+            {
+                // typically zero
+                if (OffCount > OnCount * 1.5)
+                    return 0; // not worth showing
+                return previous == 0 ? 1 : 0;
+            }
+        }
+
+        /// <summary>
+        /// Returns the Average Water State using both average and noteworthy average
+        /// </summary>
+        /// <param name="records">Group of records over time</param>
+        /// <param name="readerId">Id of reader you want to report on</param>
+        /// <returns></returns>
+        public static int[] AverageWaterState(this IEnumerable<IGrouping<string, HistoryRecord>> records, int readerId)
+        {
+            var InitialResults = records.Select(t => t.AverageWaterState(z => z.HistoricalWater(readerId).WaterLevelHigh)).ToArray();
+            System.Diagnostics.Debug.WriteLine($"Average Water: {readerId}  " + string.Join(',',InitialResults.Select(p => p.ToString("##0.000")).ToArray()));
+            var result = new List<int>(){ (int)InitialResults[0]};
+            for (int x = 1; x < records.Count(); x++)
+            {
+                result.Add( records.Skip(x).First()
+                    .NoteWorthyAverageWaterState(e => e.HistoricalWater(readerId).WaterLevelHigh, (int)InitialResults[x - 1]));
+            }
+            return result.ToArray();
         }
 
         /// <summary>
@@ -152,13 +218,9 @@ namespace AquaMonitor.Web.Helpers
         /// </summary>
         /// <param name="entries"></param>
         /// <returns></returns>
-        public static int AverageWaterState(this IEnumerable<bool> entries)
+        public static float AverageWaterState(this IEnumerable<bool> entries)
         {
-            var OnCount = entries.Count(z => z == true);
-            var OffCount = entries.Count(z => z == false);
-            if (OnCount > OffCount)
-                return 1;
-            return 0;
+            return AverageWaterState<bool>(entries, e => e);
         }
 
         /// <summary>
@@ -167,13 +229,53 @@ namespace AquaMonitor.Web.Helpers
         /// <param name="source"></param>
         /// <param name="selector"></param>
         /// <returns></returns>
-        public static int AverageWaterState<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> selector)
+        public static float AverageWaterState<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> selector)
+        {
+            var OnCount = (float)Enumerable.Select(source, selector).Count(z => z == true);
+            var OffCount = (float)Enumerable.Select(source, selector).Count(z => z == false);
+            if (OnCount > OffCount)
+                return 1 + (OnCount / (OffCount + OnCount)/10);
+            return Math.Min(0.999f,0 + (OffCount / (OnCount+ OffCount))/10);
+        }
+
+        /// <summary>
+        /// Returns the average power state over time
+        /// </summary>
+        /// <param name="entries"></param>
+        /// <param name="previous">Previous detected value</param>
+        /// <returns></returns>
+        /// <remarks>This will trigger an unlikely value if the previous value was the same</remarks>
+        public static int NoteWorthyAverageWaterState(this IEnumerable<bool> entries, int previous)
+        {
+            return NoteWorthyAverageWaterState<bool>(entries, e => e, previous);
+        }
+
+        /// <summary>
+        /// Returns the average power state over time
+        /// </summary>
+        /// <param name="source">source values</param>
+        /// <param name="selector">selector to trim results</param>
+        /// <param name="previous">Previous detected value</param>
+        /// <returns></returns>
+        /// <remarks>This will trigger an unlikely value if the previous value was the same</remarks>
+        public static int NoteWorthyAverageWaterState<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> selector, int previous)
         {
             var OnCount = Enumerable.Select(source, selector).Count(z => z == true);
             var OffCount = Enumerable.Select(source, selector).Count(z => z == false);
             if (OnCount > OffCount)
-                return 1;
-            return 0;
+            {
+                // typically one
+                if (OnCount > OffCount * 1.5)
+                    return 1; // not worth showing
+                return previous == 1 ? 0 : 1;
+            }
+            else
+            {
+                // typically zero
+                if (OffCount > OnCount * 1.5)
+                    return 0; // not worth showing
+                return previous == 0 ? 1 : 0;
+            }
         }
     }
 }

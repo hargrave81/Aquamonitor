@@ -83,16 +83,22 @@ namespace AquaMonitor.Web.Models
         /// <param name="Range"></param>
         public RelayChartModel(IEnumerable<HistoryRecord> records, TimeSpan Range) : this()
         {
+            var readers = new List<int>() {records.Last().PowerReadings.First().ReaderId};
             DataSets.First().Label = records.Last().PowerReadings.First().Name;
 
             if (records.Last().PowerReadings.Count() > 1)
             {
                 DataSets.Skip(1).First().Label = records.Last().PowerReadings.Skip(1).First().Name;
+                readers.Add(records.Last().PowerReadings.Skip(1).First().ReaderId);
                 if (records.Last().PowerReadings.Count() > 2)
                 {
                     DataSets.Skip(2).First().Label = records.Last().PowerReadings.Skip(2).First().Name;
+                    readers.Add(records.Last().PowerReadings.Skip(2).First().ReaderId);
                     if (records.Last().PowerReadings.Count() > 3)
+                    {
+                        readers.Add(records.Last().PowerReadings.Skip(3).First().ReaderId);
                         DataSets.Skip(3).First().Label = records.Last().PowerReadings.Skip(3).First().Name;
+                    }
                     else
                         DataSets = new ChartJSData<int>[] {DataSets[0], DataSets[1], DataSets[2]};
                 }
@@ -140,17 +146,13 @@ namespace AquaMonitor.Web.Models
                 this.Labels = months.ToArray();
             }
 
-            this.DataSets.First().Data = records.GroupBy(t => t.Created.ToString(filter))
-                .Select(t => t.AveragePowerState(z => z.PowerReadings.First().PowerState)).ToArray();
+            this.DataSets.First().Data = records.GroupBy(t => t.Created.ToString(filter)).AveragePowerState(readers[0]);
             if (this.DataSets.Length > 1)
-                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString(filter))
-                    .Select(t => t.AveragePowerState(z => z.PowerReadings.Skip(1).First().PowerState)).ToArray();
+                this.DataSets.Skip(1).First().Data = records.GroupBy(t => t.Created.ToString(filter)).AveragePowerState(readers[1]);
             if (this.DataSets.Length > 2)
-                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString(filter))
-                    .Select(t => t.AveragePowerState(z => z.PowerReadings.Skip(2).First().PowerState)).ToArray();
+                this.DataSets.Skip(2).First().Data = records.GroupBy(t => t.Created.ToString(filter)).AveragePowerState(readers[2]);
             if (this.DataSets.Length > 3)
-                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString(filter))
-                    .Select(t => t.AveragePowerState(z => z.PowerReadings.Skip(3).First().PowerState)).ToArray();
+                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString(filter)).AveragePowerState(readers[3]);
         }
 
 

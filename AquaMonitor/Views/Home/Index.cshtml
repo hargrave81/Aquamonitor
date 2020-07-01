@@ -79,6 +79,46 @@
         </div>
     </div>
 </div>
+@if(!string.IsNullOrEmpty(Model.More.CameraJPGUrl)){
+    <div class="row">
+        <div class="spacer"></div>
+    </div>
+    <div class="row">
+        <div class="col-xl-8 mb-5 mb-xl-0">
+            <div class="card shadow">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h6 class="text-uppercase text-muted ls-1 mb-1">Camera</h6>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="cameraview">
+                        <img id="cameraImage" src="@Url.RouteUrl("defaultApi", new {controller = "Camera"})"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 <div class="table-section">
     <partial name="_tables" model="Model" />
 </div>
+
+@section Scripts
+{
+    <script>
+        setTimeout('updateCamera();', 9000);
+
+
+        function updateCamera() {
+            if ($('#cameraImage').length > 0) {
+                setTimeout('updateCamera();', 9000);
+                d = new Date();
+                $("#cameraImage").attr("src", cameraUrl + '?date=' + d.getTime());
+            }
+        }
+    </script>
+}

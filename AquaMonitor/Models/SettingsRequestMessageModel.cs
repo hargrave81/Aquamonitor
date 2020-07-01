@@ -45,5 +45,10 @@ namespace AquaMonitor.Web.Models
         /// Temperature Offset
         /// </summary>
         public double? More_TempOffset { get; set; }
+
+        /// <summary>
+        /// Camera JPG url
+        /// </summary>
+        public string More_CameraJPGUrl { get; set; }
     }
 }

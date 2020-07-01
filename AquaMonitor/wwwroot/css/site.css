@@ -330,3 +330,20 @@ label {
 .settings .card th {
     padding: .5rem .5rem .5rem .5rem;   
 }
+
+.cameraview img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.cameraview {
+    position: relative;
+}
+
+.spacer {
+    width: 100%;
+    height: 20px;
+    display: block;
+    position: relative;
+}

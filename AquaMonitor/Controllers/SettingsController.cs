@@ -81,6 +81,7 @@ namespace AquaMonitor.Web.Controllers
                 globalData.TempType = int.Parse(request.TempType);
                 globalData.DataCollectionRate = request.DataCollectionRate;
                 globalData.More.TempOffset = request.More_TempOffset;
+                globalData.More.CameraJPGUrl = request.More_CameraJPGUrl;
                 // now save to database    
                 var settings = dbContext.GetSetting();
                 settings.TempType = globalData.TempType;
@@ -90,6 +91,7 @@ namespace AquaMonitor.Web.Controllers
                 settings.Zipcode = globalData.Zipcode;
                 settings.APIKey = globalData.APIKey;
                 settings.More.TempOffset = globalData.More.TempOffset;
+                settings.More.CameraJPGUrl = globalData.More.CameraJPGUrl;
                 dbContext.SaveSettings(settings);
             }
             catch (Exception ex)

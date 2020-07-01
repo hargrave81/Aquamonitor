@@ -1,7 +1,13 @@
 ## Aquaponics System
-### Raspberry Pi Setup (3 B+)
+### Raspberry Pi Setup (3 B+) / 4
+
+#### Web Downloader
+Updated the deploy system to automatically get updates when code changes are checked in and merged to the master branch.  This can be disabled by editing your appsettings.json file for your /usr/local/aquadeploy
+
+
 ##### Quick install on a 32bit OS
 sudo wget https://raw.githubusercontent.com/hargrave81/Aquamonitor/master/installubuntu.sh -v -O install.sh && sudo chmod +777 install.sh && sudo ./install.sh; sudo rm -rf install.sh
+
 ##### Initial Setup
 - Download 20.04 x64 Server https://ubuntu.com/download/raspberry-pi/thank-you?version=20.04&architecture=arm64+raspi
   - (you may need to unzip the image if its in .xz format with 7Zip https://www.7-zip.org/download.html)
@@ -67,6 +73,7 @@ sudo wget https://raw.githubusercontent.com/hargrave81/Aquamonitor/master/instal
 - sudo ufw allow 80/tcp
 
 ##### Install AquaMonitor
+- sudo apt install libgdiplus
 - sudo apt-get install unzip
 - sudo nano /etc/systemd/system/kestrel-aquamonitor.service
   - copy contents of Aquamonitorservice
@@ -87,15 +94,21 @@ sudo wget https://raw.githubusercontent.com/hargrave81/Aquamonitor/master/instal
 - sudo systemctl status kestrel-aquadeploy.service
 
 
-##### HTU21D support
+##### HTU21D support - Raspbian OS is going to be the preferred solution moving forward
 Requires Raspbian OS
 Requires linux-arm (not 64 builds)
 
 
+##### FFMPEG
+- Required download for testing, is pre installed with raspbian OS
+
 ##### Building source code - Aquamonitor
-- On Build Box
+- On Build Box 64bit
 dotnet publish ./AquaMonitor/AquaMonitor.csproj -c Release -o ./Publish -r linux-arm64
 Compress-Archive -Path Publish/* -DestinationPath AquaMonitor.zip -CompressionLevel "Optimal" -Force
+- On Build Box 32bit 
+dotnet publish ./AquaMonitor/AquaMonitor.csproj -c Release -o ./Publish32 -r linux-arm
+Compress-Archive -Path Publish32/* -DestinationPath AquaMonitor32.zip -CompressionLevel "Optimal" -Force
 - on Raspberry Pi
 sudo systemctl stop kestrel-aquamonitor.service
 sudo unzip -o /home/remote/AquaMonitor.zip -d /usr/local/wwwroot/Publish

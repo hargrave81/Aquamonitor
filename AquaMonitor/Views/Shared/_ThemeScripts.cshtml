@@ -59,7 +59,8 @@
     });
 
     refreshCards();
-
+    
+    var cameraUrl = '@Url.RouteUrl("defaultApi", new {controller = "Camera"})';
     var tempChartUrl = '@Url.RouteUrl("defaultApi",new { controller="TempChart"})';
     var waterChartUrl = '@Url.RouteUrl("defaultApi",new { controller="WaterChart"})';
     var relayChartUrl = '@Url.RouteUrl("defaultApi",new { controller="RelayChart"})';
