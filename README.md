@@ -124,6 +124,10 @@ Compress-Archive -Path DeployLinux/* -DestinationPath AquaDeploy.zip -Compressio
   - sudo unzip -o /home/remote/AquaDeploy.zip -d /usr/local/aquadeploy
   - sudo systemctl start kestrel-aquadeploy.service    
 
+Sample Monitor:
+![Sample Monitor](AquaMonitor.jpg)
+
+
 Sample Wiring Diagram:
 ![Sample Wiring Diagram](SampleLayout.png)
 
