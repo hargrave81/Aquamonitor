@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AquaMonitor.Data.Models
+﻿namespace AquaMonitor.Data.Models
 {
 
     /// <summary>
@@ -18,6 +14,7 @@ namespace AquaMonitor.Data.Models
         /// <summary>
         /// URL to fetch JPG of plant area
         /// </summary>
+        // ReSharper disable once InconsistentNaming
         string CameraJPGUrl { get; set; }
     }
 

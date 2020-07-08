@@ -42,10 +42,10 @@ namespace AquaMonitor.Web.Controllers
                 return this.NotFound();
             }
 
-            var img = new byte[]{};
+            byte[] img;
             try
             {
-                string path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                string path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
                     $"wwwroot/img/camera");
                 var cameraFolder = new System.IO.DirectoryInfo(path);
                 string file = cameraFolder.GetFiles().OrderByDescending(t => t.CreationTime).First().FullName;
@@ -56,7 +56,7 @@ namespace AquaMonitor.Web.Controllers
                 logger.LogError(ex, "Failed to read camera image from disk: "+ ex.Message);
                 return this.NoContent();
             }
-            return File(img, "image/jpg", $"camerastream{Guid.NewGuid().ToString()}.jpg");
+            return File(img, "image/jpg", $"camerastream{Guid.NewGuid()}.jpg");
         }
     }
 }

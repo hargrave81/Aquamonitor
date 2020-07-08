@@ -134,24 +134,19 @@ footer {
     display: inline-block;
 }
 
-.settings table tr td span input {
-    max-width: 70px;
-    padding-right: 5px;
-    margin-left: 5px;
-    float: right;
-    position: relative;
-    height: 20px;
-}
-.settings table tr td.long span input {
-    max-width: 140px;
-    position: unset;
-    float: none;
+.settings table tr td.long input {
+    height: calc(1.7rem + 2px);
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 .settings table tr td.long {
     text-align: center;
 }
 
+.settings table td.long {
+    text-align: center;
+}
 
 div.fishgraphics {
     min-height: 120px;
@@ -346,4 +341,87 @@ label {
     height: 20px;
     display: block;
     position: relative;
+}
+
+.deleteRelay {
+    float: right;
+    top: -8px;
+}
+
+.settings h4 {
+    border-bottom: 1px solid #004060;
+    text-align: center;
+}
+
+.bg-gradient-hardness {
+    background: linear-gradient(260deg, #e0b930 0, #934d35 100%) !important;
+}
+
+.bg-gradient-alkaline {
+    background: linear-gradient(260deg, #fbde16 0, #0a805e 100%) !important;
+}
+
+.bg-gradient-nitrate {
+    background: linear-gradient(260deg, #ecee45 0, #a11726 100%) !important;
+}
+
+.bg-gradient-nitrite {
+    background: linear-gradient(260deg, #71b1d7 0, #7f207a 100%) !important;
+}
+
+.bg-gradient-ammonia {
+    background: linear-gradient(260deg, #eada4f 0, #0c7950 100%) !important;
+}
+
+.bg-gradient-ph {
+    background: linear-gradient(87deg, #a11726 0, #5fa8a1 50%, #7a2a8b 100%) !important;
+}
+
+.bg-gradient-food {
+    background: linear-gradient(260deg, #555 0, #9e8e5e 100%) !important;
+}
+
+.rounded-title {
+    border-radius: 20px;
+    padding-top: 5px;
+}
+
+a.nav-link.nav-reading {
+    padding: 3px 8px;
+}
+
+.nav-pills .nav-item:not(:last-child) {
+    padding-right: .33rem;
+}
+
+.card-reading .col-6 {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.card-reading .col-5 {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.card-reading .col-1 {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+@media screen and (max-width: 768px) {
+    .card-reading .col-5.col-buttons {
+        max-height: 24px;
+    }
+}
+
+@media screen and (max-width: 1460px) and (min-width: 1200px){
+    .card-reading .col-5.col-buttons {
+        margin-left: -10px;
+    }
+}
+
+.card .alert.alert-warning {
+    margin-bottom: 10px;
+    margin-top: -30px;
 }

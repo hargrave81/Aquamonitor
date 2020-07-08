@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace AquaMonitor.Data.Models
 {
@@ -10,6 +11,7 @@ namespace AquaMonitor.Data.Models
         /// <summary>
         /// Power Relay Id
         /// </summary>
+        [Key]
         public int Id { get; set; }
 
         /// <summary>

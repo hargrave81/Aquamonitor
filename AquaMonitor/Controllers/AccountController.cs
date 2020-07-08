@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AquaMonitor.Data.Context;
 using AquaMonitor.Data.Models;
-using AquaMonitor.Web.Global;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +11,6 @@ namespace AquaMonitor.Web.Controllers
     /// </summary>
     public class AccountController : Controller
     {
-        private readonly IGlobalState globalData;
         private readonly UserManager<AppUser> userManager;
         private readonly SignInManager<AppUser> signInManager;
         private readonly AquaDbContext dbContext;
@@ -24,14 +18,12 @@ namespace AquaMonitor.Web.Controllers
         /// <summary>
         /// CTor
         /// </summary>
-        /// <param name="globalData"></param>
         /// <param name="dbContext"></param>
         /// <param name="userManager"></param>
         /// <param name="signInManager"></param>
-        public AccountController(IGlobalState globalData, AquaDbContext dbContext,
+        public AccountController(AquaDbContext dbContext,
             UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
-            this.globalData = globalData;
             this.dbContext = dbContext;
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -90,10 +82,7 @@ namespace AquaMonitor.Web.Controllers
                 return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
             }
 
-            return View(new PasswordModel
-            {
-                
-            });
+            return View(new PasswordModel());
         }
 
         /// <summary>

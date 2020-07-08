@@ -4,11 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using AquaMonitor.Data.Context;
 using AquaMonitor.Data.Models;
-using AquaMonitor.Web.Global;
 using AquaMonitor.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PowerState = AquaMonitor.Data.Models.PowerState;
 
 namespace AquaMonitor.Web.Controllers
 {
@@ -51,7 +49,7 @@ namespace AquaMonitor.Web.Controllers
             if (Request.HttpContext.User?.Claims != null && Request.HttpContext.User.Claims.Any())
             {
                 string form = Request.HttpContext.User.Identity.Name;
-                if (form.ToUpper() != "ADMIN")
+                if (form != null && form.ToUpper() != "ADMIN")
                 {
                     return new JsonResult(new { success = false, message = "this request cannot be validated as secure.  Please do not attempt to hack." });
                 }

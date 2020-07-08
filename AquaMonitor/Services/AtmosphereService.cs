@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Device.I2c;
 using System.Threading;
 using System.Threading.Tasks;
 using AquaMonitor.Data.Models;
 using AquaMonitor.Web.Devices;
-using AquaMonitor.Web.Global;
+using Iot.Device.Bmxx80;
+using Iot.Device.Bmxx80.FilteringMode;
+using Iot.Device.Bmxx80.PowerMode;
 using Iot.Device.DHTxx;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -23,6 +26,9 @@ namespace AquaMonitor.Web.Services
         private int cyclesSinceWorking;
         private readonly Random random;
         private bool i2c;
+        private I2cDevice bmeI2c;
+        
+        private int CurrentSensor;
 
         /// <summary>
         /// Service Constructor
@@ -54,6 +60,10 @@ namespace AquaMonitor.Web.Services
 
         private void DoWork(object state)
         {
+            while (!globalData.SettingsLoaded)
+            {
+                return; // cannot work without settings
+            }
             if (!busy)
             {
                 busy = true;
@@ -104,7 +114,29 @@ namespace AquaMonitor.Web.Services
             cyclesSinceWorking++;
             double h;
             Iot.Units.Temperature tc;
-            
+
+            if (CurrentSensor != globalData.TempType)
+            {
+                // clean up any current sensor data
+                if (CurrentSensor != 0)
+                {
+                    if (CurrentSensor == 21)
+                    {
+                        // clean up the BUS
+                        Htu21D.DisposeI2C();   
+                    }
+
+                    if (CurrentSensor == 28)
+                    {
+                        // clean up the BUS
+                        bmeI2c.Dispose();
+                        bmeI2c = null;
+                    }
+                }
+            }
+
+            CurrentSensor = globalData.TempType;
+
             if (globalData.TempType == 11)
             {
                 using var tempSensor = new Dht11(globalData.TempPin);
@@ -142,19 +174,56 @@ namespace AquaMonitor.Web.Services
                         globalData.TemperatureF = tc.Fahrenheit;
                     }
                 }
-            } else if(globalData.TempType == 21)
+            }
+            else if(globalData.TempType == 21)
             {
                 this.i2c = true;
-                using var Htu = Htu21D.CreateDevice(globalData.TempPin, I2cAddress.AddrLow, Resolution.Medium);
-                h = Htu.Humidity;
-                if(Htu.IsLastReadSuccessful)
+                using var htu = Htu21D.CreateDevice(globalData.TempPin, I2cAddress.AddrLow, Resolution.Medium);
+                h = htu.Humidity;
+                if(htu.IsLastReadSuccessful)
                 {
                     cyclesSinceWorking = 0;
                     logger.LogInformation("I2C detected humid information and is being tracked.");
                     globalData.Humidity = h;
-                    System.Threading.Thread.Sleep(100);
-                    tc = Htu.Temperature;                    
-                    if (Htu.IsLastReadSuccessful)
+                    Thread.Sleep(100);
+                    tc = htu.Temperature;                    
+                    if (htu.IsLastReadSuccessful)
+                    {
+                        if(globalData.More?.TempOffset != null)
+                            tc = Iot.Units.Temperature.FromFahrenheit(tc.Fahrenheit - globalData.More.TempOffset.Value);
+                        logger.LogInformation("I2C detected temp information and is being tracked.");
+                        globalData.TemperatureC = tc.Celsius;
+                        globalData.TemperatureF = tc.Fahrenheit;
+                    }                    
+                }
+            }
+            else if(globalData.TempType == 28)
+            {
+                this.i2c = true;
+                bool firstGo = false;
+                if (bmeI2c == null)
+                {
+                    firstGo = true;
+                    bmeI2c = I2cDevice.Create(new I2cConnectionSettings(1, 0x76));
+                }
+                using var bme = new Bme280(bmeI2c);
+                if (firstGo)
+                {
+                    bme.SetPowerMode(Bmx280PowerMode.Normal);
+                }
+                bme.HumiditySampling = Sampling.HighResolution;
+                bme.TemperatureSampling = Sampling.HighResolution;
+                bme.FilterMode = Bmx280FilteringMode.X4;
+                Thread.Sleep(10);
+                bool success = bme.TryReadHumidity(out h);
+                if(success)
+                {
+                    cyclesSinceWorking = 0;
+                    logger.LogInformation("I2C detected humid information and is being tracked.");
+                    globalData.Humidity = h;
+                    Thread.Sleep(50);
+                    success = bme.TryReadTemperature(out tc);
+                    if (success)
                     {
                         if(globalData.More?.TempOffset != null)
                             tc = Iot.Units.Temperature.FromFahrenheit(tc.Fahrenheit - globalData.More.TempOffset.Value);

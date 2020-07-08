@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using AquaMonitor.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

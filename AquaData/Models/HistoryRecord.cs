@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 
 namespace AquaMonitor.Data.Models
 {
     /// <summary>
     /// Historical Record of data collected
     /// </summary>
-    public class HistoryRecord
+    public sealed class HistoryRecord
     {
+        [Key]
         public int Id { get; set; }
         public double TempF { get; set; }
         public double TempC { get; set; }
@@ -22,8 +23,8 @@ namespace AquaMonitor.Data.Models
         public DateTime? Sunset { get; set; }
         public double? CloudCoverage { get; set; }
         public bool? Rain { get; set; }
-        public virtual IEnumerable<WaterReading> WaterReadings { get; set; }
-        public virtual IEnumerable<PowerReading> PowerReadings { get; set; }
+        public IEnumerable<WaterReading> WaterReadings { get; set; }
+        public IEnumerable<PowerReading> PowerReadings { get; set; }
         public bool SystemRunning { get; set; }
         public DateTime Created { get; set; }
         /// <summary>
@@ -41,13 +42,13 @@ namespace AquaMonitor.Data.Models
         public HistoryRecord(double tempF, double tempC, double humidity, IEnumerable<WaterLevel> levels,
             IEnumerable<PowerRelay> relays, bool systemOnline)
         {
-            this.TempC = tempC;
-            this.TempF = tempF;
-            this.Humidity = humidity;
-            this.WaterReadings = levels.Select(t => new WaterReading(t)).ToList();
-            this.PowerReadings = relays.Select(t => new PowerReading(t)).ToList();
-            this.SystemRunning = systemOnline;
-            this.Created = DateTime.UtcNow;
+            TempC = tempC;
+            TempF = tempF;
+            Humidity = humidity;
+            WaterReadings = levels.Select(t => new WaterReading(t)).ToList();
+            PowerReadings = relays.Select(t => new PowerReading(t)).ToList();
+            SystemRunning = systemOnline;
+            Created = DateTime.UtcNow;
         }
 
         public HistoryRecord(double tempF, double tempC, double humidity, IEnumerable<WaterLevel> levels,

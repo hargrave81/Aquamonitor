@@ -3,8 +3,6 @@ using System.Device.Gpio;
 using System.Device.Gpio.Drivers;
 using System.Linq;
 using AquaMonitor.Data.Models;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace AquaMonitor.Web.Global

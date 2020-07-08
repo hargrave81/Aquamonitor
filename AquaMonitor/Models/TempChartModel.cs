@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AquaMonitor.Data.Models;
 using AquaMonitor.Web.Helpers;
 
@@ -30,7 +29,7 @@ namespace AquaMonitor.Web.Models
         public TempChartModel()
         {
             Labels = new string[] {};
-            DataSets = new ChartJSData<float>[]
+            DataSets = new[]
             {
                 new ChartJSData<float>()
                 {
@@ -59,10 +58,14 @@ namespace AquaMonitor.Web.Models
         /// Create instance of the temp chart model with data
         /// </summary>
         /// <param name="records"></param>
-        /// <param name="Range"></param>
-        public TempChartModel(IEnumerable<HistoryRecord> records, TimeSpan Range) : this()
+        /// <param name="range"></param>
+        public TempChartModel(IEnumerable<HistoryRecord> records, TimeSpan range) : this()
         {
-            if (Range.TotalDays > 90)
+            if (records.Count() == 0)
+            {
+                return;
+            }
+            if (range.TotalDays > 90)
             {
                 // do months
                 var months = records.OrderBy(t => t.Created).Select(t => t.Created.ToString("MMMM yyyy")).Distinct().ToArray();
@@ -71,7 +74,7 @@ namespace AquaMonitor.Web.Models
                     .Select(t => (float) t.NormalAverage(z => z.TempF)).ToArray();
                 this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString("MM/yyyy"))
                     .Select(t => (float)t.NormalAverage(z => z.Humidity)).ToArray();
-            } else if (Range.TotalDays > 6)
+            } else if (range.TotalDays > 6)
             {
                 // do days
                 var months = records.OrderBy(t => t.Created).Select(t => t.Created.ToString("MMM dd")).Distinct().ToArray();
@@ -80,7 +83,7 @@ namespace AquaMonitor.Web.Models
                     .Select(t => (float)t.NormalAverage(z => z.TempF)).ToArray();
                 this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy"))
                     .Select(t => (float)t.NormalAverage(z => z.Humidity)).ToArray();
-            } else if (Range.TotalHours > 8)
+            } else if (range.TotalHours > 8)
             {
                 // do hours
                 var months = records.OrderBy(t => t.Created).Select(t => t.Created.ToString("dd HH") + ":00").Distinct().ToArray();
@@ -89,7 +92,7 @@ namespace AquaMonitor.Web.Models
                     .Select(t => (float)t.NormalAverage(z => z.TempF)).ToArray();
                 this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy HH"))
                     .Select(t => (float)t.NormalAverage(z => z.Humidity)).ToArray();
-            } else if (Range.TotalMinutes > 10)
+            } else if (range.TotalMinutes > 10)
             {
                 // do minutes
                 var months = records.OrderBy(t => t.Created).Select(t => t.Created.ToString("dd HH:mm")).Distinct().ToArray();

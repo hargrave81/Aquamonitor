@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-using Iot.Device.Media;
 using Microsoft.Extensions.Hosting;
 using static System.Drawing.Image;
 
@@ -14,19 +13,19 @@ namespace AquaMonitor.Web.Services
     /// </summary>
     public class SkyService
     {
-        private const float hour = 25f;
-        private const float minute = .4166666667f;
-        private const float second = .00694444444f;
+        private const float Hour = 25f;
+        private const float Minute = .4166666667f;
+        private const float Second = .00694444444f;
 
         /// <summary>
         /// Light sky image
         /// </summary>
-        private readonly byte[] LightSky;
+        private readonly byte[] lightSky;
 
         /// <summary>
         /// Dark sky image
         /// </summary>
-        private readonly byte[] DarkSky;
+        private readonly byte[] darkSky;
 
         /// <summary>
         /// CTOR
@@ -34,8 +33,8 @@ namespace AquaMonitor.Web.Services
         /// <param name="env"></param>
         public SkyService(IHostEnvironment env)
         {
-            LightSky = File.ReadAllBytes(Path.Combine(env.ContentRootPath,"wwwroot/img/lightsky.png"));
-            DarkSky = File.ReadAllBytes(Path.Combine(env.ContentRootPath,"wwwroot/img/darksky.png"));
+            lightSky = File.ReadAllBytes(Path.Combine(env.ContentRootPath,"wwwroot/img/lightsky.png"));
+            darkSky = File.ReadAllBytes(Path.Combine(env.ContentRootPath,"wwwroot/img/darksky.png"));
         }
 
         /// <summary>
@@ -46,9 +45,9 @@ namespace AquaMonitor.Web.Services
         /// <returns></returns>
         public Bitmap BuildSky(DateTime? start, DateTime? end)
         {
-            var block = new Bitmap(600, 24, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
-            using var msls = new MemoryStream(LightSky);
-            using var msds = new MemoryStream(DarkSky);
+            var block = new Bitmap(600, 24, PixelFormat.Format32bppPArgb);
+            using var msls = new MemoryStream(lightSky);
+            using var msds = new MemoryStream(darkSky);
             using var ls = FromStream(msls);
             using var ds = FromStream(msds);
             using var g = Graphics.FromImage(block);
@@ -62,8 +61,8 @@ namespace AquaMonitor.Web.Services
                 start = DateTime.Parse("0:00:00");
             if (!end.HasValue)
                 end = DateTime.Parse("23:59:59.999");
-            var startWidth = start.Value.Hour * hour + start.Value.Minute * minute + start.Value.Second * second;
-            var endWidth = end.Value.Hour * hour + end.Value.Minute * minute + end.Value.Second * second;
+            var startWidth = start.Value.Hour * Hour + start.Value.Minute * Minute + start.Value.Second * Second;
+            var endWidth = end.Value.Hour * Hour + end.Value.Minute * Minute + end.Value.Second * Second;
             if (endWidth < startWidth)
             {
                 //flip flop
@@ -85,7 +84,7 @@ namespace AquaMonitor.Web.Services
         public Byte[] BuildSkyBytes(DateTime? start, DateTime? end)
         {
             using var block = BuildSky(start, end);
-            using var ms = new System.IO.MemoryStream();
+            using var ms = new MemoryStream();
             block.Save(ms, ImageFormat.Png);
             return ms.ToArray();
         }

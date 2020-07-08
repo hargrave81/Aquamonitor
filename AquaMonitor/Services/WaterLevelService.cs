@@ -4,7 +4,6 @@ using System.Device.Gpio.Drivers;
 using System.Threading;
 using System.Threading.Tasks;
 using AquaMonitor.Data.Models;
-using AquaMonitor.Web.Global;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -60,6 +59,10 @@ namespace AquaMonitor.Web.Services
 
         private void DoWork(object state)
         {
+            while (!globalData.SettingsLoaded)
+            {
+                return; // cannot work without settings
+            }
             if (!busy)
             {
                 busy = true;

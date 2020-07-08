@@ -2,9 +2,7 @@
 using System.Linq;
 using AquaMonitor.Data.Context;
 using AquaMonitor.Data.Models;
-using AquaMonitor.Web.Global;
 using AquaMonitor.Web.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -49,7 +47,7 @@ namespace AquaMonitor.Web.Controllers
             if (Request.HttpContext.User?.Claims != null && Request.HttpContext.User.Claims.Any())
             {
                 string form = Request.HttpContext.User.Identity.Name;
-                if (form.ToUpper() != "ADMIN")
+                if (form != null && form.ToUpper() != "ADMIN")
                 {
                     return new JsonResult(new { success = false, message = "this request cannot be validated as secure.  Please do not attempt to hack." });
                 }
@@ -59,7 +57,7 @@ namespace AquaMonitor.Web.Controllers
                 return new JsonResult(new { success = false, message = "this request cannot be validated as secure." });
             }
 
-            if (request.TempType != "11" && request.TempType != "22" && request.TempType != "21")
+            if (request.TempType != "11" && request.TempType != "22" && request.TempType != "21" && request.TempType != "28")
             {
                 return new JsonResult(new { success = false, message = "Temp type is invalid" });
             }

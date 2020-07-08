@@ -58,6 +58,10 @@ namespace AquaMonitor.Web.Services
 
         private void DoWork(object state)
         {
+            while (!globalData.SettingsLoaded)
+            {
+                return; // cannot work without settings
+            }
             if (!busy)
             {
                 busy = true;

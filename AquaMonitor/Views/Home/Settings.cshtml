@@ -109,7 +109,7 @@
                                         <span>Temp Pin</span>
                                     </th>
                                     <td class="long">
-                                        <span><input value="@Model.TempPin" id="TempPin" name="TempPin" Title="Default is 4" /></span>
+                                        <input type="text" id="TempPin" class="form-control" name="TempPin" Title="Default is 4" placeholder="Temperature Pin" value="@Model.TempPin">
                                     </td>
                                 </tr>
                                 <tr>
@@ -117,7 +117,7 @@
                                         <span>Temp Type</span>
                                     </th>
                                     <td class="long">
-                                        <span><input value="@Model.TempType" id="TempType" name="TempType" Title="11 or 22" /></span>
+                                        <input class="form-control" value="@Model.TempType" id="TempType" name="TempType" placeholder="Temp Type" Title="11 or 22" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -125,7 +125,7 @@
                                         <span>Log Interval</span>
                                     </th>
                                     <td class="long">
-                                        <span><input value="@Model.DataCollectionRate" id="DataCollectionRate" name="DataCollectionRate" Title="Default is 60 seconds" /></span>
+                                        <input class="form-control" value="@Model.DataCollectionRate" id="DataCollectionRate" name="DataCollectionRate" placeholder="Log Interval" Title="Default is 60 seconds" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -133,7 +133,7 @@
                                         <span>Country Code</span>
                                     </th>
                                     <td class="long">
-                                        <span><input value="@Model.Country" id="Country" name="Country" Title="US,CA" /></span>
+                                        <input class="form-control" value="@Model.Country" id="Country" name="Country" placeholder="Country Code" Title="US,CA" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -141,7 +141,7 @@
                                         <span>Zip Code</span>
                                     </th>
                                     <td class="long">
-                                        <span><input value="@Model.Zipcode" id="Zipcode" name="Zipcode" Title="5 digit zip code" /></span>
+                                        <input class="form-control" value="@Model.Zipcode" id="Zipcode" name="Zipcode" placeholder="Zip Code" Title="5 digit zip code" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -149,7 +149,7 @@
                                         <span>Weather API Key</span>
                                     </th>
                                     <td class="long">
-                                        <span><input value="@Model.APIKey" id="APIKey" name="APIKey" Title="API Key - you must register and request a weather API key from openweathermap.org" /></span>
+                                        <input class="form-control" value="@Model.APIKey" id="APIKey" name="APIKey" placeholder="API Key" Title="API Key - you must register and request a weather API key from openweathermap.org" />
                                     </td>
                             </tr>
                             <tr>
@@ -157,7 +157,7 @@
                                     <span>Temp Offset</span>
                                 </th>
                                 <td class="long">
-                                    <span><input value="@(Model.More.TempOffset ?? 0f)" id="More_TempOffset" name="More_TempOffset" Title="Temperature offset (in F) negative or positive number" /></span>
+                                    <input class="form-control" value="@(Model.More.TempOffset ?? 0f)" id="More_TempOffset" placeholder="Temp Offset" name="More_TempOffset" Title="Temperature offset (in F) negative or positive number" />
                                 </td>
                             </tr>
                             <tr>
@@ -165,7 +165,7 @@
                                     <span>Camera URL</span>
                                 </th>
                                 <td class="long">
-                                    <span><input value="@(Model.More.CameraJPGUrl)" id="More_CameraJPGUrl" name="More_CameraJPGUrl" Title="Camera URL to fetch JPG" /></span>
+                                    <input class="form-control" value="@(Model.More.CameraJPGUrl)" id="More_CameraJPGUrl" placeholder="Camera URL" name="More_CameraJPGUrl" Title="Camera URL to fetch JPG" />
                                 </td>
                             </tr>
                             </tbody>
@@ -206,47 +206,41 @@
                     <!-- Projects table -->
                     <form id="relayForm">
                         <table class="table align-items-center table-flush">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">Setting</th>
-                                    <th scope="col">Value</th>
-                                </tr>
-                            </thead>
-                            <tbody>
                                 @foreach (var relay in Model.Relays)
                                 {
-                                    <tr class="el-table__row">
-                                        <th scope="row" class="el-table_1_col_1">
-                                            <span>Relay #@relay.Id.ToString() @relay.Letter</span>
-                                            <br />
-                                            <button class="deleteRelay btn btn-sm btn-warning" data-id="@relay.Id.ToString()" data-letter="@relay.Letter">Remove</button>
-                                        </th>
-                                        <td class="el-table_1_col_2">
-                                            <span><label>Name: </label><input id="Name[@relay.Id]" value="@relay.Name" /></span>
-                                            <span><label>Pin: </label><input id="Pin[@relay.Id]" value="@relay.Pin" /></span>
-                                            <br />
-                                            <span><label>Interval: </label><input id="Interval[@relay.Id]" value="@relay.Interval" /></span>
-                                            <span><label>RunTime: </label><input id="IntervalRun[@relay.Id]" value="@relay.IntervalRun" /></span>
-                                            <br />
-                                            <span><label>Start: </label><input class="starttime" id="Start[@relay.Id]" value="@(relay.Start.HasValue ? relay.Start.Value.ToString("g") : "")" /></span>
-                                            <span><label>Stop: </label><input class="stoptime" id="Stop[@relay.Id]" value="@(relay.Stop.HasValue ? relay.Stop.Value.ToString("g") : "")" /></span>
-                                            <br />
-                                            <span><label>Min Temp: </label><input id="MinTempF[@relay.Id]" value="@(relay.MinTempF.HasValue ? relay.MinTempF.Value.ToString("###0.00") : "")" /></span>
-                                            <span><label>Max Temp: </label><input id="MaxTempF[@relay.Id]" value="@(relay.MaxTempF.HasValue ? relay.MaxTempF.Value.ToString("###0.00") : "")" /></span>
-                                            <span><label>Variance: </label><input id="TempVariance[@relay.Id]" value="@(relay.TempVariance.HasValue ? relay.TempVariance.Value.ToString("###0.00") : "")" /></span>
-                                            <br />
-                                            <span><label>Min OutTemp: </label><input id="MinOutTempF[@relay.Id]" value="@(relay.MinOutTempF.HasValue ? relay.MinOutTempF.Value.ToString("###0.00") : "")" /></span>
-                                            <span><label>Max OutTemp: </label><input id="MaxOutTempF[@relay.Id]" value="@(relay.MaxOutTempF.HasValue ? relay.MaxOutTempF.Value.ToString("###0.00") : "")" /></span>
-                                            <br />
-                                            <span><label>WaterID: </label><input id="WaterId[@relay.Id]" value="@(relay.WaterId.HasValue ? relay.WaterId.Value.ToString() : "")" /></span>
-                                            <span><label>Water Must Be High: </label><input id="OnWhenFloatHigh[@relay.Id]" value="@(relay.OnWhenFloatHigh ? "Yes" : "No")" /></span>
-                                            <br />
-                                            <img data-url="@Url.RouteUrl("defaultApi", new {controller = "Sky"})" src="@Url.RouteUrl("defaultApi", new {controller = "Sky"})?start=@(relay.Start.HasValue ? relay.Start.Value.ToString("g") : "")&end=@(relay.Stop.HasValue ? relay.Stop.Value.ToString("g") : "")" />
+                                    <tr>
+                                        <td style="border-top: 1px solid #ccc;">
+                                            <h4>Relay #@relay.Id.ToString() @relay.Letter
+                                                <button class="deleteRelay btn btn-sm btn-warning" data-id="@relay.Id.ToString()" data-letter="@relay.Letter">Remove</button>
+                                                </h4>
+                                            <div class="form-group">
+                                                <span><label class="form-control-label">Name</label><input class="form-control" id="Name[@relay.Id]" value="@relay.Name"/></span>
+                                                <span><label class="form-control-label">Pin</label><input class="form-control" id="Pin[@relay.Id]" value="@relay.Pin"/></span>
+                                                <span><label class="form-control-label">Interval</label><input class="form-control" id="Interval[@relay.Id]" value="@relay.Interval"/></span>
+                                                <span><label class="form-control-label">RunTime</label><input class="form-control" id="IntervalRun[@relay.Id]" value="@relay.IntervalRun"/></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span><label class="form-control-label">Start</label><input class="form-control starttime" id="Start[@relay.Id]" value="@(relay.Start.HasValue ? relay.Start.Value.ToString("g") : "")"/></span>
+                                                <span><label class="form-control-label">Stop</label><input class="form-control stoptime" id="Stop[@relay.Id]" value="@(relay.Stop.HasValue ? relay.Stop.Value.ToString("g") : "")"/></span>
+                                                <div class="position: relative;">
+                                                    <img data-url="@Url.RouteUrl("defaultApi", new {controller = "Sky"})" src="@Url.RouteUrl("defaultApi", new {controller = "Sky"})?start=@(relay.Start.HasValue ? relay.Start.Value.ToString("g") : "")&end=@(relay.Stop.HasValue ? relay.Stop.Value.ToString("g") : "")"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <span><label class="form-control-label">Min Temp</label><input class="form-control" id="MinTempF[@relay.Id]" value="@(relay.MinTempF.HasValue ? relay.MinTempF.Value.ToString("###0.00") : "")"/></span>
+                                                <span><label class="form-control-label">Max Temp</label><input class="form-control" id="MaxTempF[@relay.Id]" value="@(relay.MaxTempF.HasValue ? relay.MaxTempF.Value.ToString("###0.00") : "")"/></span>
+                                                <span><label class="form-control-label">Variance</label><input class="form-control" id="TempVariance[@relay.Id]" value="@(relay.TempVariance.HasValue ? relay.TempVariance.Value.ToString("###0.00") : "")"/></span>
+                                                <span><label class="form-control-label">Min OutTemp</label><input class="form-control" id="MinOutTempF[@relay.Id]" value="@(relay.MinOutTempF.HasValue ? relay.MinOutTempF.Value.ToString("###0.00") : "")"/></span>
+                                                <span><label class="form-control-label">Max OutTemp</label><input class="form-control" id="MaxOutTempF[@relay.Id]" value="@(relay.MaxOutTempF.HasValue ? relay.MaxOutTempF.Value.ToString("###0.00") : "")"/></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span><label class="form-control-label">WaterID</label><input class="form-control" id="WaterId[@relay.Id]" value="@(relay.WaterId.HasValue ? relay.WaterId.Value.ToString() : "")"/></span>
+                                                <span><label class="form-control-label">Water Must Be High</label><input class="form-control" id="OnWhenFloatHigh[@relay.Id]" value="@(relay.OnWhenFloatHigh ? "Yes" : "No")"/></span>
+                                            </div>
                                         </td>
                                     </tr>
 
                                 }
-                            </tbody>
                         </table>
                     </form>
                 </div>
@@ -299,9 +293,9 @@
                                             <br />
                                             <button class="deleteWater btn btn-sm btn-warning" data-id="@water.Id.ToString()">Remove</button>
                                         </th>
-                                        <td>
-                                            <label>Name: </label><span><input id="Name[@water.Id]" value="@water.Name" /></span><br />
-                                            <label>Pin: </label><span><input id="Pin[@water.Id]" value="@water.Pin" /></span>
+                                        <td class="long">
+                                            <label class="form-control-label">Name: </label><span><input class="form-control"  id="Name[@water.Id]" value="@water.Name" /></span><br />
+                                            <label class="form-control-label">Pin: </label><span><input class="form-control"  id="Pin[@water.Id]" value="@water.Pin" /></span>
                                         </td>
                                     </tr>
                                 }
@@ -410,7 +404,7 @@ $(document).ready(function() {
         // build json based on the data
         var data = { relays: []};
         $('#relayForm').find('.deleteRelay').each(function (index) {
-            var dataTree = $(this).parent().next();
+            var dataTree = $(this).parent().parent();
             var Id = $(this).attr('data-id');
             var letter = $(this).attr('data-letter');
             data.relays[index] = {
@@ -444,8 +438,8 @@ $(document).ready(function() {
             .done(function(msg) {
                 if (msg.success) {
                     $('#relayForm img').each(function(e) {
-                        var startt = $(this).parent().find('.starttime').val();
-                        var endt = $(this).parent().find('.stoptime').val();
+                        var startt = $(this).parent().parent().find('.starttime').val();
+                        var endt = $(this).parent().parent().find('.stoptime').val();
                         $(this).attr('src', $(this).data('url') + '?start=' + startt + '&end=' + endt);
                     });
                     $('#relaySuccess').removeClass('hidden');
@@ -557,7 +551,7 @@ $('#SaveWater').click(function (e) {
         '.deleteRelay',
         function(e) {
             e.preventDefault();
-            $(this).parent().parent().hide(500, function () {
+            $(this).parent().parent().parent().hide(500, function () {
                 $(this).remove();
             });
         });
@@ -573,39 +567,42 @@ $('#SaveWater').click(function (e) {
             <br />
             <button class="deleteWater btn btn-sm btn-warning" data-id="{{Number}}">Remove</button>
         </th>
-        <td>
-            <label>Name: </label><span><input id="Name[{{Number}}]" value="New" /></span><br />
-            <label>Pin: </label><span><input id="Pin[{{Number}}]" value="0" /></span>
+        <td class="long">
+            <label class="form-control-label">Name: </label><span><input class="form-control"  id="Name[{{Number}}]" value="New" /></span><br />
+            <label class="form-control-label">Pin: </label><span><input class="form-control"  id="Pin[{{Number}}]" value="0" /></span>
         </td>
     </tr>
 </template>
 <template id="relayTemplate">
     <tr>
-        <td scope="row">
-            <span>Relay #{{Number}} {{Letter}}</span>
-            <br />
+        <td scope="row" style="border-top: 1px solid #ccc;">
+            <h4>Relay #{{Number}} {{Letter}}
             <button class="deleteRelay btn btn-sm btn-warning" data-id="{{Number}}" data-letter="{{Letter}}">Remove</button>
-        </td>
-        <td>
-            <span><label>Name: </label><input id="Name[{{Number}}]" value="New" /></span>
-            <span><label>Pin: </label><input id="Pin[{{Number}}]" value="0" /></span>
-            <br />
-            <span><label>Interval: </label><input id="Interval[{{Number}}]" value="0" /></span>
-            <span><label>RunTime: </label><input id="IntervalRun[{{Number}}]" value="0" /></span>
-            <br />
-            <span><label>Start: </label><input id="Start[{{Number}}]" /></span>
-            <span><label>Stop: </label><input id="Stop[{{Number}}]" /></span>
-            <br />
-            <span><label>Min Temp: </label><input id="MinTempF[{{Number}}]" /></span>
-            <span><label>Max Temp: </label><input id="MaxTempF[{{Number}}]" /></span>
-            <span><label>Variance: </label><input id="TempVariance[{{Number}}]" value="4" /></span>
-            <br />
-            <span><label>Min OutTemp: </label><input id="MinOutTempF[{{Number}}]" /></span>
-            <span><label>Max OutTemp: </label><input id="MaxOutTempF[{{Number}}]" /></span>
-            <br />
-            <span><label>WaterID: </label><input id="WaterId[{{Number}}]" /></span>
-            <span><label>Water Must Be High: </label><input id="OnWhenFloatHigh[{{Number}}]" value="Yes" /></span>
-            <br />
+            </h4>
+            <div class="form-group">
+            <span><label class="form-control-label">Name</label><input class="form-control" id="Name{{Number}}" value="New"/></span>
+            <span><label class="form-control-label">Pin</label><input class="form-control" id="Pin{{Number}}" value="0"/></span>
+            <span><label class="form-control-label">Interval</label><input class="form-control" id="Interval{{Number}}" value="0"/></span>
+            <span><label class="form-control-label">RunTime</label><input class="form-control" id="IntervalRun{{Number}}" value="0"/></span>
+            </div>
+            <div class="form-group">
+            <span><label class="form-control-label">Start</label><input class="form-control starttime" id="Start{{Number}}" value=""/></span>
+            <span><label class="form-control-label">Stop</label><input class="form-control stoptime" id="Stop{{Number}}" value=""/></span>
+            <div class="position: relative;">
+                <img data-url="@Url.RouteUrl("defaultApi", new {controller = "Sky"})" src="@Url.RouteUrl("defaultApi", new {controller = "Sky"})?start=&end="/>
+            </div>
+            </div>
+            <div class="form-group">
+            <span><label class="form-control-label">Min Temp</label><input class="form-control" id="MinTempF{{Number}}" value=""/></span>
+            <span><label class="form-control-label">Max Temp</label><input class="form-control" id="MaxTempF{{Number}}" value=""/></span>
+            <span><label class="form-control-label">Variance</label><input class="form-control" id="TempVariance{{Number}}" value=""/></span>
+            <span><label class="form-control-label">Min OutTemp</label><input class="form-control" id="MinOutTempF{{Number}}" value=""/></span>
+            <span><label class="form-control-label">Max OutTemp</label><input class="form-control" id="MaxOutTempF{{Number}}" value=""/></span>
+            </div>
+            <div class="form-group">
+            <span><label class="form-control-label">WaterID</label><input class="form-control" id="WaterId{{Number}}" value=""/></span>
+            <span><label class="form-control-label">Water Must Be High</label><input class="form-control" id="OnWhenFloatHigh{{Number}}" value="No"/></span>
+            </div>
         </td>
     </tr>
 </template>

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
 using AquaMonitor.Data.Models;
 using AquaMonitor.Web.Helpers;
 
@@ -31,7 +29,7 @@ namespace AquaMonitor.Web.Models
         public WaterChartModel()
         {
             Labels = new string[] { };
-            DataSets = new ChartJSData<int>[]
+            DataSets = new[]
             {
                 new ChartJSData<int>()
                 {
@@ -100,9 +98,13 @@ namespace AquaMonitor.Web.Models
         /// Create instance of the temp chart model with data
         /// </summary>
         /// <param name="records"></param>
-        /// <param name="Range"></param>
-        public WaterChartModel(IEnumerable<HistoryRecord> records, TimeSpan Range) : this()
+        /// <param name="range"></param>
+        public WaterChartModel(IEnumerable<HistoryRecord> records, TimeSpan range) : this()
         {
+            if (records.Count() == 0)
+            {
+                return;
+            }
             var readers = new List<int>() {records.Last().WaterReadings.First().ReaderId};
             DataSets.First().Label = records.Last().WaterReadings.First().Name;
 
@@ -128,24 +130,24 @@ namespace AquaMonitor.Web.Models
                                 readers.Add(records.Last().WaterReadings.Skip(5).First().ReaderId);
                             }
                             else
-                                DataSets = new ChartJSData<int>[]
+                                DataSets = new[]
                                     {DataSets[0], DataSets[1], DataSets[2], DataSets[3], DataSets[4]};
                         }
                         else
-                            DataSets = new ChartJSData<int>[] { DataSets[0], DataSets[1], DataSets[2], DataSets[3] };
+                            DataSets = new[] { DataSets[0], DataSets[1], DataSets[2], DataSets[3] };
                     }
                     else
-                        DataSets = new ChartJSData<int>[] { DataSets[0], DataSets[1], DataSets[2] };
+                        DataSets = new[] { DataSets[0], DataSets[1], DataSets[2] };
                 }
                 else
-                    DataSets = new ChartJSData<int>[] { DataSets[0], DataSets[1] };
+                    DataSets = new[] { DataSets[0], DataSets[1] };
             }
             else
-                DataSets = new ChartJSData<int>[] { DataSets[0] };
+                DataSets = new[] { DataSets[0] };
 
-            string filter = "";
+            string filter;
 
-            if (Range.TotalDays > 90)
+            if (range.TotalDays > 90)
             {
                 filter = "MM/yyyy";
                 // do months
@@ -153,7 +155,7 @@ namespace AquaMonitor.Web.Models
                 this.Labels = months.ToArray();
 
             }
-            else if (Range.TotalDays > 6)
+            else if (range.TotalDays > 6)
             {
                 filter = "dd/MM/yyyy";
                 // do days
@@ -161,7 +163,7 @@ namespace AquaMonitor.Web.Models
                 this.Labels = months.ToArray();
 
             }
-            else if (Range.TotalHours > 8)
+            else if (range.TotalHours > 8)
             {
                 filter = "dd/MM/yyyy HH";
                 // do hours
@@ -169,7 +171,7 @@ namespace AquaMonitor.Web.Models
                 this.Labels = months.ToArray();
 
             }
-            else if (Range.TotalMinutes > 10)
+            else if (range.TotalMinutes > 10)
             {
                 filter = "dd/MM/yyyy HH:mm";
                 // do minutes

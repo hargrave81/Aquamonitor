@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace AquaMonitor.Web.Devices
+﻿namespace AquaMonitor.Web.Devices
 {
     /// <summary>
     /// SHT3x Register

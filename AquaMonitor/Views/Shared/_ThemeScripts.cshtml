@@ -19,7 +19,9 @@
 <!-- Optional JS -->
 <script src="~/vendor/chart.js/dist/Chart.min.js" asp-append-version="true"></script>
 <script src="~/vendor/chart.js/dist/Chart.extension.js" asp-append-version="true"></script>
-<script src="~/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js" asp-append-version="true"></script>
+<script src="~/js/moment.min.js" asp-append-version="true"></script>
+<script src="~/js/php-date-formatter.min.js" asp-append-version="true"></script>
+<script src="~/js/jquery.datetimepicker.js" asp-append-version="true"></script>
 <!-- Argon JS -->
 <script src="~/js/argon.js" asp-append-version="true"></script>
 <!-- Site JS -->
@@ -150,7 +152,7 @@
     }
 
     function refreshCards() {
-         setTimeout(function () {
+        setTimeout(function () {
             $.ajax({
                 url: '@Url.Action("headers","home")',
                 type: 'get',

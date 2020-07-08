@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AquaMonitor.Data.Models
+﻿namespace AquaMonitor.Data.Models
 {
     /// <summary>
     /// Power Reading value

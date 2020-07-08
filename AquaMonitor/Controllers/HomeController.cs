@@ -1,10 +1,8 @@
 ﻿using System.Diagnostics;
-using System.Threading.Tasks;
+using AquaMonitor.Data.Context;
 using AquaMonitor.Data.Models;
 using Microsoft.AspNetCore.Mvc;
-using AquaMonitor.Web.Global;
 using AquaMonitor.Web.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace AquaMonitor.Web.Controllers
 {
@@ -14,17 +12,17 @@ namespace AquaMonitor.Web.Controllers
     public class HomeController : Controller
     {
         private readonly IGlobalState globalData;
-        private readonly IPowerRelayService relayService;
+        private readonly AquaDbContext dbContext;
 
         /// <summary>
         /// CTor
         /// </summary>
         /// <param name="globalData"></param>
-        /// <param name="relayService"></param>
-        public HomeController(IGlobalState globalData, IPowerRelayService relayService)
+        /// <param name="dbContext"></param>
+        public HomeController(IGlobalState globalData, AquaDbContext dbContext)
         {
             this.globalData = globalData;
-            this.relayService = relayService;
+            this.dbContext = dbContext;
         }
 
         /// <summary>
@@ -61,6 +59,15 @@ namespace AquaMonitor.Web.Controllers
         public IActionResult Settings()
         {
             return View(globalData);
+        }
+
+        /// <summary>
+        /// Settings Page
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Readings()
+        {
+            return View(dbContext.GetLatestReadings());
         }
 
         /// <summary>

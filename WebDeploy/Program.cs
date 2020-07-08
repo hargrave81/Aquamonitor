@@ -53,7 +53,7 @@ namespace WebDeploy
                 webTimer.Elapsed += WebTimer_Elapsed;
             }
 
-            System.AppDomain.CurrentDomain.ProcessExit += (s, e) => { appAlive = false; }; // allow system to gracefully exit
+            AppDomain.CurrentDomain.ProcessExit += (s, e) => { appAlive = false; }; // allow system to gracefully exit
 
             while (appAlive)
             {

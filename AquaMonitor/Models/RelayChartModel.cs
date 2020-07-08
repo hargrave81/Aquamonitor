@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
 using AquaMonitor.Data.Models;
 using AquaMonitor.Web.Helpers;
 
@@ -31,7 +29,7 @@ namespace AquaMonitor.Web.Models
         public RelayChartModel()
         {
             Labels = new string[] {};
-            DataSets = new ChartJSData<int>[]
+            DataSets = new[]
             {
                 new ChartJSData<int>()
                 {
@@ -80,9 +78,13 @@ namespace AquaMonitor.Web.Models
         /// Create instance of the temp chart model with data
         /// </summary>
         /// <param name="records"></param>
-        /// <param name="Range"></param>
-        public RelayChartModel(IEnumerable<HistoryRecord> records, TimeSpan Range) : this()
+        /// <param name="range"></param>
+        public RelayChartModel(IEnumerable<HistoryRecord> records, TimeSpan range) : this()
         {
+            if (records.Count() == 0)
+            {
+                return;
+            }
             var readers = new List<int>() {records.Last().PowerReadings.First().ReaderId};
             DataSets.First().Label = records.Last().PowerReadings.First().Name;
 
@@ -100,38 +102,38 @@ namespace AquaMonitor.Web.Models
                         DataSets.Skip(3).First().Label = records.Last().PowerReadings.Skip(3).First().Name;
                     }
                     else
-                        DataSets = new ChartJSData<int>[] {DataSets[0], DataSets[1], DataSets[2]};
+                        DataSets = new[] {DataSets[0], DataSets[1], DataSets[2]};
                 }
                 else
-                    DataSets = new ChartJSData<int>[] {DataSets[0], DataSets[1]};
+                    DataSets = new[] {DataSets[0], DataSets[1]};
             }
             else
-                DataSets = new ChartJSData<int>[] {DataSets[0]};
+                DataSets = new[] {DataSets[0]};
 
-            string filter = "";
+            string filter;
 
-            if (Range.TotalDays > 90)
+            if (range.TotalDays > 90)
             {
                 filter = "MM/yyyy";
                 // do months
                 var months = records.OrderBy(t => t.Created).Select(t => t.Created.ToString("MMMM yyyy")).Distinct().ToArray();
                 this.Labels = months.ToArray();
 
-            } else if (Range.TotalDays > 6)
+            } else if (range.TotalDays > 6)
             {
                 filter = "dd/MM/yyyy";
                 // do days
                 var months = records.OrderBy(t => t.Created).Select(t => t.Created.ToString("MMM dd")).Distinct().ToArray();
                 this.Labels = months.ToArray();
 
-            } else if (Range.TotalHours > 8)
+            } else if (range.TotalHours > 8)
             {
                 filter = "dd/MM/yyyy HH";
                 // do hours
                 var months = records.OrderBy(t => t.Created).Select(t => t.Created.ToString("dd HH") + ":00").Distinct().ToArray();
                 this.Labels = months.ToArray();
 
-            } else if (Range.TotalMinutes > 10)
+            } else if (range.TotalMinutes > 10)
             {
                 filter = "dd/MM/yyyy HH:mm";
                 // do minutes

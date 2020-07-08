@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace AquaMonitor.Data.Models
 {
     /// <summary>
@@ -9,6 +11,7 @@ namespace AquaMonitor.Data.Models
         /// <summary>
         /// ID of water level
         /// </summary>
+        [Key]
         public int Id { get; set; }
         /// <summary>
         /// Logical name of water level

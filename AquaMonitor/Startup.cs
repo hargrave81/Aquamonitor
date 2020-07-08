@@ -39,8 +39,8 @@ namespace AquaMonitor.Web
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AquaMonitor.Data.Context.AquaServiceDbContext>(ServiceLifetime.Singleton);
-            services.AddDbContext<AquaMonitor.Data.Context.AquaDbContext>(ServiceLifetime.Scoped);
+            services.AddDbContext<AquaServiceDbContext>(ServiceLifetime.Singleton);
+            services.AddDbContext<AquaDbContext>(ServiceLifetime.Scoped);
             services.AddSingleton<IGlobalState, GlobalData>();
             services.AddSingleton(this.Configuration);
             services.AddSingleton<IPowerRelayService, PowerRelayService>();
@@ -94,6 +94,11 @@ namespace AquaMonitor.Web
         /// <param name="userManager"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<AppUser> userManager)
         {
+            // update database
+            using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            using var dbContext = serviceScope.ServiceProvider.GetService<AquaDbContext>();
+            dbContext.Migrate();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -115,6 +120,8 @@ namespace AquaMonitor.Web
 
 
             var globalSettings = app.ApplicationServices.GetService<IGlobalState>();
+            globalSettings.Load();
+
             var internalUser =
                 new AppUser()
                 {

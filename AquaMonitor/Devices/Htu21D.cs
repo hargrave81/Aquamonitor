@@ -1,10 +1,6 @@
-﻿using Iot.Device.Ft4222;
-using Iot.Device.Sht3x;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Device.I2c;
 using System.Linq;
-using System.Threading.Tasks;
 using Iot.Units;
 
 namespace AquaMonitor.Web.Devices
@@ -15,15 +11,6 @@ namespace AquaMonitor.Web.Devices
 
     public class Htu21D : IDisposable
     {
-
-        private const int HTU21_TEMPERATURE_CONVERSION_TIME_T_14b_RH_12b = 50;
-        private const int HTU21_TEMPERATURE_CONVERSION_TIME_T_13b_RH_10b = 25;
-        private const int HTU21_TEMPERATURE_CONVERSION_TIME_T_12b_RH_8b = 13;
-        private const int HTU21_TEMPERATURE_CONVERSION_TIME_T_11b_RH_11b = 7;
-        private const int HTU21_HUMIDITY_CONVERSION_TIME_T_14b_RH_12b = 16;
-        private const int HTU21_HUMIDITY_CONVERSION_TIME_T_13b_RH_10b = 5;
-        private const int HTU21_HUMIDITY_CONVERSION_TIME_T_12b_RH_8b = 3;
-        private const int HTU21_HUMIDITY_CONVERSION_TIME_T_11b_RH_11b = 8;
         private const float TEMPERATURE_COEFF_MUL = 175.72f;
         private const float TEMPERATURE_COEFF_ADD = -46.85f;
         private const float HUMIDITY_COEFF_MUL = 125;
@@ -34,7 +21,7 @@ namespace AquaMonitor.Web.Devices
         private const float HTU21_CONSTANT_C = 235.66f;
 
         private static I2cDevice _staticDevice;
-        private I2cDevice _i2cDevice;
+        private I2cDevice i2CDevice;
         private DateTime lastTemp = DateTime.MinValue;
         private DateTime lastHumid = DateTime.MinValue;
         /// <summary>
@@ -43,22 +30,22 @@ namespace AquaMonitor.Web.Devices
         public bool EnableErrorCorrection { get; set; }
         #region prop
 
-        private Resolution _resolution;
+        private Resolution resolution;
 
         /// <summary>
         /// Htu21D Resolution
         /// </summary>
         public Resolution Resolution 
         {
-            get => _resolution;
+            get => resolution;
             set
             {
                 SetResolution(value);
-                _resolution = value;
+                resolution = value;
             }
         }
 
-        private double _temperature;
+        private double temperature;
 
         /// <summary>
         /// Htu21D Temperature
@@ -69,11 +56,11 @@ namespace AquaMonitor.Web.Devices
             {
                 ReadTemp();
                 lastTemp = DateTime.Now;
-                return Temperature.FromCelsius(_temperature);
+                return Temperature.FromCelsius(temperature);
             }
         }
 
-        private double _humidity;
+        private double humidity;
 
         /// <summary>
         /// Htu21D Relative Humidity (%)
@@ -84,7 +71,7 @@ namespace AquaMonitor.Web.Devices
             {
                 ReadHumidity();
                 lastHumid = DateTime.Now;
-                return _humidity;
+                return humidity;
             }
         }
 
@@ -93,17 +80,17 @@ namespace AquaMonitor.Web.Devices
         /// </summary>
         public double CompensatedHumidity
         {
-            get => (_humidity + (25 - _temperature) * HTU21_TEMPERATURE_COEFFICIENT);
+            get => (humidity + (25 - temperature) * HTU21_TEMPERATURE_COEFFICIENT);
         }
 
-        private bool _lastReadSuccess;
+        private bool lastReadSuccess;
 
         /// <summary>
         /// Returns true or false if the last read was successful
         /// </summary>
         public bool IsLastReadSuccessful
         {
-            get => _lastReadSuccess;
+            get => lastReadSuccess;
         }
 
         /// <summary>
@@ -118,30 +105,30 @@ namespace AquaMonitor.Web.Devices
                     ReadHumidity();
                     ReadTemp();
                 }
-                double partial_pressure;
-                double dew_point;
+                double partialPressure;
+                double dewPoint;
 
                 // Missing power of 10
-                partial_pressure = Math.Pow(10, HTU21_CONSTANT_A - HTU21_CONSTANT_B / (_temperature + HTU21_CONSTANT_C));
+                partialPressure = Math.Pow(10, HTU21_CONSTANT_A - HTU21_CONSTANT_B / (temperature + HTU21_CONSTANT_C));
 
-                dew_point = -HTU21_CONSTANT_B / (Math.Log10(_humidity * partial_pressure / 100) - HTU21_CONSTANT_A) - HTU21_CONSTANT_C;
+                dewPoint = -HTU21_CONSTANT_B / (Math.Log10(humidity * partialPressure / 100) - HTU21_CONSTANT_A) - HTU21_CONSTANT_C;
 
-                return (float)dew_point;
+                return (float)dewPoint;
             }
         }
 
-        private bool _heater;
+        private bool heater;
 
         /// <summary>
         /// Htu21D Heater
         /// </summary>
         public bool Heater
         {
-            get => _heater;
+            get => heater;
             set
             {
                 SetHeater(value);
-                _heater = value;
+                heater = value;
             }
         }
 
@@ -171,7 +158,7 @@ namespace AquaMonitor.Web.Devices
         {
             EnableErrorCorrection = true;
 
-            _i2cDevice = i2CDevice;
+            this.i2CDevice = i2CDevice;
             
             Resolution = resolution;            
 
@@ -183,8 +170,8 @@ namespace AquaMonitor.Web.Devices
         /// </summary>
         public void Dispose()
         {
-            _i2cDevice?.Dispose();
-            _i2cDevice = null;
+            i2CDevice?.Dispose();
+            i2CDevice = null;
         }
 
         /// <summary>
@@ -198,10 +185,10 @@ namespace AquaMonitor.Web.Devices
         /// <summary>
         /// Set Htu21D Resolution
         /// </summary>
-        /// <param name="resolution">Resolution is the quality of the temp and humidity data gathering</param>
-        private void SetResolution(Resolution resolution)
+        /// <param name="newResolution">Resolution is the quality of the temp and humidity data gathering</param>
+        private void SetResolution(Resolution newResolution)
         {            
-            WriteBits(Register.HTU_WRITE, resolution == Resolution.High ? ResolutionBits.Humidity12BitTemp14Bit : resolution == Resolution.Medium ? ResolutionBits.Humidity10BitTemp13Bit : ResolutionBits.Humidity8BitTemp12Bit, null);            
+            WriteBits(Register.HTU_WRITE, newResolution == Resolution.High ? ResolutionBits.Humidity12BitTemp14Bit : newResolution == Resolution.Medium ? ResolutionBits.Humidity10BitTemp13Bit : ResolutionBits.Humidity8BitTemp12Bit, null);            
         }
 
 
@@ -235,47 +222,47 @@ namespace AquaMonitor.Web.Devices
                 var humidityRatio = rawHumidityReading / (float)65536;
                 double humidity = -6 + (125 * humidityRatio);            
                 */
-                var humidity = (float)rawHumidityReading / 65536 * (float)HUMIDITY_COEFF_MUL + HUMIDITY_COEFF_ADD;
+                var localHumidity = (float)rawHumidityReading / 65536 * (float)HUMIDITY_COEFF_MUL + HUMIDITY_COEFF_ADD;
 
                 var crcData = humidityData.Take(2).ToArray();
                 var crc8 = humidityData[2];
                 bool tCrc = CheckCrc8(crcData, crc8);
                 if (tCrc == false)
                 {
-                    _lastReadSuccess = false;
+                    lastReadSuccess = false;
                     Console.WriteLine("Failed humid CRC");
                     return;
                 }
-                _lastReadSuccess = true;
+                lastReadSuccess = true;
                 if (EnableErrorCorrection) // fix HTU21Ds calibration inaccuracy estimates http://www.kandrsmith.org/RJS/Misc/Hygrometers/many_surface.png
                 {
-                    if (humidity >= 88 && _temperature >= 10)
-                        humidity += 6;
-                    else if (humidity >= 88 && _temperature >= 5)
-                        humidity += 3;
-                    else if (humidity >= 78 && _temperature >= 10)
-                        humidity += 4;
-                    else if (humidity >= 78 && _temperature >= 5)
-                        humidity += 2;
-                    else if(humidity >= 58 && _temperature >= 10)
-                        humidity += 2;
-                    else if (humidity >= 58 && _temperature >= 5)
-                        humidity += 1;
-                    else if (humidity <= 25 && _temperature >= 15)
-                        humidity += 2;
-                    else if (humidity <= 25 && _temperature >= 10)
-                        humidity += 1;
-                    else if (humidity <= 16 && _temperature >= 10)
-                        humidity += 4;
-                    else if (humidity <= 16 && _temperature >= 5)
-                        humidity += 2;
+                    if (localHumidity >= 88 && temperature >= 10)
+                        localHumidity += 6;
+                    else if (localHumidity >= 88 && temperature >= 5)
+                        localHumidity += 3;
+                    else if (localHumidity >= 78 && temperature >= 10)
+                        localHumidity += 4;
+                    else if (localHumidity >= 78 && temperature >= 5)
+                        localHumidity += 2;
+                    else if(localHumidity >= 58 && temperature >= 10)
+                        localHumidity += 2;
+                    else if (localHumidity >= 58 && temperature >= 5)
+                        localHumidity += 1;
+                    else if (localHumidity <= 25 && temperature >= 15)
+                        localHumidity += 2;
+                    else if (localHumidity <= 25 && temperature >= 10)
+                        localHumidity += 1;
+                    else if (localHumidity <= 16 && temperature >= 10)
+                        localHumidity += 4;
+                    else if (localHumidity <= 16 && temperature >= 5)
+                        localHumidity += 2;
                 }
-                _humidity = humidity;
+                this.humidity = localHumidity;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
-                _lastReadSuccess = false;
+                lastReadSuccess = false;
             }
         }
 
@@ -290,24 +277,24 @@ namespace AquaMonitor.Web.Devices
 
                 var rawTempReading = tempData[0] << 8 | tempData[1];
 
-                var temperature = (float)rawTempReading / 65536 * (float)TEMPERATURE_COEFF_MUL + TEMPERATURE_COEFF_ADD;
+                var localTemperature = (float)rawTempReading / 65536 * (float)TEMPERATURE_COEFF_MUL + TEMPERATURE_COEFF_ADD;
 
                 var crcData = tempData.Take(2).ToArray();
                 var crc8 = tempData[2];
                 bool tCrc = CheckCrc8(crcData, crc8);
                 if (tCrc == false)
                 {
-                    _lastReadSuccess = false;
+                    lastReadSuccess = false;
                     Console.WriteLine("Failed temp CRC");
                     return;
                 }
-                _lastReadSuccess = true;
-                _temperature = temperature;            
+                lastReadSuccess = true;
+                this.temperature = localTemperature;            
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
-                _lastReadSuccess = false;
+                lastReadSuccess = false;
             }
 }      
 
@@ -354,15 +341,15 @@ namespace AquaMonitor.Web.Devices
             {
                 msb
             };
-            _i2cDevice.Write(writeBuff); // request the userdata            
+            i2CDevice.Write(writeBuff); // request the userdata            
             System.Threading.Thread.Sleep(10);
             if (byteLength == 1)
             {
-                byte contents = _i2cDevice.ReadByte();
-                return new byte[] { contents };
+                byte contents = i2CDevice.ReadByte();
+                return new[] { contents };
             }
             Span<byte> readBuff = stackalloc byte[byteLength];
-            _i2cDevice.Read(readBuff);
+            i2CDevice.Read(readBuff);
             return readBuff.ToArray();
         }        
 
@@ -370,15 +357,15 @@ namespace AquaMonitor.Web.Devices
         /// Writes bits to the user register
         /// </summary>
         /// <param name="register"></param>
-        /// <param name="resolution"></param>
-        /// <param name="heater"></param>
-        private void WriteBits(Register register, ResolutionBits? resolution, HeaterBits? heater)
+        /// <param name="resolutionValue"></param>
+        /// <param name="heaterValue"></param>
+        private void WriteBits(Register register, ResolutionBits? resolutionValue, HeaterBits? heaterValue)
         {
             var readBits = ReadBits(Register.HTU_READ).First();
             // flip bits as needed
-            if (resolution.HasValue)
+            if (resolutionValue.HasValue)
             {
-                switch (resolution.Value)
+                switch (resolutionValue.Value)
                 {
                     case ResolutionBits.Humidity12BitTemp14Bit:
                         readBits.BitOff(7);
@@ -398,9 +385,9 @@ namespace AquaMonitor.Web.Devices
                         break;
                 }
             }
-            if (heater.HasValue)
+            if (heaterValue.HasValue)
             {
-                switch (heater.Value)
+                switch (heaterValue.Value)
                 {
                     case HeaterBits.OnChipHeaterOn:
                         readBits.BitOn(2);
@@ -428,7 +415,7 @@ namespace AquaMonitor.Web.Devices
                 (byte)register
             };
             Span<byte> readBuff = stackalloc byte[readLength];
-            _i2cDevice.WriteRead(writeBuff, readBuff);
+            i2CDevice.WriteRead(writeBuff, readBuff);
             return readBuff.ToArray();
         }
         
@@ -448,7 +435,7 @@ namespace AquaMonitor.Web.Devices
             if (data != null)
                 writeBuff = stackalloc byte[] { msb, data.Value }; // add the data field
 
-            _i2cDevice.Write(writeBuff);
+            i2CDevice.Write(writeBuff);
 
             // wait SCL free            
             System.Threading.Thread.Sleep(20);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AquaMonitor.Data.Models
 {
@@ -90,7 +89,15 @@ namespace AquaMonitor.Data.Models
         /// </summary>
         string WeatherIcon { get; set; }
 
+        /// <summary>
+        /// Database is loaded and ready
+        /// </summary>
+        bool SettingsLoaded { get; }
 
+        /// <summary>
+        /// Function to load Settings from DB
+        /// </summary>
+        void Load();
     }
 
 }

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using AquaMonitor.Data.Models;
 
 namespace AquaMonitor.Web.Helpers
@@ -117,13 +115,13 @@ namespace AquaMonitor.Web.Helpers
         /// <returns></returns>
         public static int[] AveragePowerState(this IEnumerable<IGrouping<string, HistoryRecord>> records, int readerId)
         {
-            var InitialResults = records.Select(t => t.AveragePowerState(z => z.HistoricalPower(readerId).PowerState)).ToArray();
-            System.Diagnostics.Debug.WriteLine($"Average Power: {readerId}  " + string.Join(',',InitialResults.Select(p => p.ToString("##0.000")).ToArray()));
-            var result = new List<int>(){ (int)InitialResults[0]};
+            var initialResults = records.Select(t => t.AveragePowerState(z => z.HistoricalPower(readerId).PowerState)).ToArray();
+            System.Diagnostics.Debug.WriteLine($"Average Power: {readerId}  " + string.Join(',',initialResults.Select(p => p.ToString("##0.000")).ToArray()));
+            var result = new List<int>(){ (int)initialResults[0]};
             for (int x = 1; x < records.Count(); x++)
             {
                 result.Add( records.Skip(x).First()
-                    .NoteWorthyAveragePowerState(e => e.HistoricalPower(readerId).PowerState, (int)InitialResults[x - 1]));
+                    .NoteWorthyAveragePowerState(e => e.HistoricalPower(readerId).PowerState, (int)initialResults[x - 1]));
             }
             return result.ToArray();
         }
@@ -136,7 +134,7 @@ namespace AquaMonitor.Web.Helpers
         /// <returns></returns>
         public static float AveragePowerState(this IEnumerable<PowerState> entries)
         {
-            return AveragePowerState<PowerState>(entries, e => e);
+            return AveragePowerState(entries, e => e);
         }
 
         /// <summary>
@@ -147,11 +145,11 @@ namespace AquaMonitor.Web.Helpers
         /// <returns></returns>
         public static float AveragePowerState<TSource>(this IEnumerable<TSource> source, Func<TSource, PowerState> selector)
         {
-            var OnCount = Enumerable.Select(source, selector).Count(z => z == PowerState.On);
-            var OffCount = Enumerable.Select(source, selector).Count(z => z == PowerState.Off);
-            if (OnCount > OffCount)
-                return 1 + (OnCount / (OffCount + OnCount)/10);
-            return Math.Min(0.999f,0 + (OffCount / (OnCount+ OffCount))/10);
+            var onCount = Enumerable.Select(source, selector).Count(z => z == PowerState.On);
+            var offCount = Enumerable.Select(source, selector).Count(z => z == PowerState.Off);
+            if (onCount > offCount)
+                return 1 + (onCount / (offCount + onCount)/10);
+            return Math.Min(0.999f,0 + (offCount / (onCount+ offCount))/10);
         }
 
         /// <summary>
@@ -163,7 +161,7 @@ namespace AquaMonitor.Web.Helpers
         /// /// <remarks>This will trigger an unlikely value if the previous value was the same</remarks>
         public static int NoteWorthyAveragePowerState(this IEnumerable<PowerState> entries, int previous)
         {
-            return NoteWorthyAveragePowerState<PowerState>(entries, e => e, previous);
+            return NoteWorthyAveragePowerState(entries, e => e, previous);
         }
 
         /// <summary>
@@ -176,19 +174,19 @@ namespace AquaMonitor.Web.Helpers
         /// <remarks>This will trigger an unlikely value if the previous value was the same</remarks>
         public static int NoteWorthyAveragePowerState<TSource>(this IEnumerable<TSource> source, Func<TSource, PowerState> selector, int previous)
         {
-            var OnCount = (float)Enumerable.Select(source, selector).Count(z => z == PowerState.On);
-            var OffCount = (float)Enumerable.Select(source, selector).Count(z => z == PowerState.Off);
-            if (OnCount > OffCount)
+            var onCount = (float)Enumerable.Select(source, selector).Count(z => z == PowerState.On);
+            var offCount = (float)Enumerable.Select(source, selector).Count(z => z == PowerState.Off);
+            if (onCount > offCount)
             {
                 // typically one
-                if (OnCount > OffCount * 1.5)
+                if (onCount > offCount * 1.5)
                     return 1; // not worth showing
                 return previous == 1 ? 0 : 1;
             }
             else
             {
                 // typically zero
-                if (OffCount > OnCount * 1.5)
+                if (offCount > onCount * 1.5)
                     return 0; // not worth showing
                 return previous == 0 ? 1 : 0;
             }
@@ -202,13 +200,13 @@ namespace AquaMonitor.Web.Helpers
         /// <returns></returns>
         public static int[] AverageWaterState(this IEnumerable<IGrouping<string, HistoryRecord>> records, int readerId)
         {
-            var InitialResults = records.Select(t => t.AverageWaterState(z => z.HistoricalWater(readerId).WaterLevelHigh)).ToArray();
-            System.Diagnostics.Debug.WriteLine($"Average Water: {readerId}  " + string.Join(',',InitialResults.Select(p => p.ToString("##0.000")).ToArray()));
-            var result = new List<int>(){ (int)InitialResults[0]};
+            var initialResults = records.Select(t => t.AverageWaterState(z => z.HistoricalWater(readerId).WaterLevelHigh)).ToArray();
+            System.Diagnostics.Debug.WriteLine($"Average Water: {readerId}  " + string.Join(',',initialResults.Select(p => p.ToString("##0.000")).ToArray()));
+            var result = new List<int>(){ (int)initialResults[0]};
             for (int x = 1; x < records.Count(); x++)
             {
                 result.Add( records.Skip(x).First()
-                    .NoteWorthyAverageWaterState(e => e.HistoricalWater(readerId).WaterLevelHigh, (int)InitialResults[x - 1]));
+                    .NoteWorthyAverageWaterState(e => e.HistoricalWater(readerId).WaterLevelHigh, (int)initialResults[x - 1]));
             }
             return result.ToArray();
         }
@@ -220,7 +218,7 @@ namespace AquaMonitor.Web.Helpers
         /// <returns></returns>
         public static float AverageWaterState(this IEnumerable<bool> entries)
         {
-            return AverageWaterState<bool>(entries, e => e);
+            return AverageWaterState(entries, e => e);
         }
 
         /// <summary>
@@ -231,11 +229,11 @@ namespace AquaMonitor.Web.Helpers
         /// <returns></returns>
         public static float AverageWaterState<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> selector)
         {
-            var OnCount = (float)Enumerable.Select(source, selector).Count(z => z == true);
-            var OffCount = (float)Enumerable.Select(source, selector).Count(z => z == false);
-            if (OnCount > OffCount)
-                return 1 + (OnCount / (OffCount + OnCount)/10);
-            return Math.Min(0.999f,0 + (OffCount / (OnCount+ OffCount))/10);
+            var onCount = (float)Enumerable.Select(source, selector).Count(z => z);
+            var offCount = (float)Enumerable.Select(source, selector).Count(z => z == false);
+            if (onCount > offCount)
+                return 1 + (onCount / (offCount + onCount)/10);
+            return Math.Min(0.999f,0 + (offCount / (onCount+ offCount))/10);
         }
 
         /// <summary>
@@ -247,7 +245,7 @@ namespace AquaMonitor.Web.Helpers
         /// <remarks>This will trigger an unlikely value if the previous value was the same</remarks>
         public static int NoteWorthyAverageWaterState(this IEnumerable<bool> entries, int previous)
         {
-            return NoteWorthyAverageWaterState<bool>(entries, e => e, previous);
+            return NoteWorthyAverageWaterState(entries, e => e, previous);
         }
 
         /// <summary>
@@ -260,19 +258,19 @@ namespace AquaMonitor.Web.Helpers
         /// <remarks>This will trigger an unlikely value if the previous value was the same</remarks>
         public static int NoteWorthyAverageWaterState<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> selector, int previous)
         {
-            var OnCount = Enumerable.Select(source, selector).Count(z => z == true);
-            var OffCount = Enumerable.Select(source, selector).Count(z => z == false);
-            if (OnCount > OffCount)
+            var onCount = Enumerable.Select(source, selector).Count(z => z);
+            var offCount = Enumerable.Select(source, selector).Count(z => z == false);
+            if (onCount > offCount)
             {
                 // typically one
-                if (OnCount > OffCount * 1.5)
+                if (onCount > offCount * 1.5)
                     return 1; // not worth showing
                 return previous == 1 ? 0 : 1;
             }
             else
             {
                 // typically zero
-                if (OffCount > OnCount * 1.5)
+                if (offCount > onCount * 1.5)
                     return 0; // not worth showing
                 return previous == 0 ? 1 : 0;
             }

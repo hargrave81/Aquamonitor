@@ -1,16 +1,13 @@
 ﻿using Iot.Units;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace AquaMonitor.Web.Models
 {
     /// <summary>
     /// Results from weather API
     /// </summary>
-    public partial class WeatherResult
+    public class WeatherResult
     {
         /// <summary>
         /// Longitude and Latitude
@@ -107,7 +104,7 @@ namespace AquaMonitor.Web.Models
     /// Cloud results
     /// </summary>
 
-    public partial class Clouds
+    public class Clouds
     {
         /// <summary>
         /// Cloud coverage 0 - 100
@@ -119,7 +116,7 @@ namespace AquaMonitor.Web.Models
     /// <summary>
     /// Coordinates
     /// </summary>
-    public partial class Coord
+    public class Coord
     {
         /// <summary>
         /// Longitude
@@ -137,7 +134,7 @@ namespace AquaMonitor.Web.Models
     /// <summary>
     /// Main temperature weather
     /// </summary>
-    public partial class Main
+    public class Main
     {
         /// <summary>
         /// Temp in celcius
@@ -179,7 +176,7 @@ namespace AquaMonitor.Web.Models
     /// <summary>
     /// Sunrise Information
     /// </summary>
-    public partial class Sys
+    public class Sys
     {
         /// <summary>
         /// Sunrise unix time UTC
@@ -209,7 +206,7 @@ namespace AquaMonitor.Web.Models
         private static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
         {
             // Unix timestamp is seconds past epoch
-            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
             return dtDateTime;
         }
@@ -218,7 +215,7 @@ namespace AquaMonitor.Web.Models
     /// <summary>
     /// Weather details
     /// </summary>
-    public partial class Weather
+    public class Weather
     {
         /// <summary>
         /// Main weather e.g. Rain, snow, clouds
@@ -242,7 +239,7 @@ namespace AquaMonitor.Web.Models
     /// <summary>
     /// Wind data
     /// </summary>
-    public partial class Wind
+    public class Wind
     {
         /// <summary>
         /// Wind speed in meter/sec

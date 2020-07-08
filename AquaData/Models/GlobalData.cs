@@ -150,9 +150,49 @@ namespace AquaMonitor.Data.Models
         #endregion
 
         /// <summary>
+        /// DbContext
+        /// </summary>
+        private readonly AquaServiceDbContext dbContext;
+
+        /// <summary>
+        /// Configuration
+        /// </summary>
+        private readonly IConfiguration configuration;
+
+        /// <summary>
+        /// Database is loaded and ready
+        /// </summary>
+        public bool SettingsLoaded { get; private set; }
+
+        /// <summary>
         /// CTor
         /// </summary>
         public GlobalData(IConfiguration configuration, AquaServiceDbContext dbContext)
+        {
+            var gdx = new GlobalData();
+            configuration.Bind("Default", gdx);
+            this.configuration = configuration;
+            this.dbContext = dbContext;
+            this.TempPin = gdx.TempPin;
+            this.TempType = gdx.TempType;
+            this.DataCollectionRate = gdx.DataCollectionRate;
+            this.AdminPassword = gdx.AdminPassword;
+            this.APIKey = gdx.APIKey;
+            this.Zipcode = gdx.Zipcode;
+            this.Country = gdx.Country;
+            this.More = gdx.More;
+        }
+
+        public GlobalData(IAppSetting settings, IEnumerable<WaterLevel> waterLevels, IEnumerable<PowerRelay> relays)
+        {
+            this.Relays = relays;
+            this.WaterLevels = waterLevels;
+            this.TempPin = settings.TempPin;
+            this.TempType = settings.TempType;
+            this.SettingsLoaded = true;
+        }
+
+        public void Load()
         {
             this.More = new ExtendedSettings();
             if(DateTime.Now.Hour <=6 || DateTime.Now.Hour > 21)
@@ -204,7 +244,7 @@ namespace AquaMonitor.Data.Models
                     }
                     else
                     {
-                        throw ex;
+                        throw;
                     }
                 }
                 this.TempPin = setting.TempPin;
@@ -216,14 +256,7 @@ namespace AquaMonitor.Data.Models
                 this.Country = setting.Country;
                 this.More = setting.More;
             }
-        }
-
-        public GlobalData(IAppSetting settings, IEnumerable<WaterLevel> waterLevels, IEnumerable<PowerRelay> relays)
-        {
-            this.Relays = relays;
-            this.WaterLevels = waterLevels;
-            this.TempPin = settings.TempPin;
-            this.TempType = settings.TempType;
+            this.SettingsLoaded = true; // the application can finish starting
         }
 
         /// <summary>

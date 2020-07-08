@@ -53,6 +53,10 @@ namespace AquaMonitor.Web.Services
 
         async private void DoWork(object state)
         {
+            while (!globalData.SettingsLoaded)
+            {
+                return; // cannot work without settings
+            }
             if (!busy)
             {
                 busy = true;
@@ -102,6 +106,11 @@ namespace AquaMonitor.Web.Services
         {
             try
             {
+                if (string.IsNullOrEmpty(globalData.Zipcode) || string.IsNullOrEmpty(globalData.APIKey))
+                {
+                    logger.LogInformation("Cannot perform weather services no API Key.");
+                    return;
+                }
                 var result = await thisClient.GetStringAsync(string.Format(serviceUrl, globalData.Zipcode, globalData.Country, globalData.APIKey));
                 var weatherResult = System.Text.Json.JsonSerializer.Deserialize<Models.WeatherResult>(result);
                 this.globalData.CloudCoverage = weatherResult.Clouds.All;

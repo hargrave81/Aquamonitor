@@ -1,0 +1,92 @@
+﻿@using AquaMonitor.Web.Global
+@using AquaMonitor.Web.Helpers
+@using AquaMonitor.Data.Models
+@model AquaMonitor.Data.Models.ReadingCollection
+@{
+    ViewData["Title"] = "Readings";
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@inject AquaMonitor.Data.Context.AquaDbContext dbContext
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row">
+    @await Html.PartialAsync("_readingchart", new ReadingChartModel("PH Levels", ReadingType.PH, Model,"bg-gradient-ph"))
+    @await Html.PartialAsync("_readingchart", new ReadingChartModel("Ammonia", ReadingType.Ammonia, Model, "bg-gradient-ammonia"))
+    @await Html.PartialAsync("_readingchart", new ReadingChartModel("Nitrites", ReadingType.Nitrite, Model, "bg-gradient-nitrite"))
+    @await Html.PartialAsync("_readingchart", new ReadingChartModel("Nitrates", ReadingType.Nitrate, Model,"bg-gradient-nitrate"))
+</div>
+<div class="row">
+    @await Html.PartialAsync("_readingchart", new ReadingChartModel("Fish Feed", ReadingType.FishFeed, Model,"bg-gradient-food"))
+    @await Html.PartialAsync("_readingchart", new ReadingChartModel("Water Temps", ReadingType.WaterTemp, Model,"bg-gradient-teal"))
+    @await Html.PartialAsync("_readingchart", new ReadingChartModel("Total Hardness", ReadingType.TotalHardness, Model,"bg-gradient-hardness"))
+    @await Html.PartialAsync("_readingchart", new ReadingChartModel("Alkalinity", ReadingType.Alkalinity, Model,"bg-gradient-alkaline"))
+</div>
+@section Scripts
+{
+    <script>
+        $(document).ready(function() {
+            setTimeout('renderDatePicker();', 1000);
+        })
+
+        var currentModal;
+
+        function renderDatePicker() {
+            var formatter1 = 'MM-DD-YYYY';
+            var formatter2 = 'HH:mm';
+            var date = new Date();
+            var timeVal = moment(date).format(formatter2);
+            var dateVal = moment(date).format(formatter1);
+            $('.takenpicker').datetimepicker({ step: 60, defaultTime: timeVal, defaultDate: dateVal, format: 'm/d/Y H:i', formatTime: 'H:i', formatDate: 'm/d/Y', mask: '9999/19/39 29:59' });
+            $('.savereading').click(function(e) {
+                currentModal = $(this).closest('.modal');
+                e.preventDefault();
+                currentModal.find('.savereading').attr('disabled', 'disabled');
+                setTimeout(function () {
+                    currentModal.find('.savereading').removeAttr('disabled');
+                }, 1000);
+                var formData = new FormData(currentModal.find('form')[0]);
+                var data = {
+                    Type: formData.get('Type'),
+                    Value: parseFloat(formData.get('Value')),
+                    Taken: formData.get('Taken'),
+                    Note: formData.get('Note')
+                };
+                var formJson = JSON.stringify(data);
+                var url = currentModal.find('form').attr('action');
+                $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: formJson,
+                        dataType: 'json',
+                        contentType: "application/json; charset=utf-8",
+                        headers: {
+                            'RequestVerificationToken': "@GetAntiXsrfRequestToken()"
+                        }
+                    })
+                    .done(function(msg) {
+                        if (msg.Id !== NaN) {
+                            currentModal.modal('hide');
+                        } else {
+                            currentModal.find('.alert-warning').removeClass('hidden');
+                            setTimeout("currentModal.find('.alert-warning').addClass('hidden', {duration:1000});",
+                                8000); // hide the notice in 8 seconds
+                        }
+                    }).fail(function(fe) {
+                        currentModal.find('.alert-warning').removeClass('hidden');
+                        setTimeout("currentModal.find('.alert-warning').addClass('hidden', {duration:1000});",
+                            8000); // hide the notice in 8 seconds
+                    });
+            });
+        }
+    </script>
+}

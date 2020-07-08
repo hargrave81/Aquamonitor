@@ -9,11 +9,10 @@
             Account level controller
             </summary>
         </member>
-        <member name="M:AquaMonitor.Web.Controllers.AccountController.#ctor(AquaMonitor.Data.Models.IGlobalState,AquaMonitor.Data.Context.AquaDbContext,Microsoft.AspNetCore.Identity.UserManager{AquaMonitor.Data.Models.AppUser},Microsoft.AspNetCore.Identity.SignInManager{AquaMonitor.Data.Models.AppUser})">
+        <member name="M:AquaMonitor.Web.Controllers.AccountController.#ctor(AquaMonitor.Data.Context.AquaDbContext,Microsoft.AspNetCore.Identity.UserManager{AquaMonitor.Data.Models.AppUser},Microsoft.AspNetCore.Identity.SignInManager{AquaMonitor.Data.Models.AppUser})">
             <summary>
             CTor
             </summary>
-            <param name="globalData"></param>
             <param name="dbContext"></param>
             <param name="userManager"></param>
             <param name="signInManager"></param>
@@ -67,12 +66,12 @@
             Home controller
             </summary>
         </member>
-        <member name="M:AquaMonitor.Web.Controllers.HomeController.#ctor(AquaMonitor.Data.Models.IGlobalState,AquaMonitor.Web.Global.IPowerRelayService)">
+        <member name="M:AquaMonitor.Web.Controllers.HomeController.#ctor(AquaMonitor.Data.Models.IGlobalState,AquaMonitor.Data.Context.AquaDbContext)">
             <summary>
             CTor
             </summary>
             <param name="globalData"></param>
-            <param name="relayService"></param>
+            <param name="dbContext"></param>
         </member>
         <member name="M:AquaMonitor.Web.Controllers.HomeController.Index">
             <summary>
@@ -93,6 +92,12 @@
             <returns></returns>
         </member>
         <member name="M:AquaMonitor.Web.Controllers.HomeController.Settings">
+            <summary>
+            Settings Page
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.HomeController.Readings">
             <summary>
             Settings Page
             </summary>
@@ -128,6 +133,34 @@
             </summary>
             <param name="startDate"></param>
             <param name="endDate"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AquaMonitor.Web.Controllers.ReadingController">
+            <summary>
+            Reading Controller
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.ReadingController.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Controllers.ReadingController},AquaMonitor.Data.Context.AquaDbContext)">
+            <summary>
+            Ctor
+            </summary>
+            <param name="logger"></param>
+            <param name="dbContext"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.ReadingController.Get(System.String,System.DateTime,System.DateTime)">
+            <summary>
+            Gets the ChartJS for the given date range
+            </summary>
+            <param name="startDate"></param>
+            <param name="endDate"></param>
+            <param name="type">Reading Type</param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Controllers.ReadingController.Get(System.Int32)">
+            <summary>
+            Gets the ChartJS for the given date range
+            </summary>
+            <param name="id"></param>
             <returns></returns>
         </member>
         <member name="T:AquaMonitor.Web.Controllers.RelayChartController">
@@ -381,7 +414,7 @@
             <summary>
             Set Htu21D Resolution
             </summary>
-            <param name="resolution">Resolution is the quality of the temp and humidity data gathering</param>
+            <param name="newResolution">Resolution is the quality of the temp and humidity data gathering</param>
         </member>
         <member name="M:AquaMonitor.Web.Devices.Htu21D.SetHeater(System.Boolean)">
             <summary>
@@ -420,8 +453,8 @@
             Writes bits to the user register
             </summary>
             <param name="register"></param>
-            <param name="resolution"></param>
-            <param name="heater"></param>
+            <param name="resolutionValue"></param>
+            <param name="heaterValue"></param>
         </member>
         <member name="M:AquaMonitor.Web.Devices.Htu21D.WriteRead(AquaMonitor.Web.Devices.Register,System.Int32)">
             <summary>
@@ -613,6 +646,17 @@
             <param name="endDate"></param>
             <returns></returns>
         </member>
+        <member name="M:AquaMonitor.Web.Helpers.ChartHelper.GetChartAsync``1(AquaMonitor.Data.Context.AquaDbContext,AquaMonitor.Data.Models.ReadingType,System.DateTime,System.DateTime)">
+            <summary>
+            Generate a chart of Type T for readings
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="context"></param>
+            <param name="type"></param>
+            <param name="startDate"></param>
+            <param name="endDate"></param>
+            <returns></returns>
+        </member>
         <member name="T:AquaMonitor.Web.Helpers.NormalAverageHelper">
             <summary>
             Average helper function to normalize data
@@ -797,7 +841,7 @@
             Create instance of the temp chart model with data
             </summary>
             <param name="records"></param>
-            <param name="Range"></param>
+            <param name="range"></param>
         </member>
         <member name="T:AquaMonitor.Web.Models.PowerRelayRequestMessageModel">
             <summary>
@@ -901,6 +945,124 @@
             </summary>
             <param name="fromDb"></param>
         </member>
+        <member name="T:AquaMonitor.Web.Models.ReadingChartJSModel">
+            <summary>
+            Reading chart JS model
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ReadingChartJSModel.Labels">
+            <summary>
+            labels for chart
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ReadingChartJSModel.DataSets">
+            <summary>
+            Datasets to display
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.ReadingChartJSModel.#ctor">
+            <summary>
+            Create instance of the temp chart model
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.ReadingChartJSModel.#ctor(System.Collections.Generic.IEnumerable{AquaMonitor.Data.Models.IReading},System.TimeSpan)">
+            <summary>
+            Creates a chart with forecolors and backcolors
+            </summary>
+            <param name="readings"></param>
+            <param name="range"></param>
+            <param name="foreColor"></param>
+            <param name="backColor"></param>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.ReadingChartModel">
+            <summary>
+            Model to render a reading chart
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ReadingChartModel.ChartCaption">
+            <summary>
+            Chart Caption
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ReadingChartModel.Type">
+            <summary>
+            Type of chart to render
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ReadingChartModel.Background">
+            <summary>
+            Background of chart
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ReadingChartModel.AllReadings">
+            <summary>
+            Collection of all readings
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.ReadingChartModel.#ctor">
+            <summary>
+            CTOR
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.ReadingChartModel.#ctor(System.String,AquaMonitor.Data.Models.ReadingType,AquaMonitor.Data.Models.ReadingCollection)">
+            <summary>
+            CTOR
+            </summary>
+            <param name="caption"></param>
+            <param name="type"></param>
+            <param name="collection"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.ReadingChartModel.#ctor(System.String,AquaMonitor.Data.Models.ReadingType,AquaMonitor.Data.Models.ReadingCollection,System.String)">
+            <summary>
+            CTOR
+            </summary>
+            <param name="caption"></param>
+            <param name="type"></param>
+            <param name="collection"></param>
+            <param name="background"></param>
+        </member>
+        <member name="T:AquaMonitor.Web.Models.ReadingRequestModel">
+            <summary>
+            Model to accept reading requests
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ReadingRequestModel.Type">
+            <summary>
+            Type of reading
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ReadingRequestModel.Value">
+            <summary>
+            Value of reading
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ReadingRequestModel.Scale">
+            <summary>
+            Scale of reading
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ReadingRequestModel.Location">
+            <summary>
+            Location of reading taken
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ReadingRequestModel.Note">
+            <summary>
+            Notes of reading
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.ReadingRequestModel.Taken">
+            <summary>
+            Date time reading was taken
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Models.ReadingRequestModel.ToReading(System.String@)">
+            <summary>
+            Convert to reading
+            </summary>
+            <param name="errors"></param>
+            <returns></returns>
+        </member>
         <member name="T:AquaMonitor.Web.Models.RelayChartModel">
             <summary>
             Relay chart model
@@ -926,7 +1088,7 @@
             Create instance of the temp chart model with data
             </summary>
             <param name="records"></param>
-            <param name="Range"></param>
+            <param name="range"></param>
         </member>
         <member name="T:AquaMonitor.Web.Models.RelayRequestMessageModel">
             <summary>
@@ -1023,7 +1185,7 @@
             Create instance of the temp chart model with data
             </summary>
             <param name="records"></param>
-            <param name="Range"></param>
+            <param name="range"></param>
         </member>
         <member name="T:AquaMonitor.Web.Models.WaterChartModel">
             <summary>
@@ -1050,7 +1212,7 @@
             Create instance of the temp chart model with data
             </summary>
             <param name="records"></param>
-            <param name="Range"></param>
+            <param name="range"></param>
         </member>
         <member name="T:AquaMonitor.Web.Models.WaterLevelRequestMessageModel">
             <summary>
@@ -1429,12 +1591,12 @@
             Generates a sky image of time range
             </summary>
         </member>
-        <member name="F:AquaMonitor.Web.Services.SkyService.LightSky">
+        <member name="F:AquaMonitor.Web.Services.SkyService.lightSky">
             <summary>
             Light sky image
             </summary>
         </member>
-        <member name="F:AquaMonitor.Web.Services.SkyService.DarkSky">
+        <member name="F:AquaMonitor.Web.Services.SkyService.darkSky">
             <summary>
             Dark sky image
             </summary>

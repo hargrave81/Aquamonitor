@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AquaMonitor.Data.Models;
 using AquaMonitor.Web.Helpers;
 
@@ -30,7 +29,7 @@ namespace AquaMonitor.Web.Models
         public OutsideTempChartModel()
         {
             Labels = new string[] {};
-            DataSets = new ChartJSData<float>[]
+            DataSets = new[]
             {
                 new ChartJSData<float>()
                 {
@@ -79,29 +78,29 @@ namespace AquaMonitor.Web.Models
         /// Create instance of the temp chart model with data
         /// </summary>
         /// <param name="records"></param>
-        /// <param name="Range"></param>
-        public OutsideTempChartModel(IEnumerable<HistoryRecord> records, TimeSpan Range) : this()
+        /// <param name="range"></param>
+        public OutsideTempChartModel(IEnumerable<HistoryRecord> records, TimeSpan range) : this()
         {
             string filter;
-            if (Range.TotalDays > 90)
+            if (range.TotalDays > 90)
             {
                 // do months
                 filter = "MM/yyyy";
                 var months = records.OrderBy(t => t.Created).Select(t => t.Created.ToString("MMMM yyyy")).Distinct().ToArray();
                 this.Labels = months.ToArray();
-            } else if (Range.TotalDays > 6)
+            } else if (range.TotalDays > 6)
             {
                 // do days
                 filter = "dd/MM/yyyy";
                 var months = records.OrderBy(t => t.Created).Select(t => t.Created.ToString("MMM dd")).Distinct().ToArray();
                 this.Labels = months.ToArray();
-            } else if (Range.TotalHours > 8)
+            } else if (range.TotalHours > 8)
             {
                 // do hours
                 filter = "dd/MM/yyyy HH";
                 var months = records.OrderBy(t => t.Created).Select(t => t.Created.ToString("dd HH") + ":00").Distinct().ToArray();
                 this.Labels = months.ToArray();
-            } else if (Range.TotalMinutes > 10)
+            } else if (range.TotalMinutes > 10)
             {
                 // do minutes
                 filter = "dd/MM/yyyy HH:mm";
@@ -131,7 +130,7 @@ namespace AquaMonitor.Web.Models
             }
             catch
             {
-                
+                // ignored
             }
         }
 

@@ -299,3 +299,75 @@ var TempOutChart = (function () {
 })();
 
 
+
+var ReadingCharts = (function () {
+
+    //
+    // Variables
+    //
+    $.each($('.reading-chart'),
+        function(idx,entry) {
+            var $chart = $(entry);
+
+            //
+            // Methods
+            //
+
+            // Init chart
+            function initChart($chart, dataset) {
+
+                // Create chart
+                var ordersChart = new Chart($chart,
+                    {
+                        type: 'line',
+                        bezierCurve: true,
+                        options: {
+                            scales: {
+                                yAxes: [
+                                    {
+                                        gridLines: {
+                                            color: Charts.colors.gray[900],
+                                            zeroLineColor: Charts.colors.gray[900]
+                                        }
+                                    }
+                                ]
+                            },
+                            tooltips: {
+                                callbacks: {
+                                    label: function(item, data) {
+                                        var label = data.datasets[item.datasetIndex].label || '';
+                                        var yLabel = item.yLabel;
+                                        var content = '';
+
+                                        if (data.datasets.length > 1) {
+                                            content += '<span class="popover-body-label mr-auto">' + yLabel + '</span>';
+                                        }
+
+                                        content += '<span class="popover-body-value">: ' + label + '</span>';
+                                        return content;
+                                    }
+                                }
+                            }
+                        },
+                        data: dataset
+                    });
+
+                // Save to jQuery object
+                $chart.data('chart', ordersChart);
+            }
+
+
+            // Init chart
+            if ($chart.length) {
+                // fetch from url options
+                var jsonData = $.ajax({
+                    url: $($chart).parent().parent().parent().find('[data-default]').data('update'),
+                    dataType: 'json',
+                }).done(function(results) {
+                    initChart($chart, results);
+                });
+            }
+        });
+})();
+
+

@@ -50,7 +50,7 @@ namespace AquaMonitor.Web.Services
         {
             logger.LogInformation("Camera Service running.");
 
-            string path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+            string path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
                 $"wwwroot/img/camera");
             if (!System.IO.Directory.Exists(path))
                 System.IO.Directory.CreateDirectory(path);
@@ -121,7 +121,7 @@ namespace AquaMonitor.Web.Services
                     }
 
                     var thumbNail = System.IO.Path.Combine(
-                        System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                        System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
                         $"wwwroot/img/camera/frame{Guid.NewGuid().ToString()}.jpg");
                     var args =
                         $"-rtsp_transport tcp -y -i \"{globalData.More.CameraJPGUrl}\" -ss 00:00:01.500 -frames:v 1 \"{thumbNail}\"";
@@ -129,9 +129,9 @@ namespace AquaMonitor.Web.Services
                     var proc = Process.Start(
                         "ffmpeg", args);
                     var abortTime = DateTime.Now.AddSeconds(14);
-                    while (!proc.HasExited)
+                    while (proc != null && !proc.HasExited)
                     {
-                        System.Threading.Thread.Sleep(100);
+                        Thread.Sleep(100);
                         if (DateTime.Now > abortTime)
                         {
                             proc.Kill();
@@ -150,7 +150,7 @@ namespace AquaMonitor.Web.Services
                         else
                         {
                             // delete file
-                            System.Threading.Thread.Sleep(5000);
+                            Thread.Sleep(5000);
                             // try to delete
                             try
                             {
