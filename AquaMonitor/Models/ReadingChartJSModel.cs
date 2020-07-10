@@ -94,6 +94,7 @@ namespace AquaMonitor.Web.Models
             
             string filter;
 
+            // limit readings to daily
             if (range.TotalDays > 30)
             {
                 filter = "MM/yyyy";
@@ -106,14 +107,22 @@ namespace AquaMonitor.Web.Models
             {
                 filter = "dd/MM/yyyy";
                 // do days
-                var months = readings.OrderBy(t => t.Taken).Select(t => t.Taken.ToString("MMM dd")).Distinct().ToArray();
+                var months = readings.OrderBy(t => t.Taken).Select(t => t.Taken.ToString("yyyy MMM dd")).Distinct().ToArray();
                 this.Labels = months.ToArray();
 
             }
 
             for (int x = 0; x < readers.Count; x++)
             {
-                var dataToAnalyze = readings.Where(t => t.Type == readers[x]).GroupBy(t => t.Taken.ToString(filter));
+
+                var subResult = readings.Where(t => t.Type == readers[x]);
+                if(readers[x] == ReadingType.FishFeed)
+                {
+                    // fish feed we always want the total food for the whole day, not what was fed each feed time
+                    subResult = subResult.GroupBy(z => z.Taken.ToString("yyyy MMM dd"))
+                        .Select(t => (IReading)new FishFeedReading(t.First()) {Value = t.Sum(z => z.Value)});
+                }
+                var dataToAnalyze = subResult.GroupBy(t => t.Taken.ToString(filter));
                 this.DataSets.Skip(x).First().Data = dataToAnalyze.Select(t => (float)t.NormalAverage(z => z.Value)).ToArray();
             }
         }

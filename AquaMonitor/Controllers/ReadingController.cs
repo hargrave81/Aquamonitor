@@ -86,6 +86,11 @@ namespace AquaMonitor.Web.Controllers
             return this.Ok(result);
         }
 
+        /// <summary>
+        /// Create new reading
+        /// </summary>
+        /// <param name="newReading"></param>
+        /// <returns></returns>
         [ValidateAntiForgeryToken]
         [ProducesResponseType(typeof(ProblemDetails), 500)]
         [ProducesResponseType(typeof(ModelStateDictionary), 400)]

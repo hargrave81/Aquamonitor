@@ -163,6 +163,13 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:AquaMonitor.Web.Controllers.ReadingController.Post(AquaMonitor.Web.Models.ReadingRequestModel)">
+            <summary>
+            Create new reading
+            </summary>
+            <param name="newReading"></param>
+            <returns></returns>
+        </member>
         <member name="T:AquaMonitor.Web.Controllers.RelayChartController">
             <summary>
             Relay Chart Controller
@@ -967,12 +974,10 @@
         </member>
         <member name="M:AquaMonitor.Web.Models.ReadingChartJSModel.#ctor(System.Collections.Generic.IEnumerable{AquaMonitor.Data.Models.IReading},System.TimeSpan)">
             <summary>
-            Creates a chart with forecolors and backcolors
+            Creates a chart
             </summary>
             <param name="readings"></param>
             <param name="range"></param>
-            <param name="foreColor"></param>
-            <param name="backColor"></param>
         </member>
         <member name="T:AquaMonitor.Web.Models.ReadingChartModel">
             <summary>

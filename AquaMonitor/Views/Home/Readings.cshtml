@@ -41,12 +41,12 @@
         var currentModal;
 
         function renderDatePicker() {
-            var formatter1 = 'MM-DD-YYYY';
+            var formatter1 = 'MM/DD/YYYY';
             var formatter2 = 'HH:mm';
             var date = new Date();
             var timeVal = moment(date).format(formatter2);
             var dateVal = moment(date).format(formatter1);
-            $('.takenpicker').datetimepicker({ step: 60, defaultTime: timeVal, defaultDate: dateVal, format: 'm/d/Y H:i', formatTime: 'H:i', formatDate: 'm/d/Y', mask: '9999/19/39 29:59' });
+            $('.takenpicker').datetimepicker({ step: 60, defaultTime: timeVal, defaultDate: dateVal,value: defaultDate + ' ' + defaultTime, format: 'm/d/Y H:i', formatTime: 'H:i', formatDate: 'm/d/Y', mask: '9999/19/39 29:59' });
             $('.savereading').click(function(e) {
                 currentModal = $(this).closest('.modal');
                 e.preventDefault();
@@ -59,7 +59,8 @@
                     Type: formData.get('Type'),
                     Value: parseFloat(formData.get('Value')),
                     Taken: formData.get('Taken'),
-                    Note: formData.get('Note')
+                    Note: formData.get('Note'),
+                    Location: formData.get('Location')
                 };
                 var formJson = JSON.stringify(data);
                 var url = currentModal.find('form').attr('action');
