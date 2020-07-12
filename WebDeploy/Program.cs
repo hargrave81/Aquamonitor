@@ -150,12 +150,14 @@ namespace WebDeploy
                             {
                                 await GitHubCommit.Download("AquaMonitor32.zip",
                                     Path.Combine(settings.src + "/AquaMonitor32.zip"));
+                                Console.WriteLine("Stored 32 bit update ...");
                             }
                             catch (Exception ex)
                             {
                                 Console.WriteLine(ex.Message);
                             }
 
+                            busy = false;
                             timer.Enabled = true;
                         }
                     }
@@ -175,12 +177,14 @@ namespace WebDeploy
                             {
                                 await GitHubCommit.Download("AquaMonitor.zip",
                                     Path.Combine(settings.src + "/AquaMonitor.zip"));
+                                Console.WriteLine("Stored 64 bit update ...");
                             }
                             catch (Exception ex)
                             {
                                 Console.WriteLine(ex.Message);
                             }
 
+                            busy = false;
                             timer.Enabled = true;
                         }
                     }
