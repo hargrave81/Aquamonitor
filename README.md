@@ -124,6 +124,8 @@ Compress-Archive -Path DeployLinux32/* -DestinationPath AquaDeploy32.zip -Compre
 - On Raspberry Pi
   - transfer zip file to raspberry pi  
   - sudo systemctl stop kestrel-aquadeploy.service
+  - sudo unzip -o /home/remote/AquaDeploy32.zip -d /usr/local/aquadeploy
+  or
   - sudo unzip -o /home/remote/AquaDeploy.zip -d /usr/local/aquadeploy
   - sudo systemctl start kestrel-aquadeploy.service    
 
