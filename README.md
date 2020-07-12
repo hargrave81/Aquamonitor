@@ -115,9 +115,12 @@ sudo unzip -o /home/remote/AquaMonitor.zip -d /usr/local/wwwroot/Publish
 sudo systemctl start kestrel-aquamonitor.service
 
 ##### WebDeploy Helper
-- On Build Box
+- On Build Box 64bit
 dotnet publish ./WebDeploy/WebDeploy.csproj -c Release -o ./DeployLinux -r linux-arm64
 Compress-Archive -Path DeployLinux/* -DestinationPath AquaDeploy.zip -CompressionLevel "Optimal" -Force
+- On Build Box 32bit 
+dotnet publish ./WebDeploy/WebDeploy.csproj -c Release -o ./DeployLinux32 -r linux-arm
+Compress-Archive -Path DeployLinux32/* -DestinationPath AquaDeploy32.zip -CompressionLevel "Optimal" -Force
 - On Raspberry Pi
   - transfer zip file to raspberry pi  
   - sudo systemctl stop kestrel-aquadeploy.service

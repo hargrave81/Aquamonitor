@@ -19,6 +19,7 @@ namespace WebDeploy
         private static DateTime lastGrab = DateTime.MinValue;
         private static DateTime lastGrab2 = DateTime.MinValue;
         private static bool appAlive = true;
+        private static bool busy;
 
         static void Main(string[] args)
 
@@ -63,107 +64,134 @@ namespace WebDeploy
 
         private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            // check and see if new files were deployed in destination folder
-            FileInfo sourceFi = new FileInfo(Path.Combine(settings.src + "/AquaMonitor.zip"));
-            FileInfo sourceFi2 = new FileInfo(Path.Combine(settings.src + "/AquaMonitor32.zip"));
-            if (lastGrab == DateTime.MinValue)
+            if (busy)
+                return;
+            busy = true;
+            try
             {
-                // we do not know whats newer, so lets just track and bounce
-                lastGrab = sourceFi.CreationTimeUtc;
-            }
-            if (lastGrab2 == DateTime.MinValue)
-            {
-                // we do not know whats newer, so lets just track and bounce
-                lastGrab2 = sourceFi2.CreationTimeUtc;
-            }
-            if (sourceFi.CreationTimeUtc > lastGrab)
-            {
-                timer.Enabled = false;
-                lastGrab = sourceFi.CreationTimeUtc;
-                System.Threading.Thread.Sleep(30000); // wait for the file transfer to finish
-                Console.WriteLine("Loading new version ...");
-                // we have a new deploy
+                // check and see if new files were deployed in destination folder
+                FileInfo sourceFi = new FileInfo(Path.Combine(settings.src + "/AquaMonitor.zip"));
+                FileInfo sourceFi2 = new FileInfo(Path.Combine(settings.src + "/AquaMonitor32.zip"));
+                if (lastGrab == DateTime.MinValue)
+                {
+                    // we do not know whats newer, so lets just track and bounce
+                    lastGrab = sourceFi.CreationTimeUtc;
+                }
 
-                Bash("systemctl stop kestrel-aquamonitor.service");
-                System.Threading.Thread.Sleep(10000);
-                Console.WriteLine("Unpacking new version ...");
-                Bash($"unzip -o {settings.src}/AquaMonitor.zip -d {settings.dest}");
-                Console.WriteLine("Restarting new version ...");
-                Bash($"systemctl start kestrel-aquamonitor.service");
-                timer.Enabled = true;
-            }
-            if (sourceFi2.CreationTimeUtc > lastGrab2)
-            {
-                timer.Enabled = false;
-                lastGrab2 = sourceFi2.CreationTimeUtc;
-                System.Threading.Thread.Sleep(30000); // wait for the file transfer to finish
-                Console.WriteLine("Loading new 32bit version ...");
-                // we have a new deploy
+                if (lastGrab2 == DateTime.MinValue)
+                {
+                    // we do not know whats newer, so lets just track and bounce
+                    lastGrab2 = sourceFi2.CreationTimeUtc;
+                }
 
-                Bash("systemctl stop kestrel-aquamonitor.service");
-                System.Threading.Thread.Sleep(10000);
-                Console.WriteLine("Unpacking new version ...");
-                Bash($"unzip -o {settings.src}/AquaMonitor32.zip -d {settings.dest}");
-                Console.WriteLine("Restarting new version ...");
-                Bash($"systemctl start kestrel-aquamonitor.service");
-                timer.Enabled = true;
+                if (sourceFi.CreationTimeUtc > lastGrab)
+                {
+                    timer.Enabled = false;
+                    lastGrab = sourceFi.CreationTimeUtc;
+                    System.Threading.Thread.Sleep(30000); // wait for the file transfer to finish
+                    Console.WriteLine("Loading new version ...");
+                    // we have a new deploy
+
+                    Bash("systemctl stop kestrel-aquamonitor.service");
+                    System.Threading.Thread.Sleep(10000);
+                    Console.WriteLine("Unpacking new version ...");
+                    Bash($"unzip -o {settings.src}/AquaMonitor.zip -d {settings.dest}");
+                    Console.WriteLine("Restarting new version ...");
+                    Bash($"systemctl start kestrel-aquamonitor.service");
+                    timer.Enabled = true;
+                }
+
+                if (sourceFi2.CreationTimeUtc > lastGrab2)
+                {
+                    timer.Enabled = false;
+                    lastGrab2 = sourceFi2.CreationTimeUtc;
+                    System.Threading.Thread.Sleep(30000); // wait for the file transfer to finish
+                    Console.WriteLine("Loading new 32bit version ...");
+                    // we have a new deploy
+
+                    Bash("systemctl stop kestrel-aquamonitor.service");
+                    System.Threading.Thread.Sleep(10000);
+                    Console.WriteLine("Unpacking new version ...");
+                    Bash($"unzip -o {settings.src}/AquaMonitor32.zip -d {settings.dest}");
+                    Console.WriteLine("Restarting new version ...");
+                    Bash($"systemctl start kestrel-aquamonitor.service");
+                    timer.Enabled = true;
+                }
             }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Failed to update: "+ ex.Message);
+            }
+            busy = false;
         }
 
         private static void WebTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             webTimer.Enabled = false;
             Console.WriteLine("Testing github web files ...");
-            FileInfo sourceFi = new FileInfo(Path.Combine(settings.src + "/AquaMonitor.zip"));
-            FileInfo sourceFi2 = new FileInfo(Path.Combine(settings.src + "/AquaMonitor32.zip"));
-            Task.Run(async () =>
+            try
             {
-                if (IntPtr.Size == 4)
+                FileInfo sourceFi = new FileInfo(Path.Combine(settings.src + "/AquaMonitor.zip"));
+                FileInfo sourceFi2 = new FileInfo(Path.Combine(settings.src + "/AquaMonitor32.zip"));
+                Task.Run(async () =>
                 {
-                    // 32-bit
-                    var am32 = await GitHubCommit.Fetch("AquaMonitor32.zip");
-                    if (am32 != null && am32.Commit.Author.Date > sourceFi2.CreationTimeUtc)
+                    if (IntPtr.Size == 4)
                     {
-                        Console.WriteLine("Updating 32 bit software ...");
-                        timer.Enabled = false;
-                        // we need to update the software
-                        try
+                        // 32-bit
+                        var am32 = await GitHubCommit.Fetch("AquaMonitor32.zip");
+                        if (am32 != null && am32.Commit.Author.Date > sourceFi2.CreationTimeUtc)
                         {
-                            await GitHubCommit.Download("AquaMonitor32.zip",
-                                Path.Combine(settings.src + "/AquaMonitor32.zip"));
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex.Message);
-                        }
+                            Console.WriteLine("Updating 32 bit software ...");
+                            busy = true;
+                            timer.Enabled = false;
+                            System.Threading.Thread.Sleep(500);
+                            // we need to update the software
+                            try
+                            {
+                                await GitHubCommit.Download("AquaMonitor32.zip",
+                                    Path.Combine(settings.src + "/AquaMonitor32.zip"));
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
 
-                        timer.Enabled = true;
+                            timer.Enabled = true;
+                        }
                     }
-                }
-                else if (IntPtr.Size == 8)
-                {
-                    // 64-bit
-                    var am64 = await GitHubCommit.Fetch("AquaMonitor.zip");
-                    if (am64 != null && am64.Commit.Author.Date > sourceFi.CreationTimeUtc)
+                    else if (IntPtr.Size == 8)
                     {
-                        Console.WriteLine("Updating 64 bit software ...");
-                        // we need to update the software
-                        timer.Enabled = false;
-                        // we need to update the software
-                        try
+                        // 64-bit
+                        var am64 = await GitHubCommit.Fetch("AquaMonitor.zip");
+                        if (am64 != null && am64.Commit.Author.Date > sourceFi.CreationTimeUtc)
                         {
-                            await GitHubCommit.Download("AquaMonitor.zip", Path.Combine(settings.src + "/AquaMonitor.zip"));
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex.Message);
-                        }
+                            Console.WriteLine("Updating 64 bit software ...");
+                            busy = true;
+                            // we need to update the software
+                            timer.Enabled = false;
+                            // we need to update the software
+                            System.Threading.Thread.Sleep(500);
+                            try
+                            {
+                                await GitHubCommit.Download("AquaMonitor.zip",
+                                    Path.Combine(settings.src + "/AquaMonitor.zip"));
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
 
-                        timer.Enabled = true;
+                            timer.Enabled = true;
+                        }
                     }
-                }
-                webTimer.Enabled = true;
-            });
+
+                    webTimer.Enabled = true;
+                });
+            }
+            catch (Exception ext)
+            {
+                Console.WriteLine("Failed to process github: " + ext.Message);
+            }
         }
 
         private static void Bash(string cmd)
