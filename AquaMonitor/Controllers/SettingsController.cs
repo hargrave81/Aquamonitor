@@ -109,21 +109,30 @@ namespace AquaMonitor.Web.Controllers
                 /// swap out optional different pin for different feeder
                 if(!string.IsNullOrEmpty(request.More_Feed1_Turn))
                 {
-                    var pc = globalData.More.FoodSessions[0].PinCollection.Split(',');
-                    pc[0] = request.More_Feed1_Turn.Split(',')[1];
-                    globalData.More.FoodSessions[0].PinCollection = string.Join(',', pc);
+                    if (request.More_Feed1_Turn.Split(',').Length > 1)
+                    {
+                        var pc = globalData.More.FoodSessions[0].PinCollection.Split(',');
+                        pc[0] = request.More_Feed1_Turn.Split(',')[1];
+                        globalData.More.FoodSessions[0].PinCollection = string.Join(',', pc);
+                    }
                 }
                 if(!string.IsNullOrEmpty(request.More_Feed2_Turn))
                 {
-                    var pc = globalData.More.FoodSessions[1].PinCollection.Split(',');
-                    pc[0] = request.More_Feed2_Turn.Split(',')[1];
-                    globalData.More.FoodSessions[1].PinCollection = string.Join(',', pc);
+                    if (request.More_Feed2_Turn.Split(',').Length > 1)
+                    {
+                        var pc = globalData.More.FoodSessions[1].PinCollection.Split(',');
+                        pc[0] = request.More_Feed2_Turn.Split(',')[1];
+                        globalData.More.FoodSessions[1].PinCollection = string.Join(',', pc);
+                    }
                 }
                 if(!string.IsNullOrEmpty(request.More_Feed3_Turn))
                 {
-                    var pc = globalData.More.FoodSessions[2].PinCollection.Split(',');
-                    pc[0] = request.More_Feed3_Turn.Split(',')[1];
-                    globalData.More.FoodSessions[2].PinCollection = string.Join(',', pc);
+                    if (request.More_Feed3_Turn.Split(',').Length > 1)
+                    {
+                        var pc = globalData.More.FoodSessions[2].PinCollection.Split(',');
+                        pc[0] = request.More_Feed3_Turn.Split(',')[1];
+                        globalData.More.FoodSessions[2].PinCollection = string.Join(',', pc);
+                    }
                 }
                 // now save to database 
                 var settings = dbContext.GetSetting();

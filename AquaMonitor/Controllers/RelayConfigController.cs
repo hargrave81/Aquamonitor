@@ -83,8 +83,10 @@ namespace AquaMonitor.Web.Controllers
                 // perform DB operations
                 await dbContext.DeleteRelaysAsync(deletables);
                 await dbContext.AddRelaysAsync(adds);
-                await dbContext.UpdateRelaysAsync(allRelays.Where(t => !deletables.Contains(t)));   
-                globalData.Relays = allRelays.Where(t => !deletables.Contains(t)).ToList();                            
+                await dbContext.UpdateRelaysAsync(allRelays.Where(t => !deletables.Contains(t)));
+                var final = allRelays.ToList();
+                final.AddRange(adds);
+                globalData.Relays = final.Where(t => !deletables.Contains(t)).ToList();
             }
             catch (Exception ex)
             {

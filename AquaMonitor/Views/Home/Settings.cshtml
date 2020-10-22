@@ -323,7 +323,7 @@
                 <div class="table-responsive">
                     <!-- Projects table -->
                     <form id="relayForm">
-                        <table class="table align-items-center table-flush">
+                        <table class="table align-items-center table-flush relaytable">
                                 @foreach (var relay in Model.Relays)
                                 {
                                     <tr>
@@ -402,7 +402,7 @@
                                     <th scope="col">Value</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="water-list">
                                 @foreach (var water in Model.WaterLevels)
                                 {
                                     <tr>
@@ -629,7 +629,7 @@ $('#SaveWater').click(function (e) {
             alert('You cannot add anymore water sensors.');
             return true;
         }
-        $('.water-footer').before($('#waterTemplate').html().replace(/{{Number}}/g, Number.toString()));
+        $('.water-list').append($('#waterTemplate').html().replace(/{{Number}}/g, Number.toString()));
         return true;
     });
 
@@ -667,7 +667,7 @@ $('#SaveWater').click(function (e) {
                 }
             }
         }
-        $('.relay-footer').before($('#relayTemplate').html().replace(/{{Number}}/g, Number.toString())
+        $('.relaytable').append($('#relayTemplate').html().replace(/{{Number}}/g, Number.toString())
             .replace(/{{Letter}}/g, Letter));
         return false;
     });
@@ -700,33 +700,33 @@ $('#SaveWater').click(function (e) {
 </template>
 <template id="relayTemplate">
     <tr>
-        <td scope="row" style="border-top: 1px solid #ccc;">
+        <td style="border-top: 1px solid #ccc;">
             <h4>Relay #{{Number}} {{Letter}}
-            <button class="deleteRelay btn btn-sm btn-warning" data-id="{{Number}}" data-letter="{{Letter}}">Remove</button>
-            </h4>
+                <button class="deleteRelay btn btn-sm btn-warning" data-id="{{Number}}" data-letter="{{Letter}}">Remove</button>
+                </h4>
             <div class="form-group">
-            <span><label class="form-control-label">Name</label><input class="form-control" id="Name{{Number}}" value="New"/></span>
-            <span><label class="form-control-label">Pin</label><input class="form-control" id="Pin{{Number}}" value="0"/></span>
-            <span><label class="form-control-label">Interval</label><input class="form-control" id="Interval{{Number}}" value="0"/></span>
-            <span><label class="form-control-label">RunTime</label><input class="form-control" id="IntervalRun{{Number}}" value="0"/></span>
+                <span><label class="form-control-label">Name</label><input class="form-control" id="Name[{{Number}}]" value="New"/></span>
+                <span><label class="form-control-label">Pin</label><input class="form-control" id="Pin[{{Number}}]" value="0"/></span>
+                <span><label class="form-control-label">Interval</label><input class="form-control" id="Interval[{{Number}}]" value="0"/></span>
+                <span><label class="form-control-label">RunTime</label><input class="form-control" id="IntervalRun[{{Number}}]" value="0"/></span>
             </div>
             <div class="form-group">
-            <span><label class="form-control-label">Start</label><input class="form-control starttime" id="Start{{Number}}" value=""/></span>
-            <span><label class="form-control-label">Stop</label><input class="form-control stoptime" id="Stop{{Number}}" value=""/></span>
-            <div class="position: relative;">
-                <img data-url="@Url.RouteUrl("defaultApi", new {controller = "Sky"})" src="@Url.RouteUrl("defaultApi", new {controller = "Sky"})?start=&end="/>
-            </div>
-            </div>
-            <div class="form-group">
-            <span><label class="form-control-label">Min Temp</label><input class="form-control" id="MinTempF{{Number}}" value=""/></span>
-            <span><label class="form-control-label">Max Temp</label><input class="form-control" id="MaxTempF{{Number}}" value=""/></span>
-            <span><label class="form-control-label">Variance</label><input class="form-control" id="TempVariance{{Number}}" value=""/></span>
-            <span><label class="form-control-label">Min OutTemp</label><input class="form-control" id="MinOutTempF{{Number}}" value=""/></span>
-            <span><label class="form-control-label">Max OutTemp</label><input class="form-control" id="MaxOutTempF{{Number}}" value=""/></span>
+                <span><label class="form-control-label">Start</label><input class="form-control starttime" id="Start[{{Number}}]" value=""/></span>
+                <span><label class="form-control-label">Stop</label><input class="form-control stoptime" id="Stop[{{Number}}]" value=""/></span>
+                <div class="position: relative;">
+                    <img data-url="@Url.RouteUrl("defaultApi", new {controller = "Sky"})" src="@Url.RouteUrl("defaultApi", new {controller = "Sky"})?start=&end="/>
+                </div>
             </div>
             <div class="form-group">
-            <span><label class="form-control-label">WaterID</label><input class="form-control" id="WaterId{{Number}}" value=""/></span>
-            <span><label class="form-control-label">Water Must Be High</label><input class="form-control" id="OnWhenFloatHigh{{Number}}" value="No"/></span>
+                <span><label class="form-control-label">Min Temp</label><input class="form-control" id="MinTempF[{{Number}}]" value=""/></span>
+                <span><label class="form-control-label">Max Temp</label><input class="form-control" id="MaxTempF[{{Number}}]" value=""/></span>
+                <span><label class="form-control-label">Variance</label><input class="form-control" id="TempVariance[{{Number}}]" value=""/></span>
+                <span><label class="form-control-label">Min OutTemp</label><input class="form-control" id="MinOutTempF[{{Number}}]" value=""/></span>
+                <span><label class="form-control-label">Max OutTemp</label><input class="form-control" id="MaxOutTempF[{{Number}}]" value=""/></span>
+            </div>
+            <div class="form-group">
+                <span><label class="form-control-label">WaterID</label><input class="form-control" id="WaterId[{{Number}}]" value=""/></span>
+                <span><label class="form-control-label">Water Must Be High</label><input class="form-control" id="OnWhenFloatHigh[{{Number}}]" value="Yes"/></span>
             </div>
         </td>
     </tr>

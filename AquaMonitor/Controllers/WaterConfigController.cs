@@ -83,8 +83,10 @@ namespace AquaMonitor.Web.Controllers
                 // perform DB operations
                 await dbContext.DeleteWaterLevelsAsync(deletables);
                 await dbContext.AddWaterLevelsAsync(adds);
-                await dbContext.UpdateWaterLevelsAsync(allWaters.Where(t => !deletables.Contains(t)));       
-                globalData.WaterLevels = allWaters.Where(t => !deletables.Contains(t)).ToList();         
+                await dbContext.UpdateWaterLevelsAsync(allWaters.Where(t => !deletables.Contains(t)));
+                var final = allWaters.ToList();
+                final.AddRange(adds);
+                globalData.WaterLevels = final.Where(t => !deletables.Contains(t)).ToList();         
             }
             catch (Exception ex)
             {

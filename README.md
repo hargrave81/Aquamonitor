@@ -111,7 +111,10 @@ dotnet publish ./AquaMonitor/AquaMonitor.csproj -c Release -o ./Publish32 -r lin
 Compress-Archive -Path Publish32/* -DestinationPath AquaMonitor32.zip -CompressionLevel "Optimal" -Force
 - on Raspberry Pi
 sudo systemctl stop kestrel-aquamonitor.service
+sudo unzip -o /home/remote/AquaMonitor32.zip -d /usr/local/wwwroot/Publish
+or
 sudo unzip -o /home/remote/AquaMonitor.zip -d /usr/local/wwwroot/Publish
+then
 sudo systemctl start kestrel-aquamonitor.service
 
 ##### WebDeploy Helper
