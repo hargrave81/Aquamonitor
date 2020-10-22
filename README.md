@@ -8,6 +8,8 @@ Updated the deploy system to automatically get updates when code changes are che
 ##### Quick install on a 32bit OS Ubuntu
 sudo wget https://raw.githubusercontent.com/hargrave81/Aquamonitor/master/installubuntu.sh -v -O install.sh && sudo chmod +777 install.sh && sudo ./install.sh; sudo rm -rf install.sh
 
+##### USB Wifi Dongle (Realtek Installer)
+sudo wget https://raw.githubusercontent.com/hargrave81/Aquamonitor/master/install-wifi.sh -v -O /usr/bin/install-wifi && sudo chmod +777 /usr/bin/install-wifi && sudo /usr/bin/install-wifi
 
 ##### Initial Setup - Full Raspberry Pi Support
 - Download Latest Raspberry Pi OS (32bit w/Desktop)
