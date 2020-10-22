@@ -5,38 +5,28 @@
 Updated the deploy system to automatically get updates when code changes are checked in and merged to the master branch.  This can be disabled by editing your appsettings.json file for your /usr/local/aquadeploy
 
 
-##### Quick install on a 32bit OS
+##### Quick install on a 32bit OS Ubuntu
 sudo wget https://raw.githubusercontent.com/hargrave81/Aquamonitor/master/installubuntu.sh -v -O install.sh && sudo chmod +777 install.sh && sudo ./install.sh; sudo rm -rf install.sh
 
-##### Initial Setup
-- Download 20.04 x64 Server https://ubuntu.com/download/raspberry-pi/thank-you?version=20.04&architecture=arm64+raspi
-  - (you may need to unzip the image if its in .xz format with 7Zip https://www.7-zip.org/download.html)
+
+##### Initial Setup - Full Raspberry Pi Support
+- Download Latest Raspberry Pi OS (32bit w/Desktop)
+  https://www.raspberrypi.org/downloads/raspberry-pi-os/
 - Use balenaEtcher https://www.balena.io/etcher/ to burn the image to a microSD
 - Boot your Raspberry Pi up with your freshly minted microSD card
-- connect your device to LAN based internet
-- login with ubuntu / ubuntu and give it a new password
-- run the following commands to get things "setup" for server headless wireless mode
-- sudo bash
-- apt install net-tools
-- apt install wpasupplicant
-- apt install wireless-tools
-- ifconfig wlan0 up
-- iwlist wlan0 scan | grep ESSID
-  locate the SSID that you wish to connect to and perform the following
-- wpa_passphrase MyRouterSSID "myssidcasesensative" | tee /etc/wpa_supplicant.conf
-- wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf
-  Ensure this command works before proceeding
-- cd /etc
-- nano wifi.sh        (place the contents of wifi.sh inside that file and save it using CTRL+O [enter], CTRL+X)
-- chmod u+x wifi.sh
-- crontab -e
-  - here select nano (or your preferred editor)
-- add the following command at the end of the file
-  - @reboot /etc/wifi.sh    (CTRL+O [enter], CTRL+X to save an exit NANO)
-- timedatectl set-timezone America/New_York
-- reboot
-  - if after a reboot you do not have network access do the following
-  - edit your wifi.sh file and uncomment the two lines for DHCP
+- Complete the auto setup and updates, connect to your wifi
+- setup console mode
+  run terminal, type sudo raspi-config
+  choose boot options
+  choose desktop / cli
+  select Console Auto Login
+  now finish and save
+  exit the console (go ahead and reboot to console mode)
+- RECOMMENDED - USE THE QUICK INSTALL FROM HERE ON OUT
+- type the following into the console to launch quick install
+    sudo wget https://raw.githubusercontent.com/hargrave81/Aquamonitor/master/installpi.sh -v -O install.sh && sudo chmod +777 install.sh && sudo ./install.sh; sudo rm -rf install.sh
+- update the password for the remote FTP user from default, type the following into the console
+    passwd remote
 
 ##### Install VSFTP
 - sudo apt install vsftpd

@@ -3,7 +3,7 @@ Description=ASP.NET Core 3.0 App - AquaMonitor
 
 [Service]
 WorkingDirectory=/usr/local/wwwroot/Publish
-ExecStart=/home/ubuntu/dotnet-arm64/dotnet /usr/local/wwwroot/Publish/AquaMonitor.dll
+ExecStart=/home/share/dotnet/dotnet /usr/local/wwwroot/Publish/AquaMonitor.dll
 Restart=always
 # Restart service after 10 seconds if the dotnet service crashes:
 RestartSec=10

@@ -14,11 +14,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Aquadeployservice = Aquadeployservice
 		Aquamonitorservice = Aquamonitorservice
 		default.conf = default.conf
+		installpi.sh = installpi.sh
+		installubuntu.sh = installubuntu.sh
 		README.md = README.md
 		wifi.sh = wifi.sh
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AquaData", "AquaData\AquaData.csproj", "{785C52B1-CAB4-4406-B4E1-C9E889FD78EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AquaData", "AquaData\AquaData.csproj", "{785C52B1-CAB4-4406-B4E1-C9E889FD78EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

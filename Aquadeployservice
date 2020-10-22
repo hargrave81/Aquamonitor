@@ -3,7 +3,7 @@ Description=ASP.NET Core 3.0 App - AquaDeploy
 
 [Service]
 WorkingDirectory=/usr/local/aquadeploy
-ExecStart=/home/ubuntu/dotnet-arm64/dotnet /usr/local/aquadeploy/WebDeploy.dll
+ExecStart=/home/share/dotnet/dotnet /usr/local/aquadeploy/WebDeploy.dll
 Restart=always
 # Restart service after 10 seconds if the dotnet service crashes:
 RestartSec=10
@@ -11,6 +11,6 @@ KillSignal=SIGINT
 SyslogIdentifier=dotnet-aquadeploy
 Environment=ASPNETCORE_ENVIRONMENT=Production
 Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
-Environment=DOTNET_CLI_HOME=/home/ubuntu/space
+Environment=DOTNET_CLI_HOME=/home/share
 [Install]
 WantedBy=multi-user.target
