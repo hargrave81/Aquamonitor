@@ -3,7 +3,7 @@
 sudo apt -y install vsftpd
 sudo systemctl start vsftpd
 sudo systemctl enable vsftpd
-sudo useradd -p $(openssl passwd -1 "RemoteAccess1") "remote"
+sudo useradd -m remote
 #sudo ufw allow 20/tcp
 #sudo ufw allow 21/tcp
 wget https://raw.githubusercontent.com/hargrave81/Aquamonitor/master/vsftpd.conf
