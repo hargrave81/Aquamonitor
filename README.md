@@ -33,6 +33,9 @@ sudo wget https://raw.githubusercontent.com/hargrave81/Aquamonitor/master/instal
   choose boot options
   choose desktop / cli
   select Console Auto Login
+  go to interfacing options
+  enable SSH
+  enable I2C
   now finish and save
   exit the console (go ahead and reboot to console mode)
 - RECOMMENDED - USE THE QUICK INSTALL FROM HERE ON OUT

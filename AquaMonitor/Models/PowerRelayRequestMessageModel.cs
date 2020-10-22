@@ -133,6 +133,7 @@ namespace AquaMonitor.Web.Models
         /// <param name="fromDb"></param>
         public void UpdateRelay(PowerRelay fromDb)
         {
+            fromDb.Pin = this.Pin;
             fromDb.Name = this.Name;
             fromDb.Interval = this.Interval;
             fromDb.IntervalRun = this.IntervalRun;
