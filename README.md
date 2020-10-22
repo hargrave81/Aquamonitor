@@ -11,6 +11,17 @@ sudo wget https://raw.githubusercontent.com/hargrave81/Aquamonitor/master/instal
 ##### USB Wifi Dongle (Realtek Installer)
 sudo wget https://raw.githubusercontent.com/hargrave81/Aquamonitor/master/install-wifi.sh -v -O /usr/bin/install-wifi && sudo chmod +777 /usr/bin/install-wifi && sudo /usr/bin/install-wifi
 
+#### Disable onboard Wifi
+- if your onboard wifi isn't cutting the cheese here is how to disable it
+- sudo nano /boot/config.txt        add the following line
+  dtoverlay=pi3-disable-wifi
+- sudo nano /etc/modprobe.d/raspi-blacklist.conf
+  #wifi
+  blacklist brcmfmac
+  blacklist brcmutil
+- save changes and reboot
+  
+
 ##### Initial Setup - Full Raspberry Pi Support
 - Download Latest Raspberry Pi OS (32bit w/Desktop)
   https://www.raspberrypi.org/downloads/raspberry-pi-os/
