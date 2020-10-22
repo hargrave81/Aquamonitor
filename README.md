@@ -39,7 +39,7 @@ sudo wget https://raw.githubusercontent.com/hargrave81/Aquamonitor/master/instal
 - type the following into the console to launch quick install
     sudo wget https://raw.githubusercontent.com/hargrave81/Aquamonitor/master/installpi.sh -v -O install.sh && sudo chmod +777 install.sh && sudo ./install.sh; sudo rm -rf install.sh
 - update the password for the remote FTP user from default, type the following into the console
-    passwd remote
+    sudo passwd remote
 
 ##### Install VSFTP
 - sudo apt install vsftpd
