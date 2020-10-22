@@ -153,3 +153,6 @@ One of the two temp sensors
 
 *Raspberry Pi 4 2GB - I Suggest a kit that includes power supply, heat sinks, and an HDMI cable
 ![Raspberry Pi](RaspberryPi4.jpg)
+
+3D Printable Box: Refer to the STL files
+![Sample Print](3DBox.jpg)

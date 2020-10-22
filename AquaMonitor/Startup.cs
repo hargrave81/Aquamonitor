@@ -45,6 +45,7 @@ namespace AquaMonitor.Web
             services.AddSingleton(this.Configuration);
             services.AddSingleton<IPowerRelayService, PowerRelayService>();
             services.AddHostedService<AtmosphereService>();
+            services.AddHostedService<FoodService>();
             services.AddHostedService<WaterLevelService>();
             services.AddHostedService<SystemOperationsService>();            
             services.AddHostedService<NetworkHealthService>();

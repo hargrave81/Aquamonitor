@@ -50,5 +50,13 @@ namespace AquaMonitor.Web.Models
         /// Camera JPG url
         /// </summary>
         public string More_CameraJPGUrl { get; set; }
+
+        public string More_FeedingPins { get; set; }
+        public string More_Feed1_Start { get; set; }
+        public string More_Feed1_Turn { get; set; }
+        public string More_Feed2_Start { get; set; }
+        public string More_Feed2_Turn { get; set; }
+        public string More_Feed3_Start { get; set; }
+        public string More_Feed3_Turn { get; set; }
     }
 }

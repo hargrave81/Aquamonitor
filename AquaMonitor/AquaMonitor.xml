@@ -517,6 +517,60 @@
         <member name="F:AquaMonitor.Web.Devices.Resolution.Low">
             <summary>Low resolution</summary>
         </member>
+        <member name="T:AquaMonitor.Web.Devices.Uln2003Beta">
+            <summary>
+            This class is for controlling stepper motors that are controlled by a 4 pin controller board.
+            </summary>
+            <remarks>It is tested and developed using the 28BYJ-48 stepper motor and the ULN2003 driver board.</remarks>
+        </member>
+        <member name="F:AquaMonitor.Web.Devices.Uln2003Beta.StepperMotorDefaultDelay">
+            <summary>
+            Default delay in microseconds.
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Uln2003Beta.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Device.Gpio.GpioController,System.Boolean,System.Int32)">
+            <summary>
+            Initialize a Uln2003 class.
+            </summary>
+            <param name="pin1">The GPIO pin number which corresponds pin A on ULN2003 driver board.</param>
+            <param name="pin2">The GPIO pin number which corresponds pin B on ULN2003 driver board.</param>
+            <param name="pin3">The GPIO pin number which corresponds pin C on ULN2003 driver board.</param>
+            <param name="pin4">The GPIO pin number which corresponds pin D on ULN2003 driver board.</param>
+            <param name="controller">The controller.</param>
+            <param name="shouldDispose">True to dispose the Gpio Controller</param>
+            <param name="stepsToRotate">Amount of steps needed to rotate motor once in HalfStepMode.</param>
+        </member>
+        <member name="P:AquaMonitor.Web.Devices.Uln2003Beta.RPM">
+            <summary>
+            Sets the motor speed to revolutions per minute.
+            </summary>
+            <remarks>Default revolutions per minute for 28BYJ-48 is approximately 15.</remarks>
+        </member>
+        <member name="P:AquaMonitor.Web.Devices.Uln2003Beta.Mode">
+            <summary>
+            Sets the stepper's mode.
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Uln2003Beta.Stop">
+            <summary>
+            Stop the motor.
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Uln2003Beta.Step(System.Int32)">
+            <summary>
+            Moves the motor. If the number is negative, the motor moves in the reverse direction.
+            </summary>
+            <param name="steps">Number of steps.</param>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Uln2003Beta.Rotate(System.Int32)">
+            <summary>
+            Rotates the motor. If the number is negative, the motor moves in the reverse direction.
+            </summary>
+            <param name="rotations">Number of rotations.</param>
+        </member>
+        <member name="M:AquaMonitor.Web.Devices.Uln2003Beta.Dispose">
+            <inheritdoc/>
+        </member>
         <member name="T:AquaMonitor.Web.Devices.ResolutionBits">
             <summary>
             User Bits Flags
@@ -1551,6 +1605,51 @@
             <param name="state"></param>
         </member>
         <member name="M:AquaMonitor.Web.Services.CameraService.Dispose">
+            <summary>
+            Dispose Service
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Services.FoodService">
+            <summary>
+            Food Processor
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.FoodService.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Services.FoodService},AquaMonitor.Data.Models.IGlobalState)">
+            <summary>
+            Service Constructor
+            </summary>
+            <param name="logger"></param>
+            <param name="globalData"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.FoodService.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            Starts service
+            </summary>
+            <param name="stoppingToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.FoodService.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Stops service
+            </summary>
+            <param name="stoppingToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.FoodService.ProcessWork(System.Object)">
+            <summary>
+            Process work
+            </summary>
+            <param name="state"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.FoodService.SpillFood(System.Int32,System.String)">
+            <summary>
+            Spills food
+            </summary>
+            <param name="turnTime"></param>
+            <param name="pinCollection"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.FoodService.Dispose">
             <summary>
             Dispose Service
             </summary>

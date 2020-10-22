@@ -80,7 +80,52 @@ namespace AquaMonitor.Web.Controllers
                 globalData.DataCollectionRate = request.DataCollectionRate;
                 globalData.More.TempOffset = request.More_TempOffset;
                 globalData.More.CameraJPGUrl = request.More_CameraJPGUrl;
-                // now save to database    
+                // handle more feed
+                globalData.More.FoodSessions = new FoodSession[3];
+                globalData.More.FoodSessions[0] = new FoodSession()
+                {
+                    PinCollection = request.More_FeedingPins,
+                    StartTime = !string.IsNullOrEmpty(request.More_Feed1_Start)
+                        ? (TimeSpan?) TimeSpan.Parse(request.More_Feed1_Start)
+                        : null,
+                    TurnTime = !string.IsNullOrEmpty(request.More_Feed1_Turn) ? int.Parse(request.More_Feed1_Turn.Split(',')[0]):0
+                };
+                globalData.More.FoodSessions[1] = new FoodSession()
+                {
+                    PinCollection = request.More_FeedingPins,
+                    StartTime = !string.IsNullOrEmpty(request.More_Feed2_Start)
+                        ? (TimeSpan?) TimeSpan.Parse(request.More_Feed2_Start)
+                        : null,
+                    TurnTime = !string.IsNullOrEmpty(request.More_Feed2_Turn) ? int.Parse(request.More_Feed2_Turn.Split(',')[0]):0
+                };
+                globalData.More.FoodSessions[2] = new FoodSession()
+                {
+                    PinCollection = request.More_FeedingPins,
+                    StartTime = !string.IsNullOrEmpty(request.More_Feed3_Start)
+                        ? (TimeSpan?) TimeSpan.Parse(request.More_Feed3_Start)
+                        : null,
+                    TurnTime = !string.IsNullOrEmpty(request.More_Feed3_Turn) ? int.Parse(request.More_Feed3_Turn.Split(',')[0]):0
+                };
+                /// swap out optional different pin for different feeder
+                if(!string.IsNullOrEmpty(request.More_Feed1_Turn))
+                {
+                    var pc = globalData.More.FoodSessions[0].PinCollection.Split(',');
+                    pc[0] = request.More_Feed1_Turn.Split(',')[1];
+                    globalData.More.FoodSessions[0].PinCollection = string.Join(',', pc);
+                }
+                if(!string.IsNullOrEmpty(request.More_Feed2_Turn))
+                {
+                    var pc = globalData.More.FoodSessions[1].PinCollection.Split(',');
+                    pc[0] = request.More_Feed2_Turn.Split(',')[1];
+                    globalData.More.FoodSessions[1].PinCollection = string.Join(',', pc);
+                }
+                if(!string.IsNullOrEmpty(request.More_Feed3_Turn))
+                {
+                    var pc = globalData.More.FoodSessions[2].PinCollection.Split(',');
+                    pc[0] = request.More_Feed3_Turn.Split(',')[1];
+                    globalData.More.FoodSessions[2].PinCollection = string.Join(',', pc);
+                }
+                // now save to database 
                 var settings = dbContext.GetSetting();
                 settings.TempType = globalData.TempType;
                 settings.TempPin = globalData.TempPin;
@@ -90,6 +135,7 @@ namespace AquaMonitor.Web.Controllers
                 settings.APIKey = globalData.APIKey;
                 settings.More.TempOffset = globalData.More.TempOffset;
                 settings.More.CameraJPGUrl = globalData.More.CameraJPGUrl;
+                settings.More.FoodSessions = globalData.More.FoodSessions;
                 dbContext.SaveSettings(settings);
             }
             catch (Exception ex)

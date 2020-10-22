@@ -1,5 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace AquaMonitor.Data.Models
 {
@@ -62,8 +65,25 @@ namespace AquaMonitor.Data.Models
         /// </summary>
         public string SettingA
         {
-            get => More != null ? System.Text.Json.JsonSerializer.Serialize(More) : "{}";
-            set => More = string.IsNullOrEmpty(value) ? new ExtendedSettings() : System.Text.Json.JsonSerializer.Deserialize<ExtendedSettings>(value);
+            get => More != null ? System.Text.Json.JsonSerializer.Serialize(More, jsonOptions) : "{}";
+            set => More = string.IsNullOrEmpty(value) ? new ExtendedSettings() : System.Text.Json.JsonSerializer.Deserialize<ExtendedSettings>(value,jsonOptions);
+        }
+
+        private JsonSerializerOptions jsonOptions
+        {
+            get
+            {
+                var result = new JsonSerializerOptions()
+                {
+                    AllowTrailingCommas = true,
+                    IgnoreNullValues = true,
+                    IgnoreReadOnlyProperties = true,
+                    PropertyNameCaseInsensitive = true,
+                    ReadCommentHandling = JsonCommentHandling.Skip,
+                };
+                result.Converters.Add(new TimeSpanConverter());
+                return result;
+            }
         }
 
         /// <summary>

@@ -167,7 +167,125 @@
                                 <td class="long">
                                     <input class="form-control" value="@(Model.More.CameraJPGUrl)" id="More_CameraJPGUrl" placeholder="Camera URL" name="More_CameraJPGUrl" Title="Camera URL to fetch JPG" />
                                 </td>
-                            </tr>
+                            </tr>!
+                            @if (Model.More.FoodSessions != null && Model.More.FoodSessions.Any())
+                            {
+                                <tr>
+                                    <th scope="row">
+                                        <span>Feeding Pins</span>
+                                    </th>
+                                    <td class="long">
+                                        <input class="form-control" value="@(Model.More.FoodSessions.First().PinCollection)" id="More_FeedingPins" placeholder="13, .5, 400, 900, 1900" name="More_FeedingPins" Title="Primary Pin Setup (pin, cycle, hz, forward, stop)" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Feeding #1</span>
+                                    </th>
+                                    <td class="long">
+                                        <input class="form-control" value="@(Model.More.FoodSessions.First().StartTime)" id="More_Feed1_Start" placeholder="6:00" name="More_Feed1_Start" Title="Start Feeding Time"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Feeding #1 Run</span>
+                                    </th>
+                                    <td class="long">
+                                        <input class="form-control" value="@(Model.More.FoodSessions.First().TurnTime),@(Model.More.FoodSessions.First().PinCollection.Split(',')[0])" id="More_Feed1_Turn" placeholder="200" name="More_Feed1_Turn" Title="Turn time in Seconds, Pin"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Feeding #2</span>
+                                    </th>
+                                    <td class="long">
+                                        <input class="form-control" value="@(Model.More.FoodSessions.Skip(1).First().StartTime)" id="More_Feed2_Start" placeholder="9:00" name="More_Feed2_Start" Title="Start Feeding Time"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Feeding #2 Run</span>
+                                    </th>
+                                    <td class="long">
+                                        <input class="form-control" value="@(Model.More.FoodSessions.Skip(1).First().TurnTime),@(Model.More.FoodSessions.Skip(1).First().PinCollection.Split(',')[0])" id="More_Feed2_Turn" placeholder="200" name="More_Feed2_Turn" Title="Turn time in Seconds, Pin"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Feeding #3</span>
+                                    </th>
+                                    <td class="long">
+                                        <input class="form-control" value="@(Model.More.FoodSessions.Skip(2).First().StartTime)" id="More_Feed3_Start" placeholder="0:00" name="More_Feed3_Start" Title="Start Feeding Time"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Feeding #3 Run</span>
+                                    </th>
+                                    <td class="long">
+                                        <input class="form-control" value="@(Model.More.FoodSessions.Skip(2).First().TurnTime),@(Model.More.FoodSessions.Skip(2).First().PinCollection.Split(',')[0])" id="More_Feed3_Turn" placeholder="200" name="More_Feed3_Turn" Title="Turn time in Seconds, Pin"/>
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                 <tr>
+                                    <th scope="row">
+                                        <span>Feeding Pins</span>
+                                    </th>
+                                    <td class="long">
+                                        <input class="form-control" value="" id="More_FeedingPins" placeholder="7, 11, 13, 15" name="More_FeedingPins" Title="GPIO Pins (In1 - In4)" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Feeding #1</span>
+                                    </th>
+                                    <td class="long">
+                                        <input class="form-control" value="" id="More_Feed1_Start" placeholder="6:00" name="More_Feed1_Start" Title="Start Feeding Time"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Feeding #1 Run</span>
+                                    </th>
+                                    <td class="long">
+                                        <input class="form-control" value="" id="More_Feed1_Turn" placeholder="200" name="More_Feed1_Turn" Title="Turn time in Seconds"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Feeding #2</span>
+                                    </th>
+                                    <td class="long">
+                                        <input class="form-control" value="" id="More_Feed2_Start" placeholder="9:00" name="More_Feed2_Start" Title="Start Feeding Time"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Feeding #2 Run</span>
+                                    </th>
+                                    <td class="long">
+                                        <input class="form-control" value="" id="More_Feed2_Turn" placeholder="200" name="More_Feed2_Turn" Title="Turn time in Seconds"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Feeding #3</span>
+                                    </th>
+                                    <td class="long">
+                                        <input class="form-control" value="" id="More_Feed3_Start" placeholder="0:00" name="More_Feed3_Start" Title="Start Feeding Time"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <span>Feeding #3 Run</span>
+                                    </th>
+                                    <td class="long">
+                                        <input class="form-control" value="" id="More_Feed3_Turn" placeholder="200" name="More_Feed3_Turn" Title="Turn time in Seconds"/>
+                                    </td>
+                                </tr>
+                            }
                             </tbody>
                         </table>
                     </form>
@@ -375,7 +493,14 @@ $(document).ready(function() {
                     Country: $('#Country').val(),
                     Zipcode: $('#Zipcode').val(),
                     More_TempOffset: parseInt($('#More_TempOffset').val()),
-                    More_CameraJPGUrl: $('#More_CameraJPGUrl').val()
+                    More_CameraJPGUrl: $('#More_CameraJPGUrl').val(),
+                    More_FeedingPins: $('#More_FeedingPins').val(),
+                    More_Feed1_Start: $('#More_Feed1_Start').val(),
+                    More_Feed1_Turn: $('#More_Feed1_Turn').val(),
+                    More_Feed2_Start: $('#More_Feed2_Start').val(),
+                    More_Feed2_Turn: $('#More_Feed2_Turn').val(),
+                    More_Feed3_Start: $('#More_Feed3_Start').val(),
+                    More_Feed3_Turn: $('#More_Feed3_Turn').val()
                 }),
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8",
