@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AquaMonitor\AquaMonitor.csproj" />
+    <ProjectReference Include="..\WebDeploy\WebDeploy.csproj" />
   </ItemGroup>
 
   <ItemGroup>

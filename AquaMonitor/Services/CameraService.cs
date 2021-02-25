@@ -126,8 +126,12 @@ namespace AquaMonitor.Web.Services
                     var args =
                         $"-rtsp_transport tcp -y -i \"{globalData.More.CameraJPGUrl}\" -ss 00:00:01.500 -frames:v 1 \"{thumbNail}\"";
                     logger.LogInformation($"Spawning Process: ffmpeg.exe {args}");
-                    var proc = Process.Start(
-                        "ffmpeg", args);
+                    ProcessStartInfo si = new ProcessStartInfo("ffmpeg",args);
+                    si.RedirectStandardError = true;
+                    si.RedirectStandardInput = true;
+                    si.RedirectStandardOutput = true;
+                    var proc = Process.Start(si);
+
                     var abortTime = DateTime.Now.AddSeconds(14);
                     while (proc != null && !proc.HasExited)
                     {
