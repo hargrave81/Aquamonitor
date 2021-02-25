@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Xml.Serialization;
 
 namespace AquaMonitor.Data.Models
 {
@@ -27,20 +31,47 @@ namespace AquaMonitor.Data.Models
         public IEnumerable<PowerReading> PowerReadings { get; set; }
         public bool SystemRunning { get; set; }
         public DateTime Created { get; set; }
+
         /// <summary>
         /// Used for future serialized data
         /// </summary>
-        public string Serialize { get; set; }
+        public string Serialize
+        {
+            get => ExtendedData != null ? System.Text.Json.JsonSerializer.Serialize(ExtendedData, jsonOptions) : "{}";
+            set => ExtendedData = string.IsNullOrEmpty(value) ? new HistoryExtended() : System.Text.Json.JsonSerializer.Deserialize<HistoryExtended>(value, jsonOptions);
+        }
+
+        private JsonSerializerOptions jsonOptions
+        {
+            get
+            {
+                var result = new JsonSerializerOptions()
+                {
+                    AllowTrailingCommas = true,
+                    IgnoreNullValues = true,
+                    IgnoreReadOnlyProperties = true,
+                    PropertyNameCaseInsensitive = true,
+                    ReadCommentHandling = JsonCommentHandling.Skip,
+                };
+                result.Converters.Add(new TimeSpanConverter());
+                return result;
+            }
+        }
+
+        [NotMapped]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public IHistoryExtended ExtendedData { get; set; }
 
         #region cTor
 
         public HistoryRecord()
         {
             this.Created = DateTime.UtcNow;
+            this.ExtendedData = new HistoryExtended();
         }
 
         public HistoryRecord(double tempF, double tempC, double humidity, IEnumerable<WaterLevel> levels,
-            IEnumerable<PowerRelay> relays, bool systemOnline)
+            IEnumerable<PowerRelay> relays, bool systemOnline) : this()
         {
             TempC = tempC;
             TempF = tempF;
@@ -48,7 +79,6 @@ namespace AquaMonitor.Data.Models
             WaterReadings = levels.Select(t => new WaterReading(t)).ToList();
             PowerReadings = relays.Select(t => new PowerReading(t)).ToList();
             SystemRunning = systemOnline;
-            Created = DateTime.UtcNow;
         }
 
         public HistoryRecord(double tempF, double tempC, double humidity, IEnumerable<WaterLevel> levels,
@@ -58,6 +88,13 @@ namespace AquaMonitor.Data.Models
             this.OutsideHumidity = outsideHumidity;
             this.OutsideTempC = outsideTempC;
             this.OutsideTempF = outsideTempF;
+        }
+
+        public HistoryRecord(double tempF, double tempC, double humidity, IEnumerable<WaterLevel> levels,
+            IEnumerable<PowerRelay> relays, bool systemOnline, double outsideTempF, double outsideTempC, double outsideHumidity, double waterTemp) :
+            this(tempF, tempC, humidity, levels, relays, systemOnline, outsideTempF, outsideTempC, outsideHumidity)
+        {
+            this.ExtendedData.WaterTemp = waterTemp;
         }
 
         public HistoryRecord(IGlobalState state)
@@ -76,6 +113,8 @@ namespace AquaMonitor.Data.Models
             this.Rain = state.Rain;
             this.Sunrise = state.Sunrise;
             this.Sunset = state.Sunset;
+            this.ExtendedData = new HistoryExtended();
+            this.ExtendedData.WaterTemp = state.WaterTemp??0;
             this.Created = DateTime.UtcNow;
         }
 
@@ -117,5 +156,21 @@ namespace AquaMonitor.Data.Models
         #endregion
 
 
+    }
+
+    /// <summary>
+    /// Extended History values
+    /// </summary>
+    public class HistoryExtended : IHistoryExtended
+    {
+        public double WaterTemp { get; set; }
+    }
+
+    /// <summary>
+    /// Extended History interface
+    /// </summary>
+    public interface IHistoryExtended
+    {
+        double WaterTemp { get; set; }
     }
 }

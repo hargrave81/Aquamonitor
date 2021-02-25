@@ -115,8 +115,8 @@ namespace AquaMonitor.Web.Services
                 var weatherResult = System.Text.Json.JsonSerializer.Deserialize<Models.WeatherResult>(result);
                 this.globalData.CloudCoverage = weatherResult.Clouds.All;
                 this.globalData.OutsideHumidity = weatherResult.Main.Humidity;
-                this.globalData.OutsideTempC = weatherResult.Temp.Celsius;
-                this.globalData.OutsideTempF = weatherResult.Temp.Fahrenheit;
+                this.globalData.OutsideTempC = weatherResult.Temp.DegreesCelsius;
+                this.globalData.OutsideTempF = weatherResult.Temp.DegreesFahrenheit;
                 this.globalData.Rain = weatherResult.Weather.Any(t => t.Main == "Rain");
                 this.globalData.WindSpeed = weatherResult.Wind.SpeedMph();
                 this.globalData.Sunrise = weatherResult.Sys.Sunrise;

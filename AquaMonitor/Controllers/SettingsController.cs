@@ -80,6 +80,7 @@ namespace AquaMonitor.Web.Controllers
                 globalData.DataCollectionRate = request.DataCollectionRate;
                 globalData.More.TempOffset = request.More_TempOffset;
                 globalData.More.CameraJPGUrl = request.More_CameraJPGUrl;
+                globalData.More.WaterSensorEnabled = request.More_WaterSensorEnabled;
                 // handle more feed
                 globalData.More.FoodSessions = new FoodSession[3];
                 globalData.More.FoodSessions[0] = new FoodSession()
@@ -106,7 +107,7 @@ namespace AquaMonitor.Web.Controllers
                         : null,
                     TurnTime = !string.IsNullOrEmpty(request.More_Feed3_Turn) ? int.Parse(request.More_Feed3_Turn.Split(',')[0]):0
                 };
-                /// swap out optional different pin for different feeder
+                // swap out optional different pin for different feeder
                 if(!string.IsNullOrEmpty(request.More_Feed1_Turn))
                 {
                     if (request.More_Feed1_Turn.Split(',').Length > 1)
@@ -145,6 +146,7 @@ namespace AquaMonitor.Web.Controllers
                 settings.More.TempOffset = globalData.More.TempOffset;
                 settings.More.CameraJPGUrl = globalData.More.CameraJPGUrl;
                 settings.More.FoodSessions = globalData.More.FoodSessions;
+                settings.More.WaterSensorEnabled = globalData.More.WaterSensorEnabled;
                 dbContext.SaveSettings(settings);
             }
             catch (Exception ex)

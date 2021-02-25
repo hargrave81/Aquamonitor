@@ -4,6 +4,7 @@ sudo apt -y install vsftpd
 sudo systemctl start vsftpd
 sudo systemctl enable vsftpd
 sudo useradd -m remote
+sudo usermod -aG sudo remote
 #sudo ufw allow 20/tcp
 #sudo ufw allow 21/tcp
 wget https://raw.githubusercontent.com/hargrave81/Aquamonitor/master/vsftpd.conf
@@ -22,6 +23,8 @@ sudo cp ./default.conf /etc/nginx/sites-available/default
 sudo nginx -t
 sudo nginx -s reload
 #sudo ufw allow 80/tcp
+sudo apt install libc6-dev 
+sudo apt install libgdiplus
 sudo apt-get -y install unzip
 wget https://raw.githubusercontent.com/hargrave81/Aquamonitor/master/Aquadeployservice
 wget https://raw.githubusercontent.com/hargrave81/Aquamonitor/master/Aquamonitorservice

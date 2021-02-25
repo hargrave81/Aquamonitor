@@ -1,6 +1,6 @@
-﻿using Iot.Units;
-using System;
+﻿using System;
 using System.Text.Json.Serialization;
+using UnitsNet;
 
 namespace AquaMonitor.Web.Models
 {
@@ -79,25 +79,25 @@ namespace AquaMonitor.Web.Models
         /// Returns current Temperature
         /// </summary>
         [JsonIgnore]
-        public Temperature Temp { get { return Temperature.FromCelsius(Main.Temp); } }
+        public Temperature Temp { get { return Temperature.FromDegreesCelsius(Main.Temp); } }
 
         /// <summary>
         /// Returns today's low Temperature
         /// </summary>
         [JsonIgnore]
-        public Temperature TempMin { get { return Temperature.FromCelsius(Main.TempMin); } }
+        public Temperature TempMin { get { return Temperature.FromDegreesCelsius(Main.TempMin); } }
 
         /// <summary>
         /// Returns a today's high Temperature
         /// </summary>
         [JsonIgnore]
-        public Temperature TempMax { get { return Temperature.FromCelsius(Main.TempMax); } }
+        public Temperature TempMax { get { return Temperature.FromDegreesCelsius(Main.TempMax); } }
 
         /// <summary>
         /// Returns current Feels Like Temperature
         /// </summary>
         [JsonIgnore]
-        public Temperature TempFeelsLike { get { return Temperature.FromCelsius(Main.FeelsLike); } }
+        public Temperature TempFeelsLike { get { return Temperature.FromDegreesCelsius(Main.FeelsLike); } }
     }
 
     /// <summary>

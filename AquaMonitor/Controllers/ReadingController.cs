@@ -45,8 +45,7 @@ namespace AquaMonitor.Web.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Get(string type, DateTime startDate, DateTime endDate)
         {
-            ReadingType resultType;
-            if (!Enum.TryParse<ReadingType>(type, out resultType))
+            if (!Enum.TryParse<ReadingType>(type, out var resultType))
                 return this.BadRequest("Invalid Type");
 
             logger.LogInformation("Reading Chart has been requested");
@@ -121,8 +120,7 @@ namespace AquaMonitor.Web.Controllers
 
             try
             {
-                string errors;
-                var finalReading = newReading.ToReading(out errors);
+                var finalReading = newReading.ToReading(out var errors);
                 if (!string.IsNullOrEmpty(errors))
                 {
                     return this.BadRequest(finalReading); // we had errors processing the parsing

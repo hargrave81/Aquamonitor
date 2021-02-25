@@ -2,6 +2,7 @@ using System;
 using AquaMonitor.Data.Context;
 using AquaMonitor.Data.Models;
 using AquaMonitor.Web.Global;
+using AquaMonitor.Web.Helpers;
 using AquaMonitor.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace AquaMonitor.Web
 {
@@ -47,6 +49,7 @@ namespace AquaMonitor.Web
             services.AddHostedService<AtmosphereService>();
             services.AddHostedService<FoodService>();
             services.AddHostedService<WaterLevelService>();
+            services.AddHostedService<WaterTempService>();
             services.AddHostedService<SystemOperationsService>();            
             services.AddHostedService<NetworkHealthService>();
             services.AddHostedService<WeatherServices>();
@@ -95,6 +98,9 @@ namespace AquaMonitor.Web
         /// <param name="userManager"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<AppUser> userManager)
         {
+            var loggerFactory = app.ApplicationServices.GetRequiredService<ILoggerFactory>();
+            Helpers.ApplicationLogging.LoggerFactory = loggerFactory;
+
             // update database
             using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
             using var dbContext = serviceScope.ServiceProvider.GetService<AquaDbContext>();

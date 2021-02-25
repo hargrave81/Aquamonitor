@@ -23,6 +23,11 @@ namespace AquaMonitor.Data.Models
         /// Food sessions
         /// </summary>
         FoodSession[] FoodSessions { get; set; }
+
+        /// <summary>
+        /// True or false if the water sensor is enabled
+        /// </summary>
+        bool WaterSensorEnabled {get; set; }
     }
 
     /// <summary>
@@ -44,6 +49,11 @@ namespace AquaMonitor.Data.Models
         /// Food sessions
         /// </summary>
         public FoodSession[] FoodSessions { get; set; }
+
+        /// <summary>
+        /// True or false if the water sensor is enabled
+        /// </summary>
+        public bool WaterSensorEnabled { get; set; }
     }
 
     /// <summary>

@@ -45,6 +45,16 @@ namespace AquaMonitor.Web.Models
                 {
                     Label="Humidity",
                     Data = new float[]{},
+                    BackgroundColor = "rgba(151,187,151,0.3)",
+                    BorderColor = "rgba(151,190,151,1)",
+                    PointBackgroundColor = "rgba(151,190,151,.9)",
+                    PointBorderColor = "#fff",
+                    Fill = true
+                },
+                new ChartJSData<float>()
+                {
+                    Label="Water(F)",
+                    Data = new float[]{},
                     BackgroundColor = "rgba(151,187,205,0.3)",
                     BorderColor = "rgba(151,190,210,1)",
                     PointBackgroundColor = "rgba(151,190,210,.9)",
@@ -72,8 +82,10 @@ namespace AquaMonitor.Web.Models
                 this.Labels = months.ToArray();
                 this.DataSets.First().Data = records.GroupBy(t => t.Created.ToString("MM/yyyy"))
                     .Select(t => (float) t.NormalAverage(z => z.TempF)).ToArray();
-                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString("MM/yyyy"))
+                this.DataSets.Skip(1).First().Data = records.GroupBy(t => t.Created.ToString("MM/yyyy"))
                     .Select(t => (float)t.NormalAverage(z => z.Humidity)).ToArray();
+                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString("MM/yyyy"))
+                    .Select(t => (float)t.NormalAverage(z => z.ExtendedData.WaterTemp)).ToArray();
             } else if (range.TotalDays > 6)
             {
                 // do days
@@ -81,8 +93,11 @@ namespace AquaMonitor.Web.Models
                 this.Labels = months.ToArray();
                 this.DataSets.First().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy"))
                     .Select(t => (float)t.NormalAverage(z => z.TempF)).ToArray();
-                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy"))
+
+                this.DataSets.Skip(1).First().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy"))
                     .Select(t => (float)t.NormalAverage(z => z.Humidity)).ToArray();
+                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy"))
+                    .Select(t => (float)t.NormalAverage(z => z.ExtendedData.WaterTemp)).ToArray();
             } else if (range.TotalHours > 8)
             {
                 // do hours
@@ -90,8 +105,10 @@ namespace AquaMonitor.Web.Models
                 this.Labels = months.ToArray();
                 this.DataSets.First().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy HH"))
                     .Select(t => (float)t.NormalAverage(z => z.TempF)).ToArray();
-                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy HH"))
+                this.DataSets.Skip(1).First().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy HH"))
                     .Select(t => (float)t.NormalAverage(z => z.Humidity)).ToArray();
+                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy HH"))
+                    .Select(t => (float)t.NormalAverage(z => z.ExtendedData.WaterTemp)).ToArray();
             } else if (range.TotalMinutes > 10)
             {
                 // do minutes
@@ -99,8 +116,10 @@ namespace AquaMonitor.Web.Models
                 this.Labels = months.ToArray();
                 this.DataSets.First().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy HH:mm"))
                     .Select(t => (float)t.NormalAverage(z => z.TempF)).ToArray();
-                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy HH:mm"))
+                this.DataSets.Skip(1).First().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy HH:mm"))
                     .Select(t => (float)t.NormalAverage(z => z.Humidity)).ToArray();
+                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy HH:mm"))
+                    .Select(t => (float)t.NormalAverage(z => z.ExtendedData.WaterTemp)).ToArray();
             }
             else
             {
@@ -109,8 +128,10 @@ namespace AquaMonitor.Web.Models
                 this.Labels = months.ToArray();
                 this.DataSets.First().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy HH:mm:ss"))
                     .Select(t => (float)t.NormalAverage(z => z.TempF)).ToArray();
-                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy HH:mm:ss"))
+                this.DataSets.Skip(1).First().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy HH:mm:ss"))
                     .Select(t => (float)t.NormalAverage(z => z.Humidity)).ToArray();
+                this.DataSets.Last().Data = records.GroupBy(t => t.Created.ToString("dd/MM/yyyy HH:mm:ss"))
+                    .Select(t => (float)t.NormalAverage(z => z.ExtendedData.WaterTemp)).ToArray();
             }
         }
 

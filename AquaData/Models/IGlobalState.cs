@@ -95,6 +95,11 @@ namespace AquaMonitor.Data.Models
         bool SettingsLoaded { get; }
 
         /// <summary>
+        /// Last recorded water temperature
+        /// </summary>
+        float? WaterTemp { get; set; }
+
+        /// <summary>
         /// Function to load Settings from DB
         /// </summary>
         void Load();

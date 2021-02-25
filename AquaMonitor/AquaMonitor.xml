@@ -400,11 +400,10 @@
             <param name="resolution"></param>
             <returns></returns>
         </member>
-        <member name="M:AquaMonitor.Web.Devices.Htu21D.#ctor(System.Device.I2c.I2cDevice,AquaMonitor.Web.Devices.Resolution)">
+        <member name="M:AquaMonitor.Web.Devices.Htu21D.#ctor(AquaMonitor.Web.Devices.Resolution)">
             <summary>
             Creates a new instance of the Htu21D
             </summary>
-            <param name="i2CDevice">The I2C device used for communication.</param>
             <param name="resolution">Htu21D Read Resolution</param>
         </member>
         <member name="M:AquaMonitor.Web.Devices.Htu21D.Dispose">
@@ -691,6 +690,11 @@
             </summary>
             <param name="relay"></param>
             <param name="active"></param>
+        </member>
+        <member name="T:AquaMonitor.Web.Helpers.ApplicationLogging">
+            <summary>
+            Shared logger
+            </summary>
         </member>
         <member name="T:AquaMonitor.Web.Helpers.ChartHelper">
             <summary>
@@ -1207,6 +1211,46 @@
         <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.More_CameraJPGUrl">
             <summary>
             Camera JPG url
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.More_FeedingPins">
+            <summary>
+            Feeding Pins
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.More_Feed1_Start">
+            <summary>
+            Feed Start Time
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.More_Feed1_Turn">
+            <summary>
+            Feed Turn TIme
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.More_Feed2_Start">
+            <summary>
+            Feed Start Time
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.More_Feed2_Turn">
+            <summary>
+            Feed Turn Time
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.More_Feed3_Start">
+            <summary>
+            Feed Start Time
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.More_Feed3_Turn">
+            <summary>
+            Feed Turn Time
+            </summary>
+        </member>
+        <member name="P:AquaMonitor.Web.Models.SettingsRequestMessageModel.More_WaterSensorEnabled">
+            <summary>
+            Monitor water temps
             </summary>
         </member>
         <member name="T:AquaMonitor.Web.Models.SystemRequestMessageModel">
@@ -1804,6 +1848,44 @@
             <param name="state"></param>
         </member>
         <member name="M:AquaMonitor.Web.Services.WaterLevelService.Dispose">
+            <summary>
+            Dispose Service
+            </summary>
+        </member>
+        <member name="T:AquaMonitor.Web.Services.WaterTempService">
+            <summary>
+            Atmospheric information
+            </summary>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.WaterTempService.#ctor(Microsoft.Extensions.Logging.ILogger{AquaMonitor.Web.Services.WaterTempService},AquaMonitor.Data.Models.IGlobalState,AquaMonitor.Data.Context.AquaServiceDbContext)">
+            <summary>
+            Service Constructor
+            </summary>
+            <param name="logger"></param>
+            <param name="globalData"></param>
+            <param name="dbContext"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.WaterTempService.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            Starts service
+            </summary>
+            <param name="stoppingToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.WaterTempService.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Stops service
+            </summary>
+            <param name="stoppingToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.WaterTempService.ProcessWork(System.Object)">
+            <summary>
+            Process work
+            </summary>
+            <param name="state"></param>
+        </member>
+        <member name="M:AquaMonitor.Web.Services.WaterTempService.Dispose">
             <summary>
             Dispose Service
             </summary>

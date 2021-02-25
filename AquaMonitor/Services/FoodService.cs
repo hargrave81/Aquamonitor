@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Device.Pwm;
-using System.Device.Pwm.Drivers;
-using System.Reflection.PortableExecutable;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AquaMonitor.Data.Models;
-using AquaMonitor.Web.Devices;
-using Iot.Device.Uln2003;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -23,7 +18,6 @@ namespace AquaMonitor.Web.Services
         private Timer timer;
         private bool busy;
         private readonly IGlobalState globalData;
-        private readonly Random random;
         private bool stopFood = false;
 
         /// <summary>
@@ -35,7 +29,6 @@ namespace AquaMonitor.Web.Services
         {
             this.logger = logger;
             this.globalData = globalData;
-            random = new Random();
         }
 
         /// <summary>
@@ -123,7 +116,7 @@ namespace AquaMonitor.Web.Services
             {
                 if (entry.StartTime.HasValue && entry.TurnTime > 0)
                 {
-                    logger.LogInformation($"Checking Food Run #{index} {entry.StartTime.ToString()}");
+                    logger.LogInformation($"Checking Food Run #{index} {entry.StartTime}");
                     if (entry.StartTime < clock && entry.LastRan.Date < DateTime.Now.Date)
                     {
                         // we need to process this food
@@ -142,7 +135,7 @@ namespace AquaMonitor.Web.Services
         /// <param name="turnTime"></param>
         /// <param name="pinCollection"></param>
         /// <returns></returns>
-        private async Task SpillFood(int turnTime, string pinCollection)
+        private void SpillFood(int turnTime, string pinCollection)
         {
             logger.LogInformation($"Dumping food for {turnTime} on {pinCollection}");
             var pins = pinCollection.Split(',');

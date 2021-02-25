@@ -124,6 +124,11 @@ namespace AquaMonitor.Data.Models
         /// </summary>
         public string WeatherIcon { get; set; }
 
+        /// <summary>
+        /// Last recorded water temperature
+        /// </summary>
+        public float? WaterTemp { get; set; }
+
         #region Extra settings
         /// <summary>
         /// Gets or sets extended settings

@@ -104,6 +104,13 @@ sudo wget https://raw.githubusercontent.com/hargrave81/Aquamonitor/master/instal
 Requires Raspbian OS
 Requires linux-arm (not 64 builds)
 
+##### Water Temp Sensor
+
+https://github.com/dotnet/iot/tree/main/src/devices/OneWire
+Add the following to /boot/config.txt to enable 1-wire protocol. The default gpio is 4 (pin 7).
+dtoverlay=w1-gpio
+Add this to specify gpio 17 (pin 11).
+dtoverlay=w1-gpio,gpiopin=17
 
 ##### FFMPEG
 - Required download for testing, is pre installed with raspbian OS

@@ -51,12 +51,43 @@ namespace AquaMonitor.Web.Models
         /// </summary>
         public string More_CameraJPGUrl { get; set; }
 
+        /// <summary>
+        /// Feeding Pins
+        /// </summary>
         public string More_FeedingPins { get; set; }
+
+        /// <summary>
+        /// Feed Start Time
+        /// </summary>
         public string More_Feed1_Start { get; set; }
+        /// <summary>
+        /// Feed Turn TIme
+        /// </summary>
         public string More_Feed1_Turn { get; set; }
+
+        /// <summary>
+        /// Feed Start Time
+        /// </summary>
         public string More_Feed2_Start { get; set; }
+
+        /// <summary>
+        /// Feed Turn Time
+        /// </summary>
         public string More_Feed2_Turn { get; set; }
+
+        /// <summary>
+        /// Feed Start Time
+        /// </summary>
         public string More_Feed3_Start { get; set; }
+
+        /// <summary>
+        /// Feed Turn Time
+        /// </summary>
         public string More_Feed3_Turn { get; set; }
+
+        /// <summary>
+        /// Monitor water temps
+        /// </summary>
+        public bool More_WaterSensorEnabled { get; set; }
     }
 }

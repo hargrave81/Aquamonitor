@@ -221,17 +221,25 @@ namespace AquaMonitor.Web.Services
 
             if (globalData.GetRelay(relay).WaterId.HasValue && shouldABeOn >= 0) // should operate based on a water sensor
             {
-                var currentWaterState =
-                    globalData.WaterLevels.First(t => t.Id == globalData.GetRelay(relay).WaterId.Value).FloatHigh;
-                if (globalData.GetRelay(relay).OnWhenFloatHigh && currentWaterState)
+                try
                 {
-                    reason += " Water level correct";
-                    shouldABeOn = 1;
+                    var currentWaterState =
+                        globalData.WaterLevels.First(t => t.Id == globalData.GetRelay(relay).WaterId.Value).FloatHigh;
+                    if (globalData.GetRelay(relay).OnWhenFloatHigh && currentWaterState)
+                    {
+                        reason += " Water level correct";
+                        shouldABeOn = 1;
+                    }
+                    else
+                    {
+                        shouldABeOn = -1;
+                        reason += " Water level wrong";
+                    }
                 }
-                else
+                catch
                 {
                     shouldABeOn = -1;
-                    reason += " Water level wrong";
+                    reason += " Water is broken";
                 }
             }
 

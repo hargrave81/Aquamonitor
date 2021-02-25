@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Device.I2c;
 using System.Linq;
-using Iot.Units;
+using AquaMonitor.Web.Helpers;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.Logging;
+using UnitsNet;
 
 namespace AquaMonitor.Web.Devices
 {
@@ -20,8 +23,18 @@ namespace AquaMonitor.Web.Devices
         private const float HTU21_CONSTANT_B = 1762.39f;
         private const float HTU21_CONSTANT_C = 235.66f;
 
-        private static I2cDevice _staticDevice;
-        private I2cDevice i2CDevice;
+        private readonly ILogger logger;
+        private static byte? address = null;
+        private static int? bus = null;
+
+        private I2cDevice i2CDevice
+        {
+            get
+            {
+                var settings = new I2cConnectionSettings(bus.Value, address.Value);
+                return I2cDevice.Create(settings);
+            }
+        }
         private DateTime lastTemp = DateTime.MinValue;
         private DateTime lastHumid = DateTime.MinValue;
         /// <summary>
@@ -56,7 +69,7 @@ namespace AquaMonitor.Web.Devices
             {
                 ReadTemp();
                 lastTemp = DateTime.Now;
-                return Temperature.FromCelsius(temperature);
+                return Temperature.FromDegreesCelsius(temperature);
             }
         }
 
@@ -105,13 +118,11 @@ namespace AquaMonitor.Web.Devices
                     ReadHumidity();
                     ReadTemp();
                 }
-                double partialPressure;
-                double dewPoint;
 
                 // Missing power of 10
-                partialPressure = Math.Pow(10, HTU21_CONSTANT_A - HTU21_CONSTANT_B / (temperature + HTU21_CONSTANT_C));
+                var partialPressure = Math.Pow(10, HTU21_CONSTANT_A - HTU21_CONSTANT_B / (temperature + HTU21_CONSTANT_C));
 
-                dewPoint = -HTU21_CONSTANT_B / (Math.Log10(humidity * partialPressure / 100) - HTU21_CONSTANT_A) - HTU21_CONSTANT_C;
+                var dewPoint = -HTU21_CONSTANT_B / (Math.Log10(humidity * partialPressure / 100) - HTU21_CONSTANT_A) - HTU21_CONSTANT_C;
 
                 return (float)dewPoint;
             }
@@ -143,25 +154,36 @@ namespace AquaMonitor.Web.Devices
         /// <returns></returns>
         public static Htu21D CreateDevice(int busId, I2cAddress address = I2cAddress.AddrLow, Resolution resolution = Resolution.High)
         {
-            I2cConnectionSettings settings = new I2cConnectionSettings(busId, (byte)address);
-            if(_staticDevice == null)
-                _staticDevice = I2cDevice.Create(settings);
-            return new Htu21D(_staticDevice, resolution);
+            var logger = ApplicationLogging.CreateLogger<Htu21D>();
+            try
+            {
+                Htu21D.bus = busId;
+                Htu21D.address = (byte) address;
+                var settings = new I2cConnectionSettings(busId, (byte) address);
+                var dev = I2cDevice.Create(settings);
+                logger.LogDebug("Device for temperature created successfully.");
+                dev.Dispose();
+                return new Htu21D(resolution);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to create HTU21D");
+            }
+            return null;
         }
 
         /// <summary>
         /// Creates a new instance of the Htu21D
         /// </summary>
-        /// <param name="i2CDevice">The I2C device used for communication.</param>
         /// <param name="resolution">Htu21D Read Resolution</param>
-        public Htu21D(I2cDevice i2CDevice, Resolution resolution = Resolution.High)
+        public Htu21D(Resolution resolution = Resolution.High)
         {
+            this.logger = ApplicationLogging.CreateLogger<Htu21D>();
             EnableErrorCorrection = true;
-
-            this.i2CDevice = i2CDevice;
             
             Resolution = resolution;            
 
+            logger.LogDebug("Reset temp sensor to base.");
             Reset();
         }
 
@@ -170,8 +192,6 @@ namespace AquaMonitor.Web.Devices
         /// </summary>
         public void Dispose()
         {
-            i2CDevice?.Dispose();
-            i2CDevice = null;
         }
 
         /// <summary>
@@ -336,20 +356,38 @@ namespace AquaMonitor.Web.Devices
         /// <returns></returns>
         private byte[] ReadBits(Register register, int byteLength = 1)
         {
+            logger.LogDebug("Writing to read -> the bits ...");
             byte msb = (byte)register;
             Span<byte> writeBuff = stackalloc byte[]
             {
                 msb
             };
-            i2CDevice.Write(writeBuff); // request the userdata            
+            logger.LogDebug($"Write to device after bit read ... [{register.ToString()}]");
+            var i2C = i2CDevice;
+            i2C.Write(writeBuff); // request the userdata            
+            i2C.Dispose();
+            logger.LogDebug("Reading the result ...");
             System.Threading.Thread.Sleep(10);
+            if (byteLength == 0)
+                System.Threading.Thread.Sleep(10);
+            if (byteLength == 0)
+            {
+                logger.LogWarning("Failed to read sensor no data");
+                return new byte[] {};
+            }
             if (byteLength == 1)
             {
-                byte contents = i2CDevice.ReadByte();
+                logger.LogDebug("Reading single byte");
+                i2C = i2CDevice;
+                byte contents = i2C.ReadByte();
+                i2C.Dispose();
                 return new[] { contents };
             }
+            logger.LogDebug("Reading bytes");
             Span<byte> readBuff = stackalloc byte[byteLength];
-            i2CDevice.Read(readBuff);
+            i2C = i2CDevice;
+            i2C.Read(readBuff);
+            i2C.Dispose();
             return readBuff.ToArray();
         }        
 
@@ -397,6 +435,7 @@ namespace AquaMonitor.Web.Devices
                         break;
                 }
             }
+            logger.LogDebug("Writing Bits to a register for resolution and heater");
             Write(register, readBits);
             // wait SCL free            
             System.Threading.Thread.Sleep(15);
@@ -410,12 +449,15 @@ namespace AquaMonitor.Web.Devices
         /// <returns></returns>
         private byte[] WriteRead(Register register, int readLength)
         {
+            logger.LogDebug($"Write read device to get temp or humidity ... [{register.ToString()}]");
             Span<byte> writeBuff = stackalloc byte[]
             {
                 (byte)register
             };
             Span<byte> readBuff = stackalloc byte[readLength];
-            i2CDevice.WriteRead(writeBuff, readBuff);
+            var i2C = i2CDevice;
+            i2C.WriteRead(writeBuff, readBuff);
+            i2C.Dispose();
             return readBuff.ToArray();
         }
         
@@ -426,6 +468,7 @@ namespace AquaMonitor.Web.Devices
         /// <param name="data"></param>
         private void Write(Register register, byte? data = null)
         {
+            logger.LogDebug($"Write to device ... [{register.ToString()}]");
             byte msb = (byte)register;
 
             Span<byte> writeBuff = stackalloc byte[]
@@ -435,8 +478,9 @@ namespace AquaMonitor.Web.Devices
             if (data != null)
                 writeBuff = stackalloc byte[] { msb, data.Value }; // add the data field
 
-            i2CDevice.Write(writeBuff);
-
+            var i2C = i2CDevice;
+            i2C.Write(writeBuff);
+            i2C.Dispose();
             // wait SCL free            
             System.Threading.Thread.Sleep(20);
         }
@@ -446,8 +490,6 @@ namespace AquaMonitor.Web.Devices
         /// </summary>
         public static void DisposeI2C()
         {
-            if (_staticDevice != null)
-                _staticDevice.Dispose();
         }
     }
 }
